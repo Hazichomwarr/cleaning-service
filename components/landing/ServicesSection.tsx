@@ -106,7 +106,7 @@ export default function ServicesSection() {
                   </p>
 
                   <Link
-                    href="#request-cleaning"
+                    href="/request"
                     className="mt-8 inline-flex items-center gap-2 font-semibold text-blue-700 transition hover:gap-3"
                   >
                     Request this service
@@ -131,7 +131,7 @@ export default function ServicesSection() {
             </p>
 
             <Link
-              href="#request-cleaning"
+              href="/request"
               className="mt-8 inline-flex items-center justify-center rounded-xl bg-blue-600 px-7 py-4 font-semibold text-white transition hover:bg-blue-700"
             >
               Get Your Free Quote

@@ -2,11 +2,11 @@ import {
   getResidentialStartingEstimate,
   type ResidentialPricingInput,
   type ResidentialPricingResult,
-} from "../services/cleaning-pricing.service.js";
+} from "../services/cleaning-pricing.service";
 import {
   PublicCleaningEstimateSchema,
   type PublicCleaningEstimateInput,
-} from "./validations/cleaning-estimate.schema.js";
+} from "./validations/cleaning-estimate.schema";
 
 export type PublicCleaningEstimateResult =
   | {

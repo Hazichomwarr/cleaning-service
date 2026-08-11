@@ -1,4 +1,4 @@
-import { PropertyType } from "../../generated/prisma/client.js";
+import { PropertyType } from "../../generated/prisma/client";
 import { z } from "zod";
 
 export const PublicCleaningEstimateSchema = z

@@ -68,7 +68,7 @@ export default function HowItWorks() {
             </p>
 
             <Link
-              href="#request-cleaning"
+              href="/request"
               className="mt-9 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-slate-950 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-slate-950"
             >
               Request Your Cleaning

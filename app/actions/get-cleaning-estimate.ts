@@ -3,7 +3,7 @@
 import {
   resolvePublicCleaningEstimate,
   type PublicCleaningEstimateResult,
-} from "../../src/lib/cleaning-estimate-boundary.js";
+} from "../../src/lib/cleaning-estimate-boundary";
 
 export async function getCleaningEstimate(
   input: unknown,

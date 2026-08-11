@@ -68,7 +68,7 @@ export default function FinalCTA() {
 
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
               <Link
-                href="/request-cleaning"
+                href="/request"
                 className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-semibold text-blue-700 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-blue-600"
               >
                 <CalendarDays aria-hidden="true" className="size-5" />

@@ -1,4 +1,4 @@
-import { PropertyType, Prisma } from "../generated/prisma/client.js";
+import { PropertyType, Prisma } from "../generated/prisma/client";
 
 export type ResidentialPricingInput = {
   propertyType: PropertyType;
@@ -63,7 +63,7 @@ function isValidBedroomCount(bedroomCount: number) {
 }
 
 async function getDefaultPricingRuleReader(): Promise<PricingRuleReader> {
-  const { prisma } = await import("../lib/db/prisma.js");
+  const { prisma } = await import("../lib/db/prisma");
   return prisma.pricingRule;
 }
 
