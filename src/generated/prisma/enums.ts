@@ -40,3 +40,13 @@ export const WorkerType = {
 } as const
 
 export type WorkerType = (typeof WorkerType)[keyof typeof WorkerType]
+
+
+export const CleaningEstimateOutcome = {
+  AUTOMATIC_ESTIMATE: 'AUTOMATIC_ESTIMATE',
+  MANUAL_QUOTE_REQUIRED: 'MANUAL_QUOTE_REQUIRED',
+  NO_CONFIGURED_ESTIMATE: 'NO_CONFIGURED_ESTIMATE',
+  ESTIMATE_UNAVAILABLE: 'ESTIMATE_UNAVAILABLE'
+} as const
+
+export type CleaningEstimateOutcome = (typeof CleaningEstimateOutcome)[keyof typeof CleaningEstimateOutcome]

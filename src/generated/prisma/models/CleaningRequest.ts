@@ -61,6 +61,7 @@ export type CleaningRequestMinAggregateOutputType = {
   preferredDate: Date | null
   preferredTimeWindow: string | null
   estimatedPrice: runtime.Decimal | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome | null
   confirmedPrice: runtime.Decimal | null
   scheduledStart: Date | null
   scheduledEnd: Date | null
@@ -92,6 +93,7 @@ export type CleaningRequestMaxAggregateOutputType = {
   preferredDate: Date | null
   preferredTimeWindow: string | null
   estimatedPrice: runtime.Decimal | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome | null
   confirmedPrice: runtime.Decimal | null
   scheduledStart: Date | null
   scheduledEnd: Date | null
@@ -123,6 +125,7 @@ export type CleaningRequestCountAggregateOutputType = {
   preferredDate: number
   preferredTimeWindow: number
   estimatedPrice: number
+  estimateOutcome: number
   confirmedPrice: number
   scheduledStart: number
   scheduledEnd: number
@@ -172,6 +175,7 @@ export type CleaningRequestMinAggregateInputType = {
   preferredDate?: true
   preferredTimeWindow?: true
   estimatedPrice?: true
+  estimateOutcome?: true
   confirmedPrice?: true
   scheduledStart?: true
   scheduledEnd?: true
@@ -203,6 +207,7 @@ export type CleaningRequestMaxAggregateInputType = {
   preferredDate?: true
   preferredTimeWindow?: true
   estimatedPrice?: true
+  estimateOutcome?: true
   confirmedPrice?: true
   scheduledStart?: true
   scheduledEnd?: true
@@ -234,6 +239,7 @@ export type CleaningRequestCountAggregateInputType = {
   preferredDate?: true
   preferredTimeWindow?: true
   estimatedPrice?: true
+  estimateOutcome?: true
   confirmedPrice?: true
   scheduledStart?: true
   scheduledEnd?: true
@@ -351,7 +357,8 @@ export type CleaningRequestGroupByOutputType = {
   approximateSquareFeet: number | null
   preferredDate: Date
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal
+  estimatedPrice: runtime.Decimal | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice: runtime.Decimal | null
   scheduledStart: Date | null
   scheduledEnd: Date | null
@@ -405,7 +412,8 @@ export type CleaningRequestWhereInput = {
   approximateSquareFeet?: Prisma.IntNullableFilter<"CleaningRequest"> | number | null
   preferredDate?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   preferredTimeWindow?: Prisma.StringFilter<"CleaningRequest"> | string
-  estimatedPrice?: Prisma.DecimalFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.DecimalNullableFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFilter<"CleaningRequest"> | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.DecimalNullableFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.DateTimeNullableFilter<"CleaningRequest"> | Date | string | null
   scheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequest"> | Date | string | null
@@ -439,7 +447,8 @@ export type CleaningRequestOrderByWithRelationInput = {
   approximateSquareFeet?: Prisma.SortOrderInput | Prisma.SortOrder
   preferredDate?: Prisma.SortOrder
   preferredTimeWindow?: Prisma.SortOrder
-  estimatedPrice?: Prisma.SortOrder
+  estimatedPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimateOutcome?: Prisma.SortOrder
   confirmedPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledStart?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledEnd?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -476,7 +485,8 @@ export type CleaningRequestWhereUniqueInput = Prisma.AtLeast<{
   approximateSquareFeet?: Prisma.IntNullableFilter<"CleaningRequest"> | number | null
   preferredDate?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   preferredTimeWindow?: Prisma.StringFilter<"CleaningRequest"> | string
-  estimatedPrice?: Prisma.DecimalFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.DecimalNullableFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFilter<"CleaningRequest"> | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.DecimalNullableFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.DateTimeNullableFilter<"CleaningRequest"> | Date | string | null
   scheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequest"> | Date | string | null
@@ -510,7 +520,8 @@ export type CleaningRequestOrderByWithAggregationInput = {
   approximateSquareFeet?: Prisma.SortOrderInput | Prisma.SortOrder
   preferredDate?: Prisma.SortOrder
   preferredTimeWindow?: Prisma.SortOrder
-  estimatedPrice?: Prisma.SortOrder
+  estimatedPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  estimateOutcome?: Prisma.SortOrder
   confirmedPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledStart?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledEnd?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -549,7 +560,8 @@ export type CleaningRequestScalarWhereWithAggregatesInput = {
   approximateSquareFeet?: Prisma.IntNullableWithAggregatesFilter<"CleaningRequest"> | number | null
   preferredDate?: Prisma.DateTimeWithAggregatesFilter<"CleaningRequest"> | Date | string
   preferredTimeWindow?: Prisma.StringWithAggregatesFilter<"CleaningRequest"> | string
-  estimatedPrice?: Prisma.DecimalWithAggregatesFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.DecimalNullableWithAggregatesFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeWithAggregatesFilter<"CleaningRequest"> | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.DecimalNullableWithAggregatesFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.DateTimeNullableWithAggregatesFilter<"CleaningRequest"> | Date | string | null
   scheduledEnd?: Prisma.DateTimeNullableWithAggregatesFilter<"CleaningRequest"> | Date | string | null
@@ -579,7 +591,8 @@ export type CleaningRequestCreateInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -613,7 +626,8 @@ export type CleaningRequestUncheckedCreateInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -645,7 +659,8 @@ export type CleaningRequestUpdateInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -679,7 +694,8 @@ export type CleaningRequestUncheckedUpdateInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -712,7 +728,8 @@ export type CleaningRequestCreateManyInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -742,7 +759,8 @@ export type CleaningRequestUpdateManyMutationInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -773,7 +791,8 @@ export type CleaningRequestUncheckedUpdateManyInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -815,6 +834,7 @@ export type CleaningRequestCountOrderByAggregateInput = {
   preferredDate?: Prisma.SortOrder
   preferredTimeWindow?: Prisma.SortOrder
   estimatedPrice?: Prisma.SortOrder
+  estimateOutcome?: Prisma.SortOrder
   confirmedPrice?: Prisma.SortOrder
   scheduledStart?: Prisma.SortOrder
   scheduledEnd?: Prisma.SortOrder
@@ -854,6 +874,7 @@ export type CleaningRequestMaxOrderByAggregateInput = {
   preferredDate?: Prisma.SortOrder
   preferredTimeWindow?: Prisma.SortOrder
   estimatedPrice?: Prisma.SortOrder
+  estimateOutcome?: Prisma.SortOrder
   confirmedPrice?: Prisma.SortOrder
   scheduledStart?: Prisma.SortOrder
   scheduledEnd?: Prisma.SortOrder
@@ -885,6 +906,7 @@ export type CleaningRequestMinOrderByAggregateInput = {
   preferredDate?: Prisma.SortOrder
   preferredTimeWindow?: Prisma.SortOrder
   estimatedPrice?: Prisma.SortOrder
+  estimateOutcome?: Prisma.SortOrder
   confirmedPrice?: Prisma.SortOrder
   scheduledStart?: Prisma.SortOrder
   scheduledEnd?: Prisma.SortOrder
@@ -964,6 +986,10 @@ export type NullableDecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type EnumCleaningEstimateOutcomeFieldUpdateOperationsInput = {
+  set?: $Enums.CleaningEstimateOutcome
+}
+
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
@@ -1017,7 +1043,8 @@ export type CleaningRequestCreateWithoutServiceInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -1049,7 +1076,8 @@ export type CleaningRequestUncheckedCreateWithoutServiceInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -1111,7 +1139,8 @@ export type CleaningRequestScalarWhereInput = {
   approximateSquareFeet?: Prisma.IntNullableFilter<"CleaningRequest"> | number | null
   preferredDate?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   preferredTimeWindow?: Prisma.StringFilter<"CleaningRequest"> | string
-  estimatedPrice?: Prisma.DecimalFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.DecimalNullableFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFilter<"CleaningRequest"> | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.DecimalNullableFilter<"CleaningRequest"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.DateTimeNullableFilter<"CleaningRequest"> | Date | string | null
   scheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequest"> | Date | string | null
@@ -1141,7 +1170,8 @@ export type CleaningRequestCreateWithoutRequestExtrasInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -1174,7 +1204,8 @@ export type CleaningRequestUncheckedCreateWithoutRequestExtrasInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -1221,7 +1252,8 @@ export type CleaningRequestUpdateWithoutRequestExtrasInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1254,7 +1286,8 @@ export type CleaningRequestUncheckedUpdateWithoutRequestExtrasInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1285,7 +1318,8 @@ export type CleaningRequestCreateWithoutAssignmentsInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -1318,7 +1352,8 @@ export type CleaningRequestUncheckedCreateWithoutAssignmentsInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -1365,7 +1400,8 @@ export type CleaningRequestUpdateWithoutAssignmentsInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1398,7 +1434,8 @@ export type CleaningRequestUncheckedUpdateWithoutAssignmentsInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1429,7 +1466,8 @@ export type CleaningRequestCreateManyServiceInput = {
   approximateSquareFeet?: number | null
   preferredDate: Date | string
   preferredTimeWindow: string
-  estimatedPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
   confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Date | string | null
   scheduledEnd?: Date | string | null
@@ -1459,7 +1497,8 @@ export type CleaningRequestUpdateWithoutServiceInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1491,7 +1530,8 @@ export type CleaningRequestUncheckedUpdateWithoutServiceInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1523,7 +1563,8 @@ export type CleaningRequestUncheckedUpdateManyWithoutServiceInput = {
   approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
-  estimatedPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
   confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1595,6 +1636,7 @@ export type CleaningRequestSelect<ExtArgs extends runtime.Types.Extensions.Inter
   preferredDate?: boolean
   preferredTimeWindow?: boolean
   estimatedPrice?: boolean
+  estimateOutcome?: boolean
   confirmedPrice?: boolean
   scheduledStart?: boolean
   scheduledEnd?: boolean
@@ -1630,6 +1672,7 @@ export type CleaningRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   preferredDate?: boolean
   preferredTimeWindow?: boolean
   estimatedPrice?: boolean
+  estimateOutcome?: boolean
   confirmedPrice?: boolean
   scheduledStart?: boolean
   scheduledEnd?: boolean
@@ -1662,6 +1705,7 @@ export type CleaningRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   preferredDate?: boolean
   preferredTimeWindow?: boolean
   estimatedPrice?: boolean
+  estimateOutcome?: boolean
   confirmedPrice?: boolean
   scheduledStart?: boolean
   scheduledEnd?: boolean
@@ -1694,6 +1738,7 @@ export type CleaningRequestSelectScalar = {
   preferredDate?: boolean
   preferredTimeWindow?: boolean
   estimatedPrice?: boolean
+  estimateOutcome?: boolean
   confirmedPrice?: boolean
   scheduledStart?: boolean
   scheduledEnd?: boolean
@@ -1706,7 +1751,7 @@ export type CleaningRequestSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CleaningRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "requestNumber" | "serviceId" | "customerName" | "customerEmail" | "customerPhone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "propertyType" | "bedrooms" | "bathrooms" | "approximateSquareFeet" | "preferredDate" | "preferredTimeWindow" | "estimatedPrice" | "confirmedPrice" | "scheduledStart" | "scheduledEnd" | "customerNotes" | "internalNotes" | "status" | "cancelledAt" | "cancellationReason" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningRequest"]>
+export type CleaningRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "requestNumber" | "serviceId" | "customerName" | "customerEmail" | "customerPhone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "propertyType" | "bedrooms" | "bathrooms" | "approximateSquareFeet" | "preferredDate" | "preferredTimeWindow" | "estimatedPrice" | "estimateOutcome" | "confirmedPrice" | "scheduledStart" | "scheduledEnd" | "customerNotes" | "internalNotes" | "status" | "cancelledAt" | "cancellationReason" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningRequest"]>
 export type CleaningRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   service?: boolean | Prisma.CleaningServiceDefaultArgs<ExtArgs>
   requestExtras?: boolean | Prisma.CleaningRequest$requestExtrasArgs<ExtArgs>
@@ -1745,7 +1790,8 @@ export type $CleaningRequestPayload<ExtArgs extends runtime.Types.Extensions.Int
     approximateSquareFeet: number | null
     preferredDate: Date
     preferredTimeWindow: string
-    estimatedPrice: runtime.Decimal
+    estimatedPrice: runtime.Decimal | null
+    estimateOutcome: $Enums.CleaningEstimateOutcome
     confirmedPrice: runtime.Decimal | null
     scheduledStart: Date | null
     scheduledEnd: Date | null
@@ -2200,6 +2246,7 @@ export interface CleaningRequestFieldRefs {
   readonly preferredDate: Prisma.FieldRef<"CleaningRequest", 'DateTime'>
   readonly preferredTimeWindow: Prisma.FieldRef<"CleaningRequest", 'String'>
   readonly estimatedPrice: Prisma.FieldRef<"CleaningRequest", 'Decimal'>
+  readonly estimateOutcome: Prisma.FieldRef<"CleaningRequest", 'CleaningEstimateOutcome'>
   readonly confirmedPrice: Prisma.FieldRef<"CleaningRequest", 'Decimal'>
   readonly scheduledStart: Prisma.FieldRef<"CleaningRequest", 'DateTime'>
   readonly scheduledEnd: Prisma.FieldRef<"CleaningRequest", 'DateTime'>

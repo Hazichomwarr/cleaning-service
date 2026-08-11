@@ -256,6 +256,13 @@ export type DecimalNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDecimalNullableFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
+export type EnumCleaningEstimateOutcomeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningEstimateOutcome | Prisma.EnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningEstimateOutcomeFilter<$PrismaModel> | $Enums.CleaningEstimateOutcome
+}
+
 export type DateTimeNullableFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -298,6 +305,16 @@ export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+}
+
+export type EnumCleaningEstimateOutcomeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningEstimateOutcome | Prisma.EnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningEstimateOutcomeWithAggregatesFilter<$PrismaModel> | $Enums.CleaningEstimateOutcome
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCleaningEstimateOutcomeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCleaningEstimateOutcomeFilter<$PrismaModel>
 }
 
 export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -579,6 +596,13 @@ export type NestedDecimalNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDecimalNullableFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
 }
 
+export type NestedEnumCleaningEstimateOutcomeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningEstimateOutcome | Prisma.EnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningEstimateOutcomeFilter<$PrismaModel> | $Enums.CleaningEstimateOutcome
+}
+
 export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -621,6 +645,16 @@ export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumCleaningEstimateOutcomeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningEstimateOutcome | Prisma.EnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningEstimateOutcome[] | Prisma.ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningEstimateOutcomeWithAggregatesFilter<$PrismaModel> | $Enums.CleaningEstimateOutcome
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCleaningEstimateOutcomeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCleaningEstimateOutcomeFilter<$PrismaModel>
 }
 
 export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {

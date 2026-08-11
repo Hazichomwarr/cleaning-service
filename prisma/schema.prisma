@@ -31,6 +31,13 @@ enum WorkerType {
   CONTRACTOR
 }
 
+enum CleaningEstimateOutcome {
+  AUTOMATIC_ESTIMATE
+  MANUAL_QUOTE_REQUIRED
+  NO_CONFIGURED_ESTIMATE
+  ESTIMATE_UNAVAILABLE
+}
+
 model CleaningService {
   id           String   @id @default(cuid())
   name         String
@@ -122,8 +129,9 @@ model CleaningRequest {
   preferredDate       DateTime
   preferredTimeWindow String
 
-  estimatedPrice Decimal  @db.Decimal(10, 2)
-  confirmedPrice Decimal? @db.Decimal(10, 2)
+  estimatedPrice  Decimal?               @db.Decimal(10, 2)
+  estimateOutcome CleaningEstimateOutcome
+  confirmedPrice  Decimal?               @db.Decimal(10, 2)
 
   scheduledStart DateTime?
   scheduledEnd   DateTime?

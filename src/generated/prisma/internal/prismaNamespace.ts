@@ -1054,6 +1054,7 @@ export const CleaningRequestScalarFieldEnum = {
   preferredDate: 'preferredDate',
   preferredTimeWindow: 'preferredTimeWindow',
   estimatedPrice: 'estimatedPrice',
+  estimateOutcome: 'estimateOutcome',
   confirmedPrice: 'confirmedPrice',
   scheduledStart: 'scheduledStart',
   scheduledEnd: 'scheduledEnd',
@@ -1207,6 +1208,20 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CleaningEstimateOutcome'
+ */
+export type EnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningEstimateOutcome'>
+    
+
+
+/**
+ * Reference to a field of type 'CleaningEstimateOutcome[]'
+ */
+export type ListEnumCleaningEstimateOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningEstimateOutcome[]'>
     
 
 

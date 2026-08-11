@@ -150,6 +150,7 @@ export const CleaningRequestScalarFieldEnum = {
   preferredDate: 'preferredDate',
   preferredTimeWindow: 'preferredTimeWindow',
   estimatedPrice: 'estimatedPrice',
+  estimateOutcome: 'estimateOutcome',
   confirmedPrice: 'confirmedPrice',
   scheduledStart: 'scheduledStart',
   scheduledEnd: 'scheduledEnd',
