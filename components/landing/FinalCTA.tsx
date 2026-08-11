@@ -20,7 +20,7 @@ export default function FinalCTA() {
       className="overflow-hidden bg-white py-20 sm:py-28"
     >
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-blue-600 px-6 py-14 text-white sm:px-10 sm:py-16 lg:px-16 lg:py-20">
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-green-900 px-6 py-14 text-white sm:px-10 sm:py-16 lg:px-16 lg:py-20">
           <div
             aria-hidden="true"
             className="absolute -right-20 -top-24 size-72 rounded-full bg-white/10 blur-3xl"
