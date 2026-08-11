@@ -29,7 +29,7 @@ export default function LandingNavbar() {
           onClick={closeMenu}
           className="flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
         >
-          <span className="flex size-10 items-center justify-center rounded-xl bg-green-700 text-white">
+          <span className="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-white">
             <Sparkles aria-hidden="true" className="size-5" />
           </span>
 
@@ -67,7 +67,7 @@ export default function LandingNavbar() {
 
           <Link
             href="#request-cleaning"
-            className="rounded-xl bg-green-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
+            className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
           >
             Request a Cleaning
           </Link>
