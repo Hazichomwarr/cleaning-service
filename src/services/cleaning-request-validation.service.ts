@@ -54,6 +54,13 @@ function getBusinessDate(now: Date): string {
   return `${values.year}-${values.month}-${values.day}`;
 }
 
+function getBusinessYear(now: Date): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: BUSINESS_TIME_ZONE,
+    year: "numeric",
+  }).format(now);
+}
+
 function normalizePhone(value: string): string | null {
   const digits = value.replace(/\D/g, "");
   if (digits.length === 10) return `+1${digits}`;
@@ -129,4 +136,4 @@ export async function validateCleaningRequest(input: unknown, options: Validatio
   }
 }
 
-export { BUSINESS_TIME_ZONE, getBusinessDate, normalizePhone };
+export { BUSINESS_TIME_ZONE, getBusinessDate, getBusinessYear, normalizePhone };

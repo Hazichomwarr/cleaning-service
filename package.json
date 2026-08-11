@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test src/services/__tests__/cleaning-pricing.service.test.ts app/actions/__tests__/get-cleaning-estimate.test.ts src/lib/__tests__/request-form.test.ts src/services/__tests__/cleaning-request-validation.service.test.ts"
+    "test": "tsx --test src/services/__tests__/cleaning-pricing.service.test.ts app/actions/__tests__/get-cleaning-estimate.test.ts src/lib/__tests__/request-form.test.ts src/lib/__tests__/cleaning-request-number.test.ts src/services/__tests__/cleaning-request-validation.service.test.ts src/services/__tests__/cleaning-request.service.test.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
