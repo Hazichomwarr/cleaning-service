@@ -131,7 +131,7 @@ export default function HowItWorks() {
               })}
             </ol>
 
-            <div className="relative mt-8 overflow-hidden rounded-4xl bg-blue-600 p-6 sm:p-8">
+            <div className="relative mt-8 overflow-hidden rounded-4xl bg-green-700 p-6 sm:p-8">
               <div
                 aria-hidden="true"
                 className="absolute -right-16 -top-16 size-48 rounded-full bg-white/10 blur-2xl"
