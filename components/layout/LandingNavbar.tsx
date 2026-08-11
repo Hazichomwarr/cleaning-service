@@ -29,13 +29,13 @@ export default function LandingNavbar() {
           onClick={closeMenu}
           className="flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
         >
-          <span className="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-white">
+          <span className="flex size-10 items-center justify-center rounded-xl bg-green-700 text-white">
             <Sparkles aria-hidden="true" className="size-5" />
           </span>
 
           <span className="flex flex-col">
             <span className="text-lg font-semibold tracking-tight text-slate-950">
-              Ab Clean
+              JUST CLEANING
             </span>
             <span className="text-xs text-slate-500">
               Clean spaces. Happy places.
@@ -61,13 +61,13 @@ export default function LandingNavbar() {
             href="tel:+19735369711"
             className="flex items-center gap-2 text-sm font-semibold text-slate-800 transition hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
           >
-            <Phone aria-hidden="true" className="size-4 text-blue-600" />
+            <Phone aria-hidden="true" className="size-4 text-green-600" />
             <span>(973) 536-9711</span>
           </a>
 
           <Link
             href="#request-cleaning"
-            className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
+            className="rounded-xl bg-green-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
           >
             Request a Cleaning
           </Link>
