@@ -9,9 +9,9 @@ export type AdminLoginState = {
   email?: string;
 };
 
-export async function loginAdmin(_: AdminLoginState, formData: FormData): Promise<AdminLoginState> {
-  const emailValue = formData.get("email");
-  const passwordValue = formData.get("password");
+export async function loginAdmin(input: unknown): Promise<AdminLoginState> {
+  const emailValue = input && typeof input === "object" ? (input as { email?: unknown }).email : undefined;
+  const passwordValue = input && typeof input === "object" ? (input as { password?: unknown }).password : undefined;
   const email = typeof emailValue === "string" ? normalizeAdminEmail(emailValue) : "";
   const password = typeof passwordValue === "string" ? passwordValue : "";
   const parsed = AdminCredentialsSchema.safeParse({ email, password });

@@ -12,7 +12,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        return authenticateAdmin(credentials, {
+        return authenticateAdmin({ email: credentials?.email, password: credentials?.password }, {
           findByEmail: (email) => prisma.adminUser.findUnique({
             where: { email },
             select: { id: true, name: true, email: true, passwordHash: true, isActive: true },
