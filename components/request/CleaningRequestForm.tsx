@@ -7,6 +7,7 @@ import { getCleaningEstimate } from "@/app/actions/get-cleaning-estimate";
 import { submitCleaningRequest, type SubmitCleaningRequestResult } from "@/app/actions/submit-cleaning-request";
 import type { CatalogItem, CleaningRequestDraft, PropertyType } from "@/src/types/cleaning-request-draft";
 import { getEarliestRequestErrorStep, getRequestFieldLabel, isResidentialPropertyType, mapEstimateResult, toggleRequestExtra, updateRequestDraft } from "@/src/lib/request-form";
+import { toRequestConfirmationData, type RequestConfirmationData } from "@/src/lib/request-confirmation";
 import EstimateCard, { type EstimateState } from "./EstimateCard";
 import RequestProgress from "./RequestProgress";
 import ServiceStep from "./ServiceStep";
@@ -15,6 +16,7 @@ import ExtrasStep from "./ExtrasStep";
 import ScheduleStep from "./ScheduleStep";
 import ContactStep from "./ContactStep";
 import ReviewStep from "./ReviewStep";
+import RequestConfirmation from "./RequestConfirmation";
 
 const steps = [
   { label: "Service", title: "What kind of cleaning do you need?", description: "Start with the service that fits your space." },
@@ -35,7 +37,7 @@ type SubmissionState =
   | { status: "idle" }
   | { status: "submitting" }
   | { status: "error"; reason: Extract<SubmitCleaningRequestResult, { success: false }>["reason"]; fieldErrors?: Record<string, string[]> }
-  | { status: "success"; request: Extract<SubmitCleaningRequestResult, { success: true }>["request"] };
+  | { status: "success"; request: RequestConfirmationData };
 
 function isComplete(step: number, draft: CleaningRequestDraft): boolean {
   if (step === 0) return Boolean(draft.serviceId);
@@ -119,8 +121,10 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
     try {
       const result = await submitCleaningRequest(input);
       if (result.success) {
+        const confirmationData = toRequestConfirmationData(draft, result.request);
         setDraft(emptyDraft);
-        setSubmission({ status: "success", request: result.request });
+        setEstimate({ status: "idle" });
+        setSubmission({ status: "success", request: confirmationData });
         return;
       }
 
@@ -148,6 +152,14 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
           ? "We couldn't send your request right now. Your information is still here. Please try again."
           : "Please review the highlighted information and try again."
     : null;
+
+  const startAnotherRequest = () => {
+    submissionInFlight.current = false;
+    setDraft(emptyDraft);
+    setEstimate({ status: "idle" });
+    setSubmission({ status: "idle" });
+    setCurrentStep(0);
+  };
 
   const renderStep = () => {
     switch (currentStep) {
@@ -177,17 +189,11 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
         </div>
 
         <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
-          <div className="border-b border-slate-100 px-5 py-5 sm:px-8"><RequestProgress currentStep={currentStep + 1} totalSteps={steps.length} label={steps[currentStep].label} /></div>
-          <div className="px-5 py-7 sm:px-8 sm:py-9">
-            <div className="mb-8"><h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{steps[currentStep].title}</h2><p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">{steps[currentStep].description}</p></div>
-            {submission.status === "success" ? (
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6" role="status">
-                <p className="text-lg font-semibold text-emerald-950">Your cleaning request was received.</p>
-                <p className="mt-2 text-sm leading-6 text-emerald-900">Request number: <strong>{submission.request.requestNumber}</strong>. Our team will review your preferred timing and follow up to confirm availability and final pricing.</p>
-                <p className="mt-4 text-sm font-semibold text-emerald-900">Starting estimate: {submission.request.estimate.amount ? `$${submission.request.estimate.amount}` : "To be confirmed"}</p>
-              </div>
-            ) : (
-              <>
+          {submission.status === "success" ? <RequestConfirmation data={submission.request} onRequestAnother={startAnotherRequest} /> : <>
+            <div className="border-b border-slate-100 px-5 py-5 sm:px-8"><RequestProgress currentStep={currentStep + 1} totalSteps={steps.length} label={steps[currentStep].label} /></div>
+            <div className="px-5 py-7 sm:px-8 sm:py-9">
+              <div className="mb-8"><h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{steps[currentStep].title}</h2><p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">{steps[currentStep].description}</p></div>
+                <>
                 {submissionMessage ? (
                   <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-950" role="alert">
                     <p className="font-semibold">{submissionMessage}</p>
@@ -199,13 +205,13 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
                   </div>
                 ) : null}
                 {services.length === 0 && currentStep === 0 ? <EstimateCard state={{ status: "unavailable" }} /> : renderStep()}
-              </>
-            )}
-          </div>
-          <div className="flex flex-col-reverse gap-3 border-t border-slate-100 bg-slate-50/70 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <button type="button" onClick={() => setCurrentStep((step) => Math.max(0, step - 1))} disabled={currentStep === 0 || submission.status === "submitting" || submission.status === "success"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 font-semibold text-slate-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"><ArrowLeft aria-hidden="true" className="size-4" />Back</button>
-            {currentStep < steps.length - 1 ? <button type="button" onClick={() => setCurrentStep((step) => Math.min(steps.length - 1, step + 1))} disabled={!isComplete(currentStep, draft) || submission.status === "submitting" || submission.status === "success"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">Continue<ArrowRight aria-hidden="true" className="size-4" /></button> : <button type="button" onClick={() => void submit()} disabled={submission.status === "submitting" || submission.status === "success"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">{submission.status === "submitting" ? "Sending your request…" : "Send cleaning request"}</button>}
-          </div>
+                </>
+            </div>
+            <div className="flex flex-col-reverse gap-3 border-t border-slate-100 bg-slate-50/70 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+              <button type="button" onClick={() => setCurrentStep((step) => Math.max(0, step - 1))} disabled={currentStep === 0 || submission.status === "submitting"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 font-semibold text-slate-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"><ArrowLeft aria-hidden="true" className="size-4" />Back</button>
+              {currentStep < steps.length - 1 ? <button type="button" onClick={() => setCurrentStep((step) => Math.min(steps.length - 1, step + 1))} disabled={!isComplete(currentStep, draft) || submission.status === "submitting"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">Continue<ArrowRight aria-hidden="true" className="size-4" /></button> : <button type="button" onClick={() => void submit()} disabled={submission.status === "submitting"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">{submission.status === "submitting" ? "Sending your request…" : "Send cleaning request"}</button>}
+            </div>
+          </>}
         </div>
       </div>
     </main>

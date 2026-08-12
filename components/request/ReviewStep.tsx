@@ -47,7 +47,7 @@ export default function ReviewStep({ draft, services, extras, estimate, onEdit }
         <SummaryRow label="Your details" value={[contact, address].filter(Boolean).join(" · ")} step={4} onEdit={onEdit} />
       </div>
 
-      <p className="text-sm leading-6 text-slate-500">Submitting is not available just yet. Your request details stay in this form while we finish the secure request connection.</p>
+      <p className="text-sm leading-6 text-slate-500">Your preferred date and time are not confirmed yet. We’ll review availability after you send your request.</p>
     </div>
   );
 }
