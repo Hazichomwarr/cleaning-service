@@ -54,6 +54,16 @@ model CleaningService {
   @@index([isActive, displayOrder])
 }
 
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model CleaningExtra {
   id           String   @id @default(cuid())
   name         String

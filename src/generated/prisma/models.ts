@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/CleaningService'
+export type * from './models/AdminUser'
 export type * from './models/CleaningExtra'
 export type * from './models/Worker'
 export type * from './models/PricingRule'

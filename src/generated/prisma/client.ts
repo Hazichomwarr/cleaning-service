@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type CleaningService = Prisma.CleaningServiceModel
 /**
+ * Model AdminUser
+ * 
+ */
+export type AdminUser = Prisma.AdminUserModel
+/**
  * Model CleaningExtra
  * 
  */

@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   CleaningService: 'CleaningService',
+  AdminUser: 'AdminUser',
   CleaningExtra: 'CleaningExtra',
   Worker: 'Worker',
   PricingRule: 'PricingRule',
@@ -88,6 +89,19 @@ export const CleaningServiceScalarFieldEnum = {
 } as const
 
 export type CleaningServiceScalarFieldEnum = (typeof CleaningServiceScalarFieldEnum)[keyof typeof CleaningServiceScalarFieldEnum]
+
+
+export const AdminUserScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
 
 
 export const CleaningExtraScalarFieldEnum = {

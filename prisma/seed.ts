@@ -2,6 +2,7 @@ import "dotenv/config";
 import { neonConfig } from "@neondatabase/serverless";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import ws from "ws";
+import { hash } from "bcryptjs";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 
 neonConfig.webSocketConstructor = ws;
@@ -174,10 +175,33 @@ async function seedPricingRules() {
   }
 }
 
+async function seedAdminUser() {
+  const name = process.env.ADMIN_NAME?.trim();
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!name || !email || !password) {
+    console.log("Admin provisioning skipped: ADMIN_NAME, ADMIN_EMAIL, and ADMIN_PASSWORD are not all configured.");
+    return;
+  }
+
+  if (password.length < 12) throw new Error("ADMIN_PASSWORD must be at least 12 characters.");
+
+  const existing = await prisma.adminUser.findUnique({ where: { email }, select: { id: true } });
+  if (existing) {
+    console.log("Admin provisioning skipped: administrator already exists.");
+    return;
+  }
+
+  await prisma.adminUser.create({ data: { name, email, passwordHash: await hash(password, 12), isActive: true } });
+  console.log("Initial administrator provisioned.");
+}
+
 async function main() {
   await seedCleaningServices();
   await seedCleaningExtras();
   await seedPricingRules();
+  await seedAdminUser();
   console.log("Seed complete.");
 }
 
