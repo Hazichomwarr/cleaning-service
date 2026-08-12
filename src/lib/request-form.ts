@@ -2,6 +2,38 @@ import type { CleaningRequestDraft, PropertyType } from "../types/cleaning-reque
 import type { PublicCleaningEstimateResult } from "./cleaning-estimate-boundary";
 import type { EstimateState } from "../../components/request/EstimateCard";
 
+export const requestFieldSteps: Record<string, number> = {
+  serviceId: 0,
+  propertyType: 1,
+  bedrooms: 1,
+  bathrooms: 1,
+  extraIds: 2,
+  preferredDate: 3,
+  preferredTimeWindow: 3,
+  customerName: 4,
+  customerEmail: 4,
+  customerPhone: 4,
+  addressLine1: 4,
+  addressLine2: 4,
+  city: 4,
+  state: 4,
+  postalCode: 4,
+  customerNotes: 4,
+};
+
+export function getEarliestRequestErrorStep(fieldErrors: Record<string, string[]>): number {
+  return Object.keys(fieldErrors).reduce(
+    (earliest, field) => Math.min(earliest, requestFieldSteps[field] ?? 0),
+    Number.POSITIVE_INFINITY,
+  );
+}
+
+export function getRequestFieldLabel(field: string): string {
+  return field
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (character) => character.toUpperCase());
+}
+
 export function isResidentialPropertyType(propertyType: PropertyType | ""): boolean {
   return propertyType === "HOUSE" || propertyType === "APARTMENT" || propertyType === "AIRBNB";
 }

@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Phone, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { getCleaningEstimate } from "@/app/actions/get-cleaning-estimate";
+import { submitCleaningRequest, type SubmitCleaningRequestResult } from "@/app/actions/submit-cleaning-request";
 import type { CatalogItem, CleaningRequestDraft, PropertyType } from "@/src/types/cleaning-request-draft";
-import { isResidentialPropertyType, mapEstimateResult, toggleRequestExtra, updateRequestDraft } from "@/src/lib/request-form";
+import { getEarliestRequestErrorStep, getRequestFieldLabel, isResidentialPropertyType, mapEstimateResult, toggleRequestExtra, updateRequestDraft } from "@/src/lib/request-form";
 import EstimateCard, { type EstimateState } from "./EstimateCard";
 import RequestProgress from "./RequestProgress";
 import ServiceStep from "./ServiceStep";
@@ -30,6 +31,12 @@ const emptyDraft: CleaningRequestDraft = {
   addressLine1: "", addressLine2: "", city: "", state: "", postalCode: "", customerNotes: "",
 };
 
+type SubmissionState =
+  | { status: "idle" }
+  | { status: "submitting" }
+  | { status: "error"; reason: Extract<SubmitCleaningRequestResult, { success: false }>["reason"]; fieldErrors?: Record<string, string[]> }
+  | { status: "success"; request: Extract<SubmitCleaningRequestResult, { success: true }>["request"] };
+
 function isComplete(step: number, draft: CleaningRequestDraft): boolean {
   if (step === 0) return Boolean(draft.serviceId);
   if (step === 1) return Boolean(draft.propertyType) && (!isResidentialPropertyType(draft.propertyType) || Boolean(draft.bedrooms && Number.isInteger(draft.bedrooms) && draft.bedrooms > 0));
@@ -42,6 +49,8 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
   const [draft, setDraft] = useState(emptyDraft);
   const [currentStep, setCurrentStep] = useState(0);
   const [estimate, setEstimate] = useState<EstimateState>({ status: "idle" });
+  const [submission, setSubmission] = useState<SubmissionState>({ status: "idle" });
+  const submissionInFlight = useRef(false);
   const estimateSequence = useRef(0);
 
   useEffect(() => {
@@ -82,6 +91,64 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
     update("bedrooms", bedrooms);
   };
 
+  const submit = async () => {
+    if (submissionInFlight.current || submission.status === "success") return;
+
+    submissionInFlight.current = true;
+    setSubmission({ status: "submitting" });
+
+    const input = {
+      serviceId: draft.serviceId,
+      propertyType: draft.propertyType,
+      bedrooms: draft.bedrooms,
+      bathrooms: draft.bathrooms,
+      extraIds: draft.extraIds,
+      preferredDate: draft.preferredDate,
+      preferredTimeWindow: draft.preferredTimeWindow,
+      customerName: draft.customerName,
+      customerEmail: draft.customerEmail,
+      customerPhone: draft.customerPhone,
+      addressLine1: draft.addressLine1,
+      addressLine2: draft.addressLine2,
+      city: draft.city,
+      state: draft.state,
+      postalCode: draft.postalCode,
+      customerNotes: draft.customerNotes,
+    };
+
+    try {
+      const result = await submitCleaningRequest(input);
+      if (result.success) {
+        setDraft(emptyDraft);
+        setSubmission({ status: "success", request: result.request });
+        return;
+      }
+
+      setSubmission({ status: "error", reason: result.reason, fieldErrors: result.fieldErrors });
+      if (result.reason === "INVALID_INPUT" && result.fieldErrors) {
+        setCurrentStep(getEarliestRequestErrorStep(result.fieldErrors));
+      } else if (result.reason === "SERVICE_UNAVAILABLE") {
+        setCurrentStep(0);
+      } else if (result.reason === "EXTRA_UNAVAILABLE") {
+        setCurrentStep(2);
+      }
+    } catch {
+      setSubmission({ status: "error", reason: "INTERNAL_ERROR" });
+    } finally {
+      submissionInFlight.current = false;
+    }
+  };
+
+  const submissionMessage = submission.status === "error"
+    ? submission.reason === "SERVICE_UNAVAILABLE"
+      ? "That service is no longer available. Please choose another service."
+      : submission.reason === "EXTRA_UNAVAILABLE"
+        ? "One of the selected extras is no longer available. Please review your selections."
+        : submission.reason === "INTERNAL_ERROR"
+          ? "We couldn't send your request right now. Your information is still here. Please try again."
+          : "Please review the highlighted information and try again."
+    : null;
+
   const renderStep = () => {
     switch (currentStep) {
       case 0: return <ServiceStep services={services} selectedId={draft.serviceId} onSelect={chooseService} />;
@@ -113,11 +180,31 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
           <div className="border-b border-slate-100 px-5 py-5 sm:px-8"><RequestProgress currentStep={currentStep + 1} totalSteps={steps.length} label={steps[currentStep].label} /></div>
           <div className="px-5 py-7 sm:px-8 sm:py-9">
             <div className="mb-8"><h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{steps[currentStep].title}</h2><p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">{steps[currentStep].description}</p></div>
-            {services.length === 0 && currentStep === 0 ? <EstimateCard state={{ status: "unavailable" }} /> : renderStep()}
+            {submission.status === "success" ? (
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6" role="status">
+                <p className="text-lg font-semibold text-emerald-950">Your cleaning request was received.</p>
+                <p className="mt-2 text-sm leading-6 text-emerald-900">Request number: <strong>{submission.request.requestNumber}</strong>. Our team will review your preferred timing and follow up to confirm availability and final pricing.</p>
+                <p className="mt-4 text-sm font-semibold text-emerald-900">Starting estimate: {submission.request.estimate.amount ? `$${submission.request.estimate.amount}` : "To be confirmed"}</p>
+              </div>
+            ) : (
+              <>
+                {submissionMessage ? (
+                  <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-950" role="alert">
+                    <p className="font-semibold">{submissionMessage}</p>
+                    {submission.status === "error" && submission.fieldErrors ? (
+                      <ul className="mt-2 list-disc pl-5">
+                        {Object.entries(submission.fieldErrors).flatMap(([field, messages]) => messages.map((message) => <li key={`${field}-${message}`}>{getRequestFieldLabel(field)}: {message}</li>))}
+                      </ul>
+                    ) : null}
+                  </div>
+                ) : null}
+                {services.length === 0 && currentStep === 0 ? <EstimateCard state={{ status: "unavailable" }} /> : renderStep()}
+              </>
+            )}
           </div>
           <div className="flex flex-col-reverse gap-3 border-t border-slate-100 bg-slate-50/70 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <button type="button" onClick={() => setCurrentStep((step) => Math.max(0, step - 1))} disabled={currentStep === 0} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 font-semibold text-slate-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"><ArrowLeft aria-hidden="true" className="size-4" />Back</button>
-            {currentStep < steps.length - 1 ? <button type="button" onClick={() => setCurrentStep((step) => Math.min(steps.length - 1, step + 1))} disabled={!isComplete(currentStep, draft)} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">Continue<ArrowRight aria-hidden="true" className="size-4" /></button> : <button type="button" disabled className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-300 px-6 font-semibold text-white">Send cleaning request</button>}
+            <button type="button" onClick={() => setCurrentStep((step) => Math.max(0, step - 1))} disabled={currentStep === 0 || submission.status === "submitting" || submission.status === "success"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 font-semibold text-slate-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"><ArrowLeft aria-hidden="true" className="size-4" />Back</button>
+            {currentStep < steps.length - 1 ? <button type="button" onClick={() => setCurrentStep((step) => Math.min(steps.length - 1, step + 1))} disabled={!isComplete(currentStep, draft) || submission.status === "submitting" || submission.status === "success"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">Continue<ArrowRight aria-hidden="true" className="size-4" /></button> : <button type="button" onClick={() => void submit()} disabled={submission.status === "submitting" || submission.status === "success"} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300">{submission.status === "submitting" ? "Sending your request…" : "Send cleaning request"}</button>}
           </div>
         </div>
       </div>
