@@ -112,14 +112,14 @@ export default function Footer() {
             <ul className="mt-6 space-y-5">
               <li>
                 <a
-                  href="tel:+17865550198"
+                  href="tel:+19084145613"
                   className="flex items-start gap-3 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 >
                   <Phone
                     aria-hidden="true"
                     className="mt-0.5 size-5 shrink-0 text-blue-300"
                   />
-                  <span>(786) 555-0198</span>
+                  <span>(908) 414 5613</span>
                 </a>
               </li>
 
@@ -162,7 +162,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-5 border-t border-white/10 pt-7 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {currentYear} Brisa Clean. All rights reserved.</p>
+          <p>© {currentYear} Just Cleaning LLC. All rights reserved.</p>
 
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             <Link

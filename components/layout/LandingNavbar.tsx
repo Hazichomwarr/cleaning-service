@@ -58,11 +58,11 @@ export default function LandingNavbar() {
           </ul>
 
           <a
-            href="tel:+19735369711"
+            href="tel:+19084145613"
             className="flex items-center gap-2 text-sm font-semibold text-slate-800 transition hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
           >
             <Phone aria-hidden="true" className="size-4 text-green-600" />
-            <span>(973) 536-9711</span>
+            <span>(908) 414 5613</span>
           </a>
 
           <Link
@@ -112,11 +112,11 @@ export default function LandingNavbar() {
             </ul>
 
             <a
-              href="tel:+19735369711"
+              href="tel:+19084145613"
               className="flex items-center gap-3 rounded-lg px-3 py-3 font-semibold text-slate-800 transition hover:bg-slate-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
             >
               <Phone aria-hidden="true" className="size-5 text-blue-600" />
-              <span>(973) 536-9711</span>
+              <span>(908) 414 5613</span>
             </a>
 
             <Link
