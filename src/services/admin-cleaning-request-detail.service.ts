@@ -4,6 +4,7 @@ import {
   type PropertyType,
   type WorkerType,
 } from "../generated/prisma/client";
+import type { CleaningRequestStatusHistoryItem } from "./cleaning-request-lifecycle.service";
 
 export type AdminCleaningRequestDetail = {
   id: string;
@@ -21,6 +22,7 @@ export type AdminCleaningRequestDetail = {
   confirmedSchedule: { start: string | null; end: string | null } | null;
   assignments: Array<{ id: string; workerId: string; workerName: string; workerType: WorkerType; assignedAt: string }>;
   cancellation: { cancelledAt: string | null; reason: string | null } | null;
+  statusHistory: CleaningRequestStatusHistoryItem[];
   createdAt: string;
   updatedAt: string;
 };
@@ -57,6 +59,14 @@ type DetailDatabaseRow = {
   service: { id: string; name: string; slug: string };
   requestExtras: Array<{ cleaningExtra: { id: string; name: string; displayOrder: number } }>;
   assignments: Array<{ id: string; workerId: string; assignedAt: Date; worker: { firstName: string; lastName: string; type: WorkerType } }>;
+  statusHistory: Array<{
+    id: string;
+    fromStatus: CleaningRequestStatus;
+    toStatus: CleaningRequestStatus;
+    reason: string | null;
+    createdAt: Date;
+    changedByAdminUser: { id: string; name: string; email: string };
+  }>;
 };
 
 type DetailDatabase = {
@@ -99,6 +109,17 @@ const detailSelect = {
   service: { select: { id: true, name: true, slug: true } },
   requestExtras: { select: { cleaningExtra: { select: { id: true, name: true, displayOrder: true } } } },
   assignments: { select: { id: true, workerId: true, assignedAt: true, worker: { select: { firstName: true, lastName: true, type: true } } } },
+  statusHistory: {
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: {
+      id: true,
+      fromStatus: true,
+      toStatus: true,
+      reason: true,
+      createdAt: true,
+      changedByAdminUser: { select: { id: true, name: true, email: true } },
+    },
+  },
 };
 
 function toDateOnly(value: Date): string {
@@ -132,6 +153,17 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
       .sort((left, right) => left.assignedAt.getTime() - right.assignedAt.getTime() || `${left.worker.lastName} ${left.worker.firstName}`.localeCompare(`${right.worker.lastName} ${right.worker.firstName}`))
       .map((assignment) => ({ id: assignment.id, workerId: assignment.workerId, workerName: `${assignment.worker.firstName} ${assignment.worker.lastName}`, workerType: assignment.worker.type, assignedAt: assignment.assignedAt.toISOString() })),
     cancellation: hasCancellation ? { cancelledAt: row.cancelledAt?.toISOString() ?? null, reason: row.cancellationReason } : null,
+    statusHistory: row.statusHistory
+      .slice()
+      .sort((left, right) => left.createdAt.getTime() - right.createdAt.getTime() || left.id.localeCompare(right.id))
+      .map((history) => ({
+        id: history.id,
+        fromStatus: history.fromStatus,
+        toStatus: history.toStatus,
+        reason: history.reason,
+        changedAt: history.createdAt.toISOString(),
+        changedBy: history.changedByAdminUser,
+      })),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

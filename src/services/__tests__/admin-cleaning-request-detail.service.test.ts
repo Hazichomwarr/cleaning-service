@@ -4,6 +4,7 @@ import { CleaningEstimateOutcome, CleaningRequestStatus, Prisma, PropertyType, W
 import { getAdminCleaningRequestDetail, type AdminCleaningRequestDetail } from "../admin-cleaning-request-detail.service.js";
 
 function row(overrides: Partial<AdminCleaningRequestDetail> = {}) {
+  const statusHistory = overrides.statusHistory ?? [];
   const item = {
     id: overrides.id ?? "request-1", requestNumber: overrides.requestNumber ?? "JC-2026-0042", status: overrides.status ?? CleaningRequestStatus.NEW,
     customer: overrides.customer ?? { name: "Jane Smith", email: "jane@example.com", phone: "+19735551234" },
@@ -17,6 +18,7 @@ function row(overrides: Partial<AdminCleaningRequestDetail> = {}) {
     preferredSchedule: overrides.preferredSchedule ?? { date: "2026-08-21", timeWindow: "MORNING" },
     confirmedSchedule: overrides.confirmedSchedule ?? null,
     assignments: overrides.assignments ?? [],
+    statusHistory,
     cancellation: overrides.cancellation ?? null,
     createdAt: overrides.createdAt ?? "2026-08-12T16:20:00.000Z", updatedAt: overrides.updatedAt ?? "2026-08-12T16:20:00.000Z",
   };
@@ -31,6 +33,7 @@ function row(overrides: Partial<AdminCleaningRequestDetail> = {}) {
     createdAt: new Date(item.createdAt), updatedAt: new Date(item.updatedAt), service: item.service,
     requestExtras: item.extras.map((extra, index) => ({ cleaningExtra: { id: extra.id, name: extra.name, displayOrder: item.extras.length - index } })),
     assignments: item.assignments.map((assignment) => { const [firstName, ...lastParts] = assignment.workerName.split(" "); return { id: assignment.id, workerId: assignment.workerId, assignedAt: new Date(assignment.assignedAt), worker: { firstName, lastName: lastParts.join(" "), type: assignment.workerType } }; }),
+    statusHistory: item.statusHistory.map((history) => ({ id: history.id, fromStatus: history.fromStatus, toStatus: history.toStatus, reason: history.reason, createdAt: new Date(history.changedAt), changedByAdminUser: history.changedBy })),
   };
 }
 
@@ -79,4 +82,15 @@ test("returns null for an unknown request and keeps empty collections safe", asy
   assert.deepEqual(result?.extras, []);
   assert.deepEqual(result?.assignments, []);
   assert.equal(result?.cancellation, null);
+});
+
+test("serializes lifecycle history oldest first with safe actor fields", async () => {
+  const result = await getAdminCleaningRequestDetail("request-1", { database: database(row({ statusHistory: [
+    { id: "history-2", fromStatus: CleaningRequestStatus.REVIEWING, toStatus: CleaningRequestStatus.CANCELLED, reason: "Unavailable", changedAt: "2026-08-14T12:00:00.000Z", changedBy: { id: "admin-2", name: "Maria Rodriguez", email: "maria@example.com" } },
+    { id: "history-1", fromStatus: CleaningRequestStatus.NEW, toStatus: CleaningRequestStatus.REVIEWING, reason: null, changedAt: "2026-08-13T12:00:00.000Z", changedBy: { id: "admin-1", name: "John Smith", email: "john@example.com" } },
+  ] })) });
+  assert.deepEqual(result?.statusHistory.map((item) => item.id), ["history-1", "history-2"]);
+  assert.deepEqual(result?.statusHistory[0]?.changedBy, { id: "admin-1", name: "John Smith", email: "john@example.com" });
+  assert.equal(result?.statusHistory[0]?.reason, null);
+  assert.equal("passwordHash" in (result?.statusHistory[0]?.changedBy ?? {}), false);
 });
