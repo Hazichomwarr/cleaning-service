@@ -40,8 +40,8 @@ export default function ReviewStep({ draft, services, extras, estimate, onEdit }
       </div>
 
       <div className="divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white px-5">
-        <SummaryRow label="Service" value={service} step={0} onEdit={onEdit} />
-        <SummaryRow label="Property" value={[property, details].filter(Boolean).join(" · ")} step={1} onEdit={onEdit} />
+        <SummaryRow label="Property" value={[property, details].filter(Boolean).join(" · ")} step={0} onEdit={onEdit} />
+        <SummaryRow label="Service" value={service} step={1} onEdit={onEdit} />
         <SummaryRow label="Extras" value={selectedExtras || "No extras selected"} step={2} onEdit={onEdit} />
         <SummaryRow label="Preferred schedule" value={[draft.preferredDate, draft.preferredTimeWindow].filter(Boolean).join(" · ")} step={3} onEdit={onEdit} />
         <SummaryRow label="Your details" value={[contact, address].filter(Boolean).join(" · ")} step={4} onEdit={onEdit} />

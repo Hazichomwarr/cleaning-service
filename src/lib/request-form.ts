@@ -2,23 +2,32 @@ import type { CleaningRequestDraft, PropertyType } from "../types/cleaning-reque
 import type { PublicCleaningEstimateResult } from "./cleaning-estimate-boundary";
 import type { EstimateState } from "../../components/request/EstimateCard";
 
+export const REQUEST_STEP = {
+  PROPERTY: 0,
+  SERVICE: 1,
+  EXTRAS: 2,
+  SCHEDULE: 3,
+  DETAILS: 4,
+  REVIEW: 5,
+} as const;
+
 export const requestFieldSteps: Record<string, number> = {
-  serviceId: 0,
-  propertyType: 1,
-  bedrooms: 1,
-  bathrooms: 1,
-  extraIds: 2,
-  preferredDate: 3,
-  preferredTimeWindow: 3,
-  customerName: 4,
-  customerEmail: 4,
-  customerPhone: 4,
-  addressLine1: 4,
-  addressLine2: 4,
-  city: 4,
-  state: 4,
-  postalCode: 4,
-  customerNotes: 4,
+  serviceId: REQUEST_STEP.SERVICE,
+  propertyType: REQUEST_STEP.PROPERTY,
+  bedrooms: REQUEST_STEP.PROPERTY,
+  bathrooms: REQUEST_STEP.PROPERTY,
+  extraIds: REQUEST_STEP.EXTRAS,
+  preferredDate: REQUEST_STEP.SCHEDULE,
+  preferredTimeWindow: REQUEST_STEP.SCHEDULE,
+  customerName: REQUEST_STEP.DETAILS,
+  customerEmail: REQUEST_STEP.DETAILS,
+  customerPhone: REQUEST_STEP.DETAILS,
+  addressLine1: REQUEST_STEP.DETAILS,
+  addressLine2: REQUEST_STEP.DETAILS,
+  city: REQUEST_STEP.DETAILS,
+  state: REQUEST_STEP.DETAILS,
+  postalCode: REQUEST_STEP.DETAILS,
+  customerNotes: REQUEST_STEP.DETAILS,
 };
 
 export function getEarliestRequestErrorStep(fieldErrors: Record<string, string[]>): number {

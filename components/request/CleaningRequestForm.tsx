@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getCleaningEstimate } from "@/app/actions/get-cleaning-estimate";
 import { submitCleaningRequest, type SubmitCleaningRequestResult } from "@/app/actions/submit-cleaning-request";
 import type { CatalogItem, CleaningRequestDraft, PropertyType } from "@/src/types/cleaning-request-draft";
-import { getEarliestRequestErrorStep, getRequestFieldLabel, isResidentialPropertyType, mapEstimateResult, toggleRequestExtra, updateRequestDraft } from "@/src/lib/request-form";
+import { getEarliestRequestErrorStep, getRequestFieldLabel, isResidentialPropertyType, mapEstimateResult, REQUEST_STEP, toggleRequestExtra, updateRequestDraft } from "@/src/lib/request-form";
 import { toRequestConfirmationData, type RequestConfirmationData } from "@/src/lib/request-confirmation";
 import EstimateCard, { type EstimateState } from "./EstimateCard";
 import RequestProgress from "./RequestProgress";
@@ -19,8 +19,8 @@ import ReviewStep from "./ReviewStep";
 import RequestConfirmation from "./RequestConfirmation";
 
 const steps = [
-  { label: "Service", title: "What kind of cleaning do you need?", description: "Start with the service that fits your space." },
   { label: "Property", title: "Tell us about the property", description: "A few details help us prepare a useful starting estimate." },
+  { label: "Service", title: "What kind of cleaning do you need?", description: "Choose the service that fits your space." },
   { label: "Extras", title: "Anything extra you’d like us to handle?", description: "Choose as many as you need, or skip this step." },
   { label: "Schedule", title: "When would you like us to come?", description: "Share your preferred timing and we’ll confirm availability." },
   { label: "Your details", title: "Where should we reach you?", description: "We’ll use these details to follow up about your request." },
@@ -40,10 +40,10 @@ type SubmissionState =
   | { status: "success"; request: RequestConfirmationData };
 
 function isComplete(step: number, draft: CleaningRequestDraft): boolean {
-  if (step === 0) return Boolean(draft.serviceId);
-  if (step === 1) return Boolean(draft.propertyType) && (!isResidentialPropertyType(draft.propertyType) || Boolean(draft.bedrooms && Number.isInteger(draft.bedrooms) && draft.bedrooms > 0));
-  if (step === 3) return Boolean(draft.preferredDate && draft.preferredTimeWindow);
-  if (step === 4) return Boolean(draft.customerName && draft.customerEmail && draft.customerPhone && draft.addressLine1 && draft.city && draft.state && draft.postalCode);
+  if (step === REQUEST_STEP.PROPERTY) return Boolean(draft.propertyType) && (!isResidentialPropertyType(draft.propertyType) || Boolean(draft.bedrooms && Number.isInteger(draft.bedrooms) && draft.bedrooms > 0));
+  if (step === REQUEST_STEP.SERVICE) return Boolean(draft.serviceId);
+  if (step === REQUEST_STEP.SCHEDULE) return Boolean(draft.preferredDate && draft.preferredTimeWindow);
+  if (step === REQUEST_STEP.DETAILS) return Boolean(draft.customerName && draft.customerEmail && draft.customerPhone && draft.addressLine1 && draft.city && draft.state && draft.postalCode);
   return true;
 }
 
@@ -132,9 +132,9 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
       if (result.reason === "INVALID_INPUT" && result.fieldErrors) {
         setCurrentStep(getEarliestRequestErrorStep(result.fieldErrors));
       } else if (result.reason === "SERVICE_UNAVAILABLE") {
-        setCurrentStep(0);
+        setCurrentStep(REQUEST_STEP.SERVICE);
       } else if (result.reason === "EXTRA_UNAVAILABLE") {
-        setCurrentStep(2);
+        setCurrentStep(REQUEST_STEP.EXTRAS);
       }
     } catch {
       setSubmission({ status: "error", reason: "INTERNAL_ERROR" });
@@ -158,16 +158,16 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
     setDraft(emptyDraft);
     setEstimate({ status: "idle" });
     setSubmission({ status: "idle" });
-    setCurrentStep(0);
+    setCurrentStep(REQUEST_STEP.PROPERTY);
   };
 
   const renderStep = () => {
     switch (currentStep) {
-      case 0: return <ServiceStep services={services} selectedId={draft.serviceId} onSelect={chooseService} />;
-      case 1: return <PropertyStep draft={draft} estimate={estimate} onPropertyTypeChange={chooseProperty} onBedroomsChange={chooseBedrooms} onBathroomsChange={(bathrooms) => update("bathrooms", bathrooms)} />;
-      case 2: return <ExtrasStep extras={extras} selectedIds={draft.extraIds} onToggle={(extraId) => update("extraIds", toggleRequestExtra(draft.extraIds, extraId))} />;
-      case 3: return <ScheduleStep preferredDate={draft.preferredDate} preferredTimeWindow={draft.preferredTimeWindow} onDateChange={(date) => update("preferredDate", date)} onTimeChange={(timeWindow) => update("preferredTimeWindow", timeWindow)} />;
-      case 4: return <ContactStep draft={draft} onChange={update} />;
+      case REQUEST_STEP.PROPERTY: return <PropertyStep draft={draft} estimate={estimate} onPropertyTypeChange={chooseProperty} onBedroomsChange={chooseBedrooms} onBathroomsChange={(bathrooms) => update("bathrooms", bathrooms)} />;
+      case REQUEST_STEP.SERVICE: return <ServiceStep services={services} selectedId={draft.serviceId} onSelect={chooseService} />;
+      case REQUEST_STEP.EXTRAS: return <ExtrasStep extras={extras} selectedIds={draft.extraIds} onToggle={(extraId) => update("extraIds", toggleRequestExtra(draft.extraIds, extraId))} />;
+      case REQUEST_STEP.SCHEDULE: return <ScheduleStep preferredDate={draft.preferredDate} preferredTimeWindow={draft.preferredTimeWindow} onDateChange={(date) => update("preferredDate", date)} onTimeChange={(timeWindow) => update("preferredTimeWindow", timeWindow)} />;
+      case REQUEST_STEP.DETAILS: return <ContactStep draft={draft} onChange={update} />;
       default: return <ReviewStep draft={draft} services={services} extras={extras} estimate={estimate} onEdit={setCurrentStep} />;
     }
   };
@@ -204,7 +204,7 @@ export default function CleaningRequestForm({ services, extras }: { services: Ca
                     ) : null}
                   </div>
                 ) : null}
-                {services.length === 0 && currentStep === 0 ? <EstimateCard state={{ status: "unavailable" }} /> : renderStep()}
+                {services.length === 0 && currentStep === REQUEST_STEP.SERVICE ? <EstimateCard state={{ status: "unavailable" }} /> : renderStep()}
                 </>
             </div>
             <div className="flex flex-col-reverse gap-3 border-t border-slate-100 bg-slate-50/70 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">

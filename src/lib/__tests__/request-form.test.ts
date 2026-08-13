@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { mapEstimateResult, toggleRequestExtra, updateRequestDraft } from "../request-form";
+import { getEarliestRequestErrorStep, mapEstimateResult, REQUEST_STEP, toggleRequestExtra, updateRequestDraft } from "../request-form";
+
+test("uses the property-first request step order", () => {
+  assert.deepEqual(REQUEST_STEP, { PROPERTY: 0, SERVICE: 1, EXTRAS: 2, SCHEDULE: 3, DETAILS: 4, REVIEW: 5 });
+  assert.equal(getEarliestRequestErrorStep({ serviceId: ["missing"] }), REQUEST_STEP.SERVICE);
+  assert.equal(getEarliestRequestErrorStep({ bedrooms: ["required"], customerEmail: ["invalid"] }), REQUEST_STEP.PROPERTY);
+  assert.equal(getEarliestRequestErrorStep({ customerEmail: ["invalid"] }), REQUEST_STEP.DETAILS);
+});
 
 test("draft updates preserve the other collected fields", () => {
   const draft = { serviceId: "service-1", serviceName: "Standard Cleaning", propertyType: "HOUSE" as const, bedrooms: 2, bathrooms: "1.5", extraIds: ["extra-1"], preferredDate: "2026-08-21", preferredTimeWindow: "Morning", customerName: "Ava", customerEmail: "ava@example.com", customerPhone: "555-1111", addressLine1: "1 Main St", addressLine2: "", city: "Newark", state: "NJ", postalCode: "07102", customerNotes: "Gate code" };
