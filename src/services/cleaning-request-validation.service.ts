@@ -68,6 +68,10 @@ function normalizePhone(value: string): string | null {
   return null;
 }
 
+export function isValidUSState(value: string): boolean {
+  return US_STATE_CODES.has(value.toUpperCase());
+}
+
 function toFieldErrors(error: { issues: Array<{ path: PropertyKey[]; message: string }> }): Record<string, string[]> {
   return error.issues.reduce<Record<string, string[]>>((errors, issue) => {
     const field = String(issue.path[0] ?? "form");
