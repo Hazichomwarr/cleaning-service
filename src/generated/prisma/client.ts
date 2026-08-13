@@ -82,6 +82,11 @@ export type PricingRule = Prisma.PricingRuleModel
  */
 export type CleaningRequest = Prisma.CleaningRequestModel
 /**
+ * Model CleaningRequestStatusHistory
+ * 
+ */
+export type CleaningRequestStatusHistory = Prisma.CleaningRequestStatusHistoryModel
+/**
  * Model CleaningRequestExtra
  * 
  */

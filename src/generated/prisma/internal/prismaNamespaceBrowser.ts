@@ -59,6 +59,7 @@ export const ModelName = {
   Worker: 'Worker',
   PricingRule: 'PricingRule',
   CleaningRequest: 'CleaningRequest',
+  CleaningRequestStatusHistory: 'CleaningRequestStatusHistory',
   CleaningRequestExtra: 'CleaningRequestExtra',
   CleaningAssignment: 'CleaningAssignment'
 } as const
@@ -216,6 +217,19 @@ export const CleaningRequestScalarFieldEnum = {
 } as const
 
 export type CleaningRequestScalarFieldEnum = (typeof CleaningRequestScalarFieldEnum)[keyof typeof CleaningRequestScalarFieldEnum]
+
+
+export const CleaningRequestStatusHistoryScalarFieldEnum = {
+  id: 'id',
+  cleaningRequestId: 'cleaningRequestId',
+  fromStatus: 'fromStatus',
+  toStatus: 'toStatus',
+  changedByAdminUserId: 'changedByAdminUserId',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type CleaningRequestStatusHistoryScalarFieldEnum = (typeof CleaningRequestStatusHistoryScalarFieldEnum)[keyof typeof CleaningRequestStatusHistoryScalarFieldEnum]
 
 
 export const CleaningRequestExtraScalarFieldEnum = {
