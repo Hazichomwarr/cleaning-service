@@ -56,7 +56,7 @@ const cleaningServices = [
   },
 ];
 
-const cleaningExtras = [
+const cleaningExtras: Array<{ name: string; description: string; displayOrder: number; isActive?: boolean }> = [
   {
     name: "Inside Oven",
     description: "Cleaning the interior surfaces of the oven.",
@@ -81,6 +81,7 @@ const cleaningExtras = [
     name: "Laundry",
     description: "Additional laundry assistance when requested.",
     displayOrder: 5,
+    isActive: false,
   },
 ];
 
@@ -125,7 +126,7 @@ async function seedCleaningExtras() {
         where: { id: existingExtra.id },
         data: {
           description: extra.description,
-          isActive: true,
+          isActive: extra.isActive ?? true,
           displayOrder: extra.displayOrder,
         },
       });
@@ -133,7 +134,7 @@ async function seedCleaningExtras() {
       await prisma.cleaningExtra.create({
         data: {
           ...extra,
-          isActive: true,
+          isActive: extra.isActive ?? true,
         },
       });
     }

@@ -81,6 +81,12 @@ test("rejects unavailable service and extras", async () => {
   if (!inactiveExtra.success) assert.equal(inactiveExtra.reason, "EXTRA_UNAVAILABLE");
 });
 
+test("rejects a newly retired Laundry extra through active configuration validation", async () => {
+  const result = await validateCleaningRequest(input({ extraIds: ["laundry-extra"] }), { now, referenceReader: reader({ findActiveExtrasByIds: async () => [] }) });
+  assert.equal(result.success, false);
+  if (!result.success) assert.equal(result.reason, "EXTRA_UNAVAILABLE");
+});
+
 test("rejects past dates but accepts today and future dates", async () => {
   assert.equal((await validateCleaningRequest(input({ preferredDate: "2026-08-10" }), { now, referenceReader: reader() })).success, false);
   assert.equal((await validateCleaningRequest(input({ preferredDate: "2026-08-11" }), { now, referenceReader: reader() })).success, true);
