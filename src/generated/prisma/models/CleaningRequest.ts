@@ -46,6 +46,8 @@ export type CleaningRequestMinAggregateOutputType = {
   id: string | null
   requestNumber: string | null
   serviceId: string | null
+  customerId: string | null
+  customerPropertyId: string | null
   customerName: string | null
   customerEmail: string | null
   customerPhone: string | null
@@ -78,6 +80,8 @@ export type CleaningRequestMaxAggregateOutputType = {
   id: string | null
   requestNumber: string | null
   serviceId: string | null
+  customerId: string | null
+  customerPropertyId: string | null
   customerName: string | null
   customerEmail: string | null
   customerPhone: string | null
@@ -110,6 +114,8 @@ export type CleaningRequestCountAggregateOutputType = {
   id: number
   requestNumber: number
   serviceId: number
+  customerId: number
+  customerPropertyId: number
   customerName: number
   customerEmail: number
   customerPhone: number
@@ -160,6 +166,8 @@ export type CleaningRequestMinAggregateInputType = {
   id?: true
   requestNumber?: true
   serviceId?: true
+  customerId?: true
+  customerPropertyId?: true
   customerName?: true
   customerEmail?: true
   customerPhone?: true
@@ -192,6 +200,8 @@ export type CleaningRequestMaxAggregateInputType = {
   id?: true
   requestNumber?: true
   serviceId?: true
+  customerId?: true
+  customerPropertyId?: true
   customerName?: true
   customerEmail?: true
   customerPhone?: true
@@ -224,6 +234,8 @@ export type CleaningRequestCountAggregateInputType = {
   id?: true
   requestNumber?: true
   serviceId?: true
+  customerId?: true
+  customerPropertyId?: true
   customerName?: true
   customerEmail?: true
   customerPhone?: true
@@ -343,6 +355,8 @@ export type CleaningRequestGroupByOutputType = {
   id: string
   requestNumber: string
   serviceId: string
+  customerId: string | null
+  customerPropertyId: string | null
   customerName: string
   customerEmail: string
   customerPhone: string
@@ -398,6 +412,8 @@ export type CleaningRequestWhereInput = {
   id?: Prisma.StringFilter<"CleaningRequest"> | string
   requestNumber?: Prisma.StringFilter<"CleaningRequest"> | string
   serviceId?: Prisma.StringFilter<"CleaningRequest"> | string
+  customerId?: Prisma.StringNullableFilter<"CleaningRequest"> | string | null
+  customerPropertyId?: Prisma.StringNullableFilter<"CleaningRequest"> | string | null
   customerName?: Prisma.StringFilter<"CleaningRequest"> | string
   customerEmail?: Prisma.StringFilter<"CleaningRequest"> | string
   customerPhone?: Prisma.StringFilter<"CleaningRequest"> | string
@@ -425,6 +441,8 @@ export type CleaningRequestWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   service?: Prisma.XOR<Prisma.CleaningServiceScalarRelationFilter, Prisma.CleaningServiceWhereInput>
+  customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
+  customerProperty?: Prisma.XOR<Prisma.CustomerPropertyNullableScalarRelationFilter, Prisma.CustomerPropertyWhereInput> | null
   requestExtras?: Prisma.CleaningRequestExtraListRelationFilter
   assignments?: Prisma.CleaningAssignmentListRelationFilter
 }
@@ -433,6 +451,8 @@ export type CleaningRequestOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   requestNumber?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  customerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerPropertyId?: Prisma.SortOrderInput | Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerEmail?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
@@ -460,6 +480,8 @@ export type CleaningRequestOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   service?: Prisma.CleaningServiceOrderByWithRelationInput
+  customer?: Prisma.CustomerOrderByWithRelationInput
+  customerProperty?: Prisma.CustomerPropertyOrderByWithRelationInput
   requestExtras?: Prisma.CleaningRequestExtraOrderByRelationAggregateInput
   assignments?: Prisma.CleaningAssignmentOrderByRelationAggregateInput
 }
@@ -471,6 +493,8 @@ export type CleaningRequestWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CleaningRequestWhereInput[]
   NOT?: Prisma.CleaningRequestWhereInput | Prisma.CleaningRequestWhereInput[]
   serviceId?: Prisma.StringFilter<"CleaningRequest"> | string
+  customerId?: Prisma.StringNullableFilter<"CleaningRequest"> | string | null
+  customerPropertyId?: Prisma.StringNullableFilter<"CleaningRequest"> | string | null
   customerName?: Prisma.StringFilter<"CleaningRequest"> | string
   customerEmail?: Prisma.StringFilter<"CleaningRequest"> | string
   customerPhone?: Prisma.StringFilter<"CleaningRequest"> | string
@@ -498,6 +522,8 @@ export type CleaningRequestWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   service?: Prisma.XOR<Prisma.CleaningServiceScalarRelationFilter, Prisma.CleaningServiceWhereInput>
+  customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
+  customerProperty?: Prisma.XOR<Prisma.CustomerPropertyNullableScalarRelationFilter, Prisma.CustomerPropertyWhereInput> | null
   requestExtras?: Prisma.CleaningRequestExtraListRelationFilter
   assignments?: Prisma.CleaningAssignmentListRelationFilter
 }, "id" | "requestNumber">
@@ -506,6 +532,8 @@ export type CleaningRequestOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   requestNumber?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  customerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerPropertyId?: Prisma.SortOrderInput | Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerEmail?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
@@ -546,6 +574,8 @@ export type CleaningRequestScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"CleaningRequest"> | string
   requestNumber?: Prisma.StringWithAggregatesFilter<"CleaningRequest"> | string
   serviceId?: Prisma.StringWithAggregatesFilter<"CleaningRequest"> | string
+  customerId?: Prisma.StringNullableWithAggregatesFilter<"CleaningRequest"> | string | null
+  customerPropertyId?: Prisma.StringNullableWithAggregatesFilter<"CleaningRequest"> | string | null
   customerName?: Prisma.StringWithAggregatesFilter<"CleaningRequest"> | string
   customerEmail?: Prisma.StringWithAggregatesFilter<"CleaningRequest"> | string
   customerPhone?: Prisma.StringWithAggregatesFilter<"CleaningRequest"> | string
@@ -604,6 +634,8 @@ export type CleaningRequestCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   service: Prisma.CleaningServiceCreateNestedOneWithoutRequestsInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutRequestsInput
+  customerProperty?: Prisma.CustomerPropertyCreateNestedOneWithoutRequestsInput
   requestExtras?: Prisma.CleaningRequestExtraCreateNestedManyWithoutCleaningRequestInput
   assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
 }
@@ -612,6 +644,8 @@ export type CleaningRequestUncheckedCreateInput = {
   id?: string
   requestNumber: string
   serviceId: string
+  customerId?: string | null
+  customerPropertyId?: string | null
   customerName: string
   customerEmail: string
   customerPhone: string
@@ -672,6 +706,8 @@ export type CleaningRequestUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   service?: Prisma.CleaningServiceUpdateOneRequiredWithoutRequestsNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutRequestsNestedInput
+  customerProperty?: Prisma.CustomerPropertyUpdateOneWithoutRequestsNestedInput
   requestExtras?: Prisma.CleaningRequestExtraUpdateManyWithoutCleaningRequestNestedInput
   assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
 }
@@ -680,6 +716,8 @@ export type CleaningRequestUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
   customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -714,6 +752,8 @@ export type CleaningRequestCreateManyInput = {
   id?: string
   requestNumber: string
   serviceId: string
+  customerId?: string | null
+  customerPropertyId?: string | null
   customerName: string
   customerEmail: string
   customerPhone: string
@@ -777,6 +817,8 @@ export type CleaningRequestUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
   customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -819,6 +861,8 @@ export type CleaningRequestCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   requestNumber?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  customerPropertyId?: Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerEmail?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
@@ -859,6 +903,8 @@ export type CleaningRequestMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   requestNumber?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  customerPropertyId?: Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerEmail?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
@@ -891,6 +937,8 @@ export type CleaningRequestMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   requestNumber?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  customerId?: Prisma.SortOrder
+  customerPropertyId?: Prisma.SortOrder
   customerName?: Prisma.SortOrder
   customerEmail?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
@@ -974,16 +1022,88 @@ export type CleaningRequestUncheckedUpdateManyWithoutServiceNestedInput = {
   deleteMany?: Prisma.CleaningRequestScalarWhereInput | Prisma.CleaningRequestScalarWhereInput[]
 }
 
-export type EnumPropertyTypeFieldUpdateOperationsInput = {
-  set?: $Enums.PropertyType
+export type CleaningRequestCreateNestedManyWithoutCustomerInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput> | Prisma.CleaningRequestCreateWithoutCustomerInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerInputEnvelope
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
 }
 
-export type NullableDecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type CleaningRequestUncheckedCreateNestedManyWithoutCustomerInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput> | Prisma.CleaningRequestCreateWithoutCustomerInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerInputEnvelope
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+}
+
+export type CleaningRequestUpdateManyWithoutCustomerNestedInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput> | Prisma.CleaningRequestCreateWithoutCustomerInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput[]
+  upsert?: Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerInput | Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerInputEnvelope
+  set?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  disconnect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  delete?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  update?: Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerInput | Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerInput[]
+  updateMany?: Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerInput | Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerInput[]
+  deleteMany?: Prisma.CleaningRequestScalarWhereInput | Prisma.CleaningRequestScalarWhereInput[]
+}
+
+export type CleaningRequestUncheckedUpdateManyWithoutCustomerNestedInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput> | Prisma.CleaningRequestCreateWithoutCustomerInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerInput[]
+  upsert?: Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerInput | Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerInputEnvelope
+  set?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  disconnect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  delete?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  update?: Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerInput | Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerInput[]
+  updateMany?: Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerInput | Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerInput[]
+  deleteMany?: Prisma.CleaningRequestScalarWhereInput | Prisma.CleaningRequestScalarWhereInput[]
+}
+
+export type CleaningRequestCreateNestedManyWithoutCustomerPropertyInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput> | Prisma.CleaningRequestCreateWithoutCustomerPropertyInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerPropertyInputEnvelope
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+}
+
+export type CleaningRequestUncheckedCreateNestedManyWithoutCustomerPropertyInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput> | Prisma.CleaningRequestCreateWithoutCustomerPropertyInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerPropertyInputEnvelope
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+}
+
+export type CleaningRequestUpdateManyWithoutCustomerPropertyNestedInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput> | Prisma.CleaningRequestCreateWithoutCustomerPropertyInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput[]
+  upsert?: Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerPropertyInput | Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerPropertyInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerPropertyInputEnvelope
+  set?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  disconnect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  delete?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  update?: Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerPropertyInput | Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerPropertyInput[]
+  updateMany?: Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerPropertyInput | Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerPropertyInput[]
+  deleteMany?: Prisma.CleaningRequestScalarWhereInput | Prisma.CleaningRequestScalarWhereInput[]
+}
+
+export type CleaningRequestUncheckedUpdateManyWithoutCustomerPropertyNestedInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput> | Prisma.CleaningRequestCreateWithoutCustomerPropertyInput[] | Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput[]
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput | Prisma.CleaningRequestCreateOrConnectWithoutCustomerPropertyInput[]
+  upsert?: Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerPropertyInput | Prisma.CleaningRequestUpsertWithWhereUniqueWithoutCustomerPropertyInput[]
+  createMany?: Prisma.CleaningRequestCreateManyCustomerPropertyInputEnvelope
+  set?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  disconnect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  delete?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  connect?: Prisma.CleaningRequestWhereUniqueInput | Prisma.CleaningRequestWhereUniqueInput[]
+  update?: Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerPropertyInput | Prisma.CleaningRequestUpdateWithWhereUniqueWithoutCustomerPropertyInput[]
+  updateMany?: Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerPropertyInput | Prisma.CleaningRequestUpdateManyWithWhereWithoutCustomerPropertyInput[]
+  deleteMany?: Prisma.CleaningRequestScalarWhereInput | Prisma.CleaningRequestScalarWhereInput[]
 }
 
 export type EnumCleaningEstimateOutcomeFieldUpdateOperationsInput = {
@@ -1055,6 +1175,8 @@ export type CleaningRequestCreateWithoutServiceInput = {
   cancellationReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customer?: Prisma.CustomerCreateNestedOneWithoutRequestsInput
+  customerProperty?: Prisma.CustomerPropertyCreateNestedOneWithoutRequestsInput
   requestExtras?: Prisma.CleaningRequestExtraCreateNestedManyWithoutCleaningRequestInput
   assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
 }
@@ -1062,6 +1184,8 @@ export type CleaningRequestCreateWithoutServiceInput = {
 export type CleaningRequestUncheckedCreateWithoutServiceInput = {
   id?: string
   requestNumber: string
+  customerId?: string | null
+  customerPropertyId?: string | null
   customerName: string
   customerEmail: string
   customerPhone: string
@@ -1125,6 +1249,8 @@ export type CleaningRequestScalarWhereInput = {
   id?: Prisma.StringFilter<"CleaningRequest"> | string
   requestNumber?: Prisma.StringFilter<"CleaningRequest"> | string
   serviceId?: Prisma.StringFilter<"CleaningRequest"> | string
+  customerId?: Prisma.StringNullableFilter<"CleaningRequest"> | string | null
+  customerPropertyId?: Prisma.StringNullableFilter<"CleaningRequest"> | string | null
   customerName?: Prisma.StringFilter<"CleaningRequest"> | string
   customerEmail?: Prisma.StringFilter<"CleaningRequest"> | string
   customerPhone?: Prisma.StringFilter<"CleaningRequest"> | string
@@ -1151,6 +1277,198 @@ export type CleaningRequestScalarWhereInput = {
   cancellationReason?: Prisma.StringNullableFilter<"CleaningRequest"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CleaningRequest"> | Date | string
+}
+
+export type CleaningRequestCreateWithoutCustomerInput = {
+  id?: string
+  requestNumber: string
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  service: Prisma.CleaningServiceCreateNestedOneWithoutRequestsInput
+  customerProperty?: Prisma.CustomerPropertyCreateNestedOneWithoutRequestsInput
+  requestExtras?: Prisma.CleaningRequestExtraCreateNestedManyWithoutCleaningRequestInput
+  assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
+}
+
+export type CleaningRequestUncheckedCreateWithoutCustomerInput = {
+  id?: string
+  requestNumber: string
+  serviceId: string
+  customerPropertyId?: string | null
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  requestExtras?: Prisma.CleaningRequestExtraUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutCleaningRequestInput
+}
+
+export type CleaningRequestCreateOrConnectWithoutCustomerInput = {
+  where: Prisma.CleaningRequestWhereUniqueInput
+  create: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput>
+}
+
+export type CleaningRequestCreateManyCustomerInputEnvelope = {
+  data: Prisma.CleaningRequestCreateManyCustomerInput | Prisma.CleaningRequestCreateManyCustomerInput[]
+  skipDuplicates?: boolean
+}
+
+export type CleaningRequestUpsertWithWhereUniqueWithoutCustomerInput = {
+  where: Prisma.CleaningRequestWhereUniqueInput
+  update: Prisma.XOR<Prisma.CleaningRequestUpdateWithoutCustomerInput, Prisma.CleaningRequestUncheckedUpdateWithoutCustomerInput>
+  create: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerInput>
+}
+
+export type CleaningRequestUpdateWithWhereUniqueWithoutCustomerInput = {
+  where: Prisma.CleaningRequestWhereUniqueInput
+  data: Prisma.XOR<Prisma.CleaningRequestUpdateWithoutCustomerInput, Prisma.CleaningRequestUncheckedUpdateWithoutCustomerInput>
+}
+
+export type CleaningRequestUpdateManyWithWhereWithoutCustomerInput = {
+  where: Prisma.CleaningRequestScalarWhereInput
+  data: Prisma.XOR<Prisma.CleaningRequestUpdateManyMutationInput, Prisma.CleaningRequestUncheckedUpdateManyWithoutCustomerInput>
+}
+
+export type CleaningRequestCreateWithoutCustomerPropertyInput = {
+  id?: string
+  requestNumber: string
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  service: Prisma.CleaningServiceCreateNestedOneWithoutRequestsInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutRequestsInput
+  requestExtras?: Prisma.CleaningRequestExtraCreateNestedManyWithoutCleaningRequestInput
+  assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
+}
+
+export type CleaningRequestUncheckedCreateWithoutCustomerPropertyInput = {
+  id?: string
+  requestNumber: string
+  serviceId: string
+  customerId?: string | null
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  requestExtras?: Prisma.CleaningRequestExtraUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutCleaningRequestInput
+}
+
+export type CleaningRequestCreateOrConnectWithoutCustomerPropertyInput = {
+  where: Prisma.CleaningRequestWhereUniqueInput
+  create: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput>
+}
+
+export type CleaningRequestCreateManyCustomerPropertyInputEnvelope = {
+  data: Prisma.CleaningRequestCreateManyCustomerPropertyInput | Prisma.CleaningRequestCreateManyCustomerPropertyInput[]
+  skipDuplicates?: boolean
+}
+
+export type CleaningRequestUpsertWithWhereUniqueWithoutCustomerPropertyInput = {
+  where: Prisma.CleaningRequestWhereUniqueInput
+  update: Prisma.XOR<Prisma.CleaningRequestUpdateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedUpdateWithoutCustomerPropertyInput>
+  create: Prisma.XOR<Prisma.CleaningRequestCreateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedCreateWithoutCustomerPropertyInput>
+}
+
+export type CleaningRequestUpdateWithWhereUniqueWithoutCustomerPropertyInput = {
+  where: Prisma.CleaningRequestWhereUniqueInput
+  data: Prisma.XOR<Prisma.CleaningRequestUpdateWithoutCustomerPropertyInput, Prisma.CleaningRequestUncheckedUpdateWithoutCustomerPropertyInput>
+}
+
+export type CleaningRequestUpdateManyWithWhereWithoutCustomerPropertyInput = {
+  where: Prisma.CleaningRequestScalarWhereInput
+  data: Prisma.XOR<Prisma.CleaningRequestUpdateManyMutationInput, Prisma.CleaningRequestUncheckedUpdateManyWithoutCustomerPropertyInput>
 }
 
 export type CleaningRequestCreateWithoutRequestExtrasInput = {
@@ -1183,6 +1501,8 @@ export type CleaningRequestCreateWithoutRequestExtrasInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   service: Prisma.CleaningServiceCreateNestedOneWithoutRequestsInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutRequestsInput
+  customerProperty?: Prisma.CustomerPropertyCreateNestedOneWithoutRequestsInput
   assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
 }
 
@@ -1190,6 +1510,8 @@ export type CleaningRequestUncheckedCreateWithoutRequestExtrasInput = {
   id?: string
   requestNumber: string
   serviceId: string
+  customerId?: string | null
+  customerPropertyId?: string | null
   customerName: string
   customerEmail: string
   customerPhone: string
@@ -1265,6 +1587,8 @@ export type CleaningRequestUpdateWithoutRequestExtrasInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   service?: Prisma.CleaningServiceUpdateOneRequiredWithoutRequestsNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutRequestsNestedInput
+  customerProperty?: Prisma.CustomerPropertyUpdateOneWithoutRequestsNestedInput
   assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
 }
 
@@ -1272,6 +1596,8 @@ export type CleaningRequestUncheckedUpdateWithoutRequestExtrasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
   customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1331,6 +1657,8 @@ export type CleaningRequestCreateWithoutAssignmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   service: Prisma.CleaningServiceCreateNestedOneWithoutRequestsInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutRequestsInput
+  customerProperty?: Prisma.CustomerPropertyCreateNestedOneWithoutRequestsInput
   requestExtras?: Prisma.CleaningRequestExtraCreateNestedManyWithoutCleaningRequestInput
 }
 
@@ -1338,6 +1666,8 @@ export type CleaningRequestUncheckedCreateWithoutAssignmentsInput = {
   id?: string
   requestNumber: string
   serviceId: string
+  customerId?: string | null
+  customerPropertyId?: string | null
   customerName: string
   customerEmail: string
   customerPhone: string
@@ -1413,6 +1743,8 @@ export type CleaningRequestUpdateWithoutAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   service?: Prisma.CleaningServiceUpdateOneRequiredWithoutRequestsNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutRequestsNestedInput
+  customerProperty?: Prisma.CustomerPropertyUpdateOneWithoutRequestsNestedInput
   requestExtras?: Prisma.CleaningRequestExtraUpdateManyWithoutCleaningRequestNestedInput
 }
 
@@ -1420,6 +1752,8 @@ export type CleaningRequestUncheckedUpdateWithoutAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
   customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1452,6 +1786,8 @@ export type CleaningRequestUncheckedUpdateWithoutAssignmentsInput = {
 export type CleaningRequestCreateManyServiceInput = {
   id?: string
   requestNumber: string
+  customerId?: string | null
+  customerPropertyId?: string | null
   customerName: string
   customerEmail: string
   customerPhone: string
@@ -1509,6 +1845,8 @@ export type CleaningRequestUpdateWithoutServiceInput = {
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneWithoutRequestsNestedInput
+  customerProperty?: Prisma.CustomerPropertyUpdateOneWithoutRequestsNestedInput
   requestExtras?: Prisma.CleaningRequestExtraUpdateManyWithoutCleaningRequestNestedInput
   assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
 }
@@ -1516,6 +1854,8 @@ export type CleaningRequestUpdateWithoutServiceInput = {
 export type CleaningRequestUncheckedUpdateWithoutServiceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
   customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1549,6 +1889,280 @@ export type CleaningRequestUncheckedUpdateWithoutServiceInput = {
 export type CleaningRequestUncheckedUpdateManyWithoutServiceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CleaningRequestCreateManyCustomerInput = {
+  id?: string
+  requestNumber: string
+  serviceId: string
+  customerPropertyId?: string | null
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CleaningRequestUpdateWithoutCustomerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  service?: Prisma.CleaningServiceUpdateOneRequiredWithoutRequestsNestedInput
+  customerProperty?: Prisma.CustomerPropertyUpdateOneWithoutRequestsNestedInput
+  requestExtras?: Prisma.CleaningRequestExtraUpdateManyWithoutCleaningRequestNestedInput
+  assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
+}
+
+export type CleaningRequestUncheckedUpdateWithoutCustomerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestExtras?: Prisma.CleaningRequestExtraUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutCleaningRequestNestedInput
+}
+
+export type CleaningRequestUncheckedUpdateManyWithoutCustomerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CleaningRequestCreateManyCustomerPropertyInput = {
+  id?: string
+  requestNumber: string
+  serviceId: string
+  customerId?: string | null
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CleaningRequestUpdateWithoutCustomerPropertyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  service?: Prisma.CleaningServiceUpdateOneRequiredWithoutRequestsNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutRequestsNestedInput
+  requestExtras?: Prisma.CleaningRequestExtraUpdateManyWithoutCleaningRequestNestedInput
+  assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
+}
+
+export type CleaningRequestUncheckedUpdateWithoutCustomerPropertyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestExtras?: Prisma.CleaningRequestExtraUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutCleaningRequestNestedInput
+}
+
+export type CleaningRequestUncheckedUpdateManyWithoutCustomerPropertyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
   customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1621,6 +2235,8 @@ export type CleaningRequestSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   requestNumber?: boolean
   serviceId?: boolean
+  customerId?: boolean
+  customerPropertyId?: boolean
   customerName?: boolean
   customerEmail?: boolean
   customerPhone?: boolean
@@ -1648,6 +2264,8 @@ export type CleaningRequestSelect<ExtArgs extends runtime.Types.Extensions.Inter
   createdAt?: boolean
   updatedAt?: boolean
   service?: boolean | Prisma.CleaningServiceDefaultArgs<ExtArgs>
+  customer?: boolean | Prisma.CleaningRequest$customerArgs<ExtArgs>
+  customerProperty?: boolean | Prisma.CleaningRequest$customerPropertyArgs<ExtArgs>
   requestExtras?: boolean | Prisma.CleaningRequest$requestExtrasArgs<ExtArgs>
   assignments?: boolean | Prisma.CleaningRequest$assignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.CleaningRequestCountOutputTypeDefaultArgs<ExtArgs>
@@ -1657,6 +2275,8 @@ export type CleaningRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   requestNumber?: boolean
   serviceId?: boolean
+  customerId?: boolean
+  customerPropertyId?: boolean
   customerName?: boolean
   customerEmail?: boolean
   customerPhone?: boolean
@@ -1684,12 +2304,16 @@ export type CleaningRequestSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   createdAt?: boolean
   updatedAt?: boolean
   service?: boolean | Prisma.CleaningServiceDefaultArgs<ExtArgs>
+  customer?: boolean | Prisma.CleaningRequest$customerArgs<ExtArgs>
+  customerProperty?: boolean | Prisma.CleaningRequest$customerPropertyArgs<ExtArgs>
 }, ExtArgs["result"]["cleaningRequest"]>
 
 export type CleaningRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   requestNumber?: boolean
   serviceId?: boolean
+  customerId?: boolean
+  customerPropertyId?: boolean
   customerName?: boolean
   customerEmail?: boolean
   customerPhone?: boolean
@@ -1717,12 +2341,16 @@ export type CleaningRequestSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   createdAt?: boolean
   updatedAt?: boolean
   service?: boolean | Prisma.CleaningServiceDefaultArgs<ExtArgs>
+  customer?: boolean | Prisma.CleaningRequest$customerArgs<ExtArgs>
+  customerProperty?: boolean | Prisma.CleaningRequest$customerPropertyArgs<ExtArgs>
 }, ExtArgs["result"]["cleaningRequest"]>
 
 export type CleaningRequestSelectScalar = {
   id?: boolean
   requestNumber?: boolean
   serviceId?: boolean
+  customerId?: boolean
+  customerPropertyId?: boolean
   customerName?: boolean
   customerEmail?: boolean
   customerPhone?: boolean
@@ -1751,24 +2379,32 @@ export type CleaningRequestSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CleaningRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "requestNumber" | "serviceId" | "customerName" | "customerEmail" | "customerPhone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "propertyType" | "bedrooms" | "bathrooms" | "approximateSquareFeet" | "preferredDate" | "preferredTimeWindow" | "estimatedPrice" | "estimateOutcome" | "confirmedPrice" | "scheduledStart" | "scheduledEnd" | "customerNotes" | "internalNotes" | "status" | "cancelledAt" | "cancellationReason" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningRequest"]>
+export type CleaningRequestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "requestNumber" | "serviceId" | "customerId" | "customerPropertyId" | "customerName" | "customerEmail" | "customerPhone" | "addressLine1" | "addressLine2" | "city" | "state" | "postalCode" | "propertyType" | "bedrooms" | "bathrooms" | "approximateSquareFeet" | "preferredDate" | "preferredTimeWindow" | "estimatedPrice" | "estimateOutcome" | "confirmedPrice" | "scheduledStart" | "scheduledEnd" | "customerNotes" | "internalNotes" | "status" | "cancelledAt" | "cancellationReason" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningRequest"]>
 export type CleaningRequestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   service?: boolean | Prisma.CleaningServiceDefaultArgs<ExtArgs>
+  customer?: boolean | Prisma.CleaningRequest$customerArgs<ExtArgs>
+  customerProperty?: boolean | Prisma.CleaningRequest$customerPropertyArgs<ExtArgs>
   requestExtras?: boolean | Prisma.CleaningRequest$requestExtrasArgs<ExtArgs>
   assignments?: boolean | Prisma.CleaningRequest$assignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.CleaningRequestCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CleaningRequestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   service?: boolean | Prisma.CleaningServiceDefaultArgs<ExtArgs>
+  customer?: boolean | Prisma.CleaningRequest$customerArgs<ExtArgs>
+  customerProperty?: boolean | Prisma.CleaningRequest$customerPropertyArgs<ExtArgs>
 }
 export type CleaningRequestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   service?: boolean | Prisma.CleaningServiceDefaultArgs<ExtArgs>
+  customer?: boolean | Prisma.CleaningRequest$customerArgs<ExtArgs>
+  customerProperty?: boolean | Prisma.CleaningRequest$customerPropertyArgs<ExtArgs>
 }
 
 export type $CleaningRequestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CleaningRequest"
   objects: {
     service: Prisma.$CleaningServicePayload<ExtArgs>
+    customer: Prisma.$CustomerPayload<ExtArgs> | null
+    customerProperty: Prisma.$CustomerPropertyPayload<ExtArgs> | null
     requestExtras: Prisma.$CleaningRequestExtraPayload<ExtArgs>[]
     assignments: Prisma.$CleaningAssignmentPayload<ExtArgs>[]
   }
@@ -1776,6 +2412,8 @@ export type $CleaningRequestPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     requestNumber: string
     serviceId: string
+    customerId: string | null
+    customerPropertyId: string | null
     customerName: string
     customerEmail: string
     customerPhone: string
@@ -2197,6 +2835,8 @@ readonly fields: CleaningRequestFieldRefs;
 export interface Prisma__CleaningRequestClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   service<T extends Prisma.CleaningServiceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningServiceDefaultArgs<ExtArgs>>): Prisma.Prisma__CleaningServiceClient<runtime.Types.Result.GetResult<Prisma.$CleaningServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  customer<T extends Prisma.CleaningRequest$customerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$customerArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  customerProperty<T extends Prisma.CleaningRequest$customerPropertyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$customerPropertyArgs<ExtArgs>>): Prisma.Prisma__CustomerPropertyClient<runtime.Types.Result.GetResult<Prisma.$CustomerPropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   requestExtras<T extends Prisma.CleaningRequest$requestExtrasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$requestExtrasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestExtraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignments<T extends Prisma.CleaningRequest$assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2231,6 +2871,8 @@ export interface CleaningRequestFieldRefs {
   readonly id: Prisma.FieldRef<"CleaningRequest", 'String'>
   readonly requestNumber: Prisma.FieldRef<"CleaningRequest", 'String'>
   readonly serviceId: Prisma.FieldRef<"CleaningRequest", 'String'>
+  readonly customerId: Prisma.FieldRef<"CleaningRequest", 'String'>
+  readonly customerPropertyId: Prisma.FieldRef<"CleaningRequest", 'String'>
   readonly customerName: Prisma.FieldRef<"CleaningRequest", 'String'>
   readonly customerEmail: Prisma.FieldRef<"CleaningRequest", 'String'>
   readonly customerPhone: Prisma.FieldRef<"CleaningRequest", 'String'>
@@ -2655,6 +3297,44 @@ export type CleaningRequestDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many CleaningRequests to delete.
    */
   limit?: number
+}
+
+/**
+ * CleaningRequest.customer
+ */
+export type CleaningRequest$customerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Customer
+   */
+  select?: Prisma.CustomerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Customer
+   */
+  omit?: Prisma.CustomerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerInclude<ExtArgs> | null
+  where?: Prisma.CustomerWhereInput
+}
+
+/**
+ * CleaningRequest.customerProperty
+ */
+export type CleaningRequest$customerPropertyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerProperty
+   */
+  select?: Prisma.CustomerPropertySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerProperty
+   */
+  omit?: Prisma.CustomerPropertyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerPropertyInclude<ExtArgs> | null
+  where?: Prisma.CustomerPropertyWhereInput
 }
 
 /**

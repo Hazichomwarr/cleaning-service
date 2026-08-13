@@ -399,6 +399,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   CleaningService: 'CleaningService',
   AdminUser: 'AdminUser',
+  Customer: 'Customer',
+  CustomerProperty: 'CustomerProperty',
   CleaningExtra: 'CleaningExtra',
   Worker: 'Worker',
   PricingRule: 'PricingRule',
@@ -420,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cleaningService" | "adminUser" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "cleaningRequestExtra" | "cleaningAssignment"
+    modelProps: "cleaningService" | "adminUser" | "customer" | "customerProperty" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "cleaningRequestExtra" | "cleaningAssignment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -569,6 +571,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AdminUserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AdminUserCountAggregateOutputType> | number
+        }
+      }
+    }
+    Customer: {
+      payload: Prisma.$CustomerPayload<ExtArgs>
+      fields: Prisma.CustomerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CustomerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CustomerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>
+        }
+        findFirst: {
+          args: Prisma.CustomerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CustomerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>
+        }
+        findMany: {
+          args: Prisma.CustomerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>[]
+        }
+        create: {
+          args: Prisma.CustomerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>
+        }
+        createMany: {
+          args: Prisma.CustomerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CustomerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>[]
+        }
+        delete: {
+          args: Prisma.CustomerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>
+        }
+        update: {
+          args: Prisma.CustomerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>
+        }
+        deleteMany: {
+          args: Prisma.CustomerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CustomerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CustomerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>[]
+        }
+        upsert: {
+          args: Prisma.CustomerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPayload>
+        }
+        aggregate: {
+          args: Prisma.CustomerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCustomer>
+        }
+        groupBy: {
+          args: Prisma.CustomerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CustomerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerCountAggregateOutputType> | number
+        }
+      }
+    }
+    CustomerProperty: {
+      payload: Prisma.$CustomerPropertyPayload<ExtArgs>
+      fields: Prisma.CustomerPropertyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CustomerPropertyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CustomerPropertyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>
+        }
+        findFirst: {
+          args: Prisma.CustomerPropertyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CustomerPropertyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>
+        }
+        findMany: {
+          args: Prisma.CustomerPropertyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>[]
+        }
+        create: {
+          args: Prisma.CustomerPropertyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>
+        }
+        createMany: {
+          args: Prisma.CustomerPropertyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CustomerPropertyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>[]
+        }
+        delete: {
+          args: Prisma.CustomerPropertyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>
+        }
+        update: {
+          args: Prisma.CustomerPropertyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>
+        }
+        deleteMany: {
+          args: Prisma.CustomerPropertyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CustomerPropertyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CustomerPropertyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>[]
+        }
+        upsert: {
+          args: Prisma.CustomerPropertyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerPropertyPayload>
+        }
+        aggregate: {
+          args: Prisma.CustomerPropertyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCustomerProperty>
+        }
+        groupBy: {
+          args: Prisma.CustomerPropertyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerPropertyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CustomerPropertyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerPropertyCountAggregateOutputType> | number
         }
       }
     }
@@ -1082,6 +1232,40 @@ export const AdminUserScalarFieldEnum = {
 export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
 
 
+export const CustomerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
+export const CustomerPropertyScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  label: 'label',
+  addressLine1: 'addressLine1',
+  addressLine2: 'addressLine2',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  propertyType: 'propertyType',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  approximateSquareFeet: 'approximateSquareFeet',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerPropertyScalarFieldEnum = (typeof CustomerPropertyScalarFieldEnum)[keyof typeof CustomerPropertyScalarFieldEnum]
+
+
 export const CleaningExtraScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1127,6 +1311,8 @@ export const CleaningRequestScalarFieldEnum = {
   id: 'id',
   requestNumber: 'requestNumber',
   serviceId: 'serviceId',
+  customerId: 'customerId',
+  customerPropertyId: 'customerPropertyId',
   customerName: 'customerName',
   customerEmail: 'customerEmail',
   customerPhone: 'customerPhone',
@@ -1258,20 +1444,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'WorkerType'
- */
-export type EnumWorkerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkerType'>
-    
-
-
-/**
- * Reference to a field of type 'WorkerType[]'
- */
-export type ListEnumWorkerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkerType[]'>
-    
-
-
-/**
  * Reference to a field of type 'PropertyType'
  */
 export type EnumPropertyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyType'>
@@ -1296,6 +1468,20 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'Decimal[]'
  */
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WorkerType'
+ */
+export type EnumWorkerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkerType'>
+    
+
+
+/**
+ * Reference to a field of type 'WorkerType[]'
+ */
+export type ListEnumWorkerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WorkerType[]'>
     
 
 
@@ -1493,6 +1679,8 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   cleaningService?: Prisma.CleaningServiceOmit
   adminUser?: Prisma.AdminUserOmit
+  customer?: Prisma.CustomerOmit
+  customerProperty?: Prisma.CustomerPropertyOmit
   cleaningExtra?: Prisma.CleaningExtraOmit
   worker?: Prisma.WorkerOmit
   pricingRule?: Prisma.PricingRuleOmit

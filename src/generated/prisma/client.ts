@@ -52,6 +52,16 @@ export type CleaningService = Prisma.CleaningServiceModel
  */
 export type AdminUser = Prisma.AdminUserModel
 /**
+ * Model Customer
+ * 
+ */
+export type Customer = Prisma.CustomerModel
+/**
+ * Model CustomerProperty
+ * 
+ */
+export type CustomerProperty = Prisma.CustomerPropertyModel
+/**
  * Model CleaningExtra
  * 
  */

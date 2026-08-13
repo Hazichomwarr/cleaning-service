@@ -10,6 +10,8 @@
  */
 export type * from './models/CleaningService'
 export type * from './models/AdminUser'
+export type * from './models/Customer'
+export type * from './models/CustomerProperty'
 export type * from './models/CleaningExtra'
 export type * from './models/Worker'
 export type * from './models/PricingRule'

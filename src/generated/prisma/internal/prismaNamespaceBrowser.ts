@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   CleaningService: 'CleaningService',
   AdminUser: 'AdminUser',
+  Customer: 'Customer',
+  CustomerProperty: 'CustomerProperty',
   CleaningExtra: 'CleaningExtra',
   Worker: 'Worker',
   PricingRule: 'PricingRule',
@@ -104,6 +106,40 @@ export const AdminUserScalarFieldEnum = {
 export type AdminUserScalarFieldEnum = (typeof AdminUserScalarFieldEnum)[keyof typeof AdminUserScalarFieldEnum]
 
 
+export const CustomerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
+export const CustomerPropertyScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  label: 'label',
+  addressLine1: 'addressLine1',
+  addressLine2: 'addressLine2',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  propertyType: 'propertyType',
+  bedrooms: 'bedrooms',
+  bathrooms: 'bathrooms',
+  approximateSquareFeet: 'approximateSquareFeet',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerPropertyScalarFieldEnum = (typeof CustomerPropertyScalarFieldEnum)[keyof typeof CustomerPropertyScalarFieldEnum]
+
+
 export const CleaningExtraScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -149,6 +185,8 @@ export const CleaningRequestScalarFieldEnum = {
   id: 'id',
   requestNumber: 'requestNumber',
   serviceId: 'serviceId',
+  customerId: 'customerId',
+  customerPropertyId: 'customerPropertyId',
   customerName: 'customerName',
   customerEmail: 'customerEmail',
   customerPhone: 'customerPhone',

@@ -39,12 +39,12 @@ enum CleaningEstimateOutcome {
 }
 
 model CleaningService {
-  id           String   @id @default(cuid())
+  id           String  @id @default(cuid())
   name         String
-  slug         String   @unique
+  slug         String  @unique
   description  String?
-  isActive     Boolean  @default(true)
-  displayOrder Int      @default(0)
+  isActive     Boolean @default(true)
+  displayOrder Int     @default(0)
 
   requests CleaningRequest[]
 
@@ -64,12 +64,57 @@ model AdminUser {
   updatedAt    DateTime @updatedAt
 }
 
+model Customer {
+  id       String  @id @default(cuid())
+  name     String
+  email    String?
+  phone    String?
+  isActive Boolean @default(true)
+
+  properties CustomerProperty[]
+  requests   CleaningRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([email])
+  @@index([phone])
+  @@index([isActive])
+}
+
+model CustomerProperty {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+
+  label                 String?
+  addressLine1          String
+  addressLine2          String?
+  city                  String
+  state                 String
+  postalCode            String
+  propertyType          PropertyType
+  bedrooms              Int?
+  bathrooms             Decimal?     @db.Decimal(4, 1)
+  approximateSquareFeet Int?
+  isActive              Boolean      @default(true)
+
+  requests CleaningRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId])
+  @@index([customerId, isActive])
+}
+
 model CleaningExtra {
-  id           String   @id @default(cuid())
+  id           String  @id @default(cuid())
   name         String
   description  String?
-  isActive     Boolean  @default(true)
-  displayOrder Int      @default(0)
+  isActive     Boolean @default(true)
+  displayOrder Int     @default(0)
 
   requestExtras CleaningRequestExtra[]
 
@@ -120,6 +165,11 @@ model CleaningRequest {
   serviceId String
   service   CleaningService @relation(fields: [serviceId], references: [id])
 
+  customerId         String?
+  customer           Customer?         @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerPropertyId String?
+  customerProperty   CustomerProperty? @relation(fields: [customerPropertyId], references: [id], onDelete: SetNull)
+
   customerName  String
   customerEmail String
   customerPhone String
@@ -139,9 +189,9 @@ model CleaningRequest {
   preferredDate       DateTime
   preferredTimeWindow String
 
-  estimatedPrice  Decimal?               @db.Decimal(10, 2)
+  estimatedPrice  Decimal?                @db.Decimal(10, 2)
   estimateOutcome CleaningEstimateOutcome
-  confirmedPrice  Decimal?               @db.Decimal(10, 2)
+  confirmedPrice  Decimal?                @db.Decimal(10, 2)
 
   scheduledStart DateTime?
   scheduledEnd   DateTime?
@@ -166,6 +216,8 @@ model CleaningRequest {
   @@index([customerEmail])
   @@index([customerPhone])
   @@index([serviceId])
+  @@index([customerId])
+  @@index([customerPropertyId])
 }
 
 model CleaningRequestExtra {
