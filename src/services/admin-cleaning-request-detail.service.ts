@@ -7,6 +7,7 @@ import {
 import type { CleaningRequestStatusHistoryItem } from "./cleaning-request-lifecycle.service";
 import type { CleaningRequestPriceHistoryItem } from "./cleaning-request-price.service";
 import type { CleaningRequestScheduleHistoryItem } from "./cleaning-request-schedule.service";
+import { getCleaningRequestConfirmationReadiness, type ConfirmationReadiness } from "../lib/cleaning-request-confirmation";
 
 export type AdminCleaningRequestDetail = {
   id: string;
@@ -27,6 +28,7 @@ export type AdminCleaningRequestDetail = {
   statusHistory: CleaningRequestStatusHistoryItem[];
   priceHistory: CleaningRequestPriceHistoryItem[];
   scheduleHistory: CleaningRequestScheduleHistoryItem[];
+  confirmationReadiness: ConfirmationReadiness;
   createdAt: string;
   updatedAt: string;
 };
@@ -51,7 +53,7 @@ type DetailDatabaseRow = {
   preferredTimeWindow: string;
   estimatedPrice: { toFixed: (digits: number) => string } | null;
   estimateOutcome: CleaningEstimateOutcome;
-  confirmedPrice: { toFixed: (digits: number) => string } | null;
+  confirmedPrice: { toFixed: (digits: number) => string; gt: (value: number) => boolean } | null;
   scheduledStart: Date | null;
   scheduledEnd: Date | null;
   customerNotes: string | null;
@@ -179,6 +181,7 @@ function toMoney(value: { toFixed: (digits: number) => string } | null): string 
 function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
   const hasSchedule = row.scheduledStart !== null || row.scheduledEnd !== null;
   const hasCancellation = row.status === CleaningRequestStatus.CANCELLED || row.cancelledAt !== null;
+  const confirmationReadiness = getCleaningRequestConfirmationReadiness({ status: row.status, confirmedPrice: row.confirmedPrice, scheduledStart: row.scheduledStart, scheduledEnd: row.scheduledEnd });
   return {
     id: row.id,
     requestNumber: row.requestNumber,
@@ -234,6 +237,7 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
         changedAt: history.createdAt.toISOString(),
         changedBy: history.changedByAdminUser,
       })),
+    confirmationReadiness,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };
