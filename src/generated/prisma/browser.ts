@@ -68,6 +68,11 @@ export type CleaningRequestStatusHistory = Prisma.CleaningRequestStatusHistoryMo
  */
 export type CleaningRequestPriceHistory = Prisma.CleaningRequestPriceHistoryModel
 /**
+ * Model CleaningRequestScheduleHistory
+ * 
+ */
+export type CleaningRequestScheduleHistory = Prisma.CleaningRequestScheduleHistoryModel
+/**
  * Model CleaningRequestExtra
  * 
  */

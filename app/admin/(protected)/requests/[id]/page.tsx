@@ -4,6 +4,7 @@ import { CleaningEstimateOutcome, CleaningRequestStatus, type PropertyType, type
 import { formatTimeWindow } from "@/src/lib/request-confirmation";
 import RequestLifecycleActions from "@/components/admin/requests/RequestLifecycleActions";
 import RequestPriceActions from "@/components/admin/requests/RequestPriceActions";
+import RequestScheduleActions from "@/components/admin/requests/RequestScheduleActions";
 import { getAdminCleaningRequestDetail, type AdminCleaningRequestDetail } from "@/src/services/admin-cleaning-request-detail.service";
 
 const statusLabels: Record<CleaningRequestStatus, string> = {
@@ -24,16 +25,8 @@ function formatPreferredDate(value: string): string {
   return new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(Date.UTC(year, month - 1, day)));
 }
 
-function formatBusinessDate(value: string): string {
-  return new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric", timeZone: "America/New_York" }).format(new Date(value));
-}
-
 function formatBusinessDateTime(value: string): string {
   return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }).format(new Date(value));
-}
-
-function formatBusinessTime(value: string): string {
-  return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }).format(new Date(value));
 }
 
 function formatMoney(value: string | null): string | null {
@@ -67,8 +60,7 @@ function EstimateSection({ detail }: { detail: AdminCleaningRequestDetail }) {
 
 function ScheduleSection({ detail }: { detail: AdminCleaningRequestDetail }) {
   const confirmed = detail.confirmedSchedule;
-  const confirmedValue = !confirmed ? "Not scheduled yet" : confirmed.start && confirmed.end ? <><span className="block">{formatBusinessDate(confirmed.start)}</span><span className="block">{formatBusinessTime(confirmed.start)} – {formatBusinessTime(confirmed.end)}</span></> : <span className="text-amber-700">Schedule incomplete</span>;
-  return <SectionCard title="Schedule"><dl><DetailRow label="Preferred date" value={formatPreferredDate(detail.preferredSchedule.date)} /><DetailRow label="Preferred window" value={formatTimeWindow(detail.preferredSchedule.timeWindow)} /><DetailRow label="Confirmed schedule" value={confirmedValue} /></dl></SectionCard>;
+  return <SectionCard title="Schedule"><dl><DetailRow label="Preferred date" value={formatPreferredDate(detail.preferredSchedule.date)} /><DetailRow label="Preferred window" value={formatTimeWindow(detail.preferredSchedule.timeWindow)} /></dl><RequestScheduleActions requestId={detail.id} status={detail.status} preferredLabel={`${formatPreferredDate(detail.preferredSchedule.date)} · ${formatTimeWindow(detail.preferredSchedule.timeWindow)}`} confirmedSchedule={confirmed} scheduleHistory={detail.scheduleHistory} /></SectionCard>;
 }
 
 function CustomerSection({ detail }: { detail: AdminCleaningRequestDetail }) {

@@ -407,6 +407,7 @@ export const ModelName = {
   CleaningRequest: 'CleaningRequest',
   CleaningRequestStatusHistory: 'CleaningRequestStatusHistory',
   CleaningRequestPriceHistory: 'CleaningRequestPriceHistory',
+  CleaningRequestScheduleHistory: 'CleaningRequestScheduleHistory',
   CleaningRequestExtra: 'CleaningRequestExtra',
   CleaningAssignment: 'CleaningAssignment'
 } as const
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cleaningService" | "adminUser" | "customer" | "customerProperty" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "cleaningRequestStatusHistory" | "cleaningRequestPriceHistory" | "cleaningRequestExtra" | "cleaningAssignment"
+    modelProps: "cleaningService" | "adminUser" | "customer" | "customerProperty" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "cleaningRequestStatusHistory" | "cleaningRequestPriceHistory" | "cleaningRequestScheduleHistory" | "cleaningRequestExtra" | "cleaningAssignment"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1168,6 +1169,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CleaningRequestScheduleHistory: {
+      payload: Prisma.$CleaningRequestScheduleHistoryPayload<ExtArgs>
+      fields: Prisma.CleaningRequestScheduleHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CleaningRequestScheduleHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CleaningRequestScheduleHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.CleaningRequestScheduleHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CleaningRequestScheduleHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.CleaningRequestScheduleHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.CleaningRequestScheduleHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.CleaningRequestScheduleHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CleaningRequestScheduleHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.CleaningRequestScheduleHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>
+        }
+        update: {
+          args: Prisma.CleaningRequestScheduleHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.CleaningRequestScheduleHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CleaningRequestScheduleHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CleaningRequestScheduleHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.CleaningRequestScheduleHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestScheduleHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.CleaningRequestScheduleHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCleaningRequestScheduleHistory>
+        }
+        groupBy: {
+          args: Prisma.CleaningRequestScheduleHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CleaningRequestScheduleHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CleaningRequestScheduleHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CleaningRequestScheduleHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
     CleaningRequestExtra: {
       payload: Prisma.$CleaningRequestExtraPayload<ExtArgs>
       fields: Prisma.CleaningRequestExtraFieldRefs
@@ -1520,6 +1595,21 @@ export const CleaningRequestPriceHistoryScalarFieldEnum = {
 export type CleaningRequestPriceHistoryScalarFieldEnum = (typeof CleaningRequestPriceHistoryScalarFieldEnum)[keyof typeof CleaningRequestPriceHistoryScalarFieldEnum]
 
 
+export const CleaningRequestScheduleHistoryScalarFieldEnum = {
+  id: 'id',
+  cleaningRequestId: 'cleaningRequestId',
+  previousScheduledStart: 'previousScheduledStart',
+  previousScheduledEnd: 'previousScheduledEnd',
+  newScheduledStart: 'newScheduledStart',
+  newScheduledEnd: 'newScheduledEnd',
+  changedByAdminUserId: 'changedByAdminUserId',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type CleaningRequestScheduleHistoryScalarFieldEnum = (typeof CleaningRequestScheduleHistoryScalarFieldEnum)[keyof typeof CleaningRequestScheduleHistoryScalarFieldEnum]
+
+
 export const CleaningRequestExtraScalarFieldEnum = {
   id: 'id',
   cleaningRequestId: 'cleaningRequestId',
@@ -1863,6 +1953,7 @@ export type GlobalOmitConfig = {
   cleaningRequest?: Prisma.CleaningRequestOmit
   cleaningRequestStatusHistory?: Prisma.CleaningRequestStatusHistoryOmit
   cleaningRequestPriceHistory?: Prisma.CleaningRequestPriceHistoryOmit
+  cleaningRequestScheduleHistory?: Prisma.CleaningRequestScheduleHistoryOmit
   cleaningRequestExtra?: Prisma.CleaningRequestExtraOmit
   cleaningAssignment?: Prisma.CleaningAssignmentOmit
 }

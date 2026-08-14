@@ -6,6 +6,7 @@ import {
 } from "../generated/prisma/client";
 import type { CleaningRequestStatusHistoryItem } from "./cleaning-request-lifecycle.service";
 import type { CleaningRequestPriceHistoryItem } from "./cleaning-request-price.service";
+import type { CleaningRequestScheduleHistoryItem } from "./cleaning-request-schedule.service";
 
 export type AdminCleaningRequestDetail = {
   id: string;
@@ -25,6 +26,7 @@ export type AdminCleaningRequestDetail = {
   cancellation: { cancelledAt: string | null; reason: string | null } | null;
   statusHistory: CleaningRequestStatusHistoryItem[];
   priceHistory: CleaningRequestPriceHistoryItem[];
+  scheduleHistory: CleaningRequestScheduleHistoryItem[];
   createdAt: string;
   updatedAt: string;
 };
@@ -73,6 +75,16 @@ type DetailDatabaseRow = {
     id: string;
     previousConfirmedPrice: { toFixed: (digits: number) => string } | null;
     newConfirmedPrice: { toFixed: (digits: number) => string };
+    reason: string | null;
+    createdAt: Date;
+    changedByAdminUser: { id: string; name: string; email: string };
+  }>;
+  scheduleHistory: Array<{
+    id: string;
+    previousScheduledStart: Date | null;
+    previousScheduledEnd: Date | null;
+    newScheduledStart: Date;
+    newScheduledEnd: Date;
     reason: string | null;
     createdAt: Date;
     changedByAdminUser: { id: string; name: string; email: string };
@@ -141,6 +153,19 @@ const detailSelect = {
       changedByAdminUser: { select: { id: true, name: true, email: true } },
     },
   },
+  scheduleHistory: {
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: {
+      id: true,
+      previousScheduledStart: true,
+      previousScheduledEnd: true,
+      newScheduledStart: true,
+      newScheduledEnd: true,
+      reason: true,
+      createdAt: true,
+      changedByAdminUser: { select: { id: true, name: true, email: true } },
+    },
+  },
 };
 
 function toDateOnly(value: Date): string {
@@ -192,6 +217,19 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
         id: history.id,
         previousConfirmedPrice: history.previousConfirmedPrice?.toFixed(2) ?? null,
         newConfirmedPrice: history.newConfirmedPrice.toFixed(2),
+        reason: history.reason,
+        changedAt: history.createdAt.toISOString(),
+        changedBy: history.changedByAdminUser,
+      })),
+    scheduleHistory: row.scheduleHistory
+      .slice()
+      .sort((left, right) => left.createdAt.getTime() - right.createdAt.getTime() || left.id.localeCompare(right.id))
+      .map((history) => ({
+        id: history.id,
+        previousScheduledStart: history.previousScheduledStart?.toISOString() ?? null,
+        previousScheduledEnd: history.previousScheduledEnd?.toISOString() ?? null,
+        newScheduledStart: history.newScheduledStart.toISOString(),
+        newScheduledEnd: history.newScheduledEnd.toISOString(),
         reason: history.reason,
         changedAt: history.createdAt.toISOString(),
         changedBy: history.changedByAdminUser,

@@ -20,6 +20,7 @@ function row(overrides: Partial<AdminCleaningRequestDetail> = {}) {
     assignments: overrides.assignments ?? [],
     statusHistory,
     priceHistory: overrides.priceHistory ?? [],
+    scheduleHistory: overrides.scheduleHistory ?? [],
     cancellation: overrides.cancellation ?? null,
     createdAt: overrides.createdAt ?? "2026-08-12T16:20:00.000Z", updatedAt: overrides.updatedAt ?? "2026-08-12T16:20:00.000Z",
   };
@@ -36,6 +37,7 @@ function row(overrides: Partial<AdminCleaningRequestDetail> = {}) {
     assignments: item.assignments.map((assignment) => { const [firstName, ...lastParts] = assignment.workerName.split(" "); return { id: assignment.id, workerId: assignment.workerId, assignedAt: new Date(assignment.assignedAt), worker: { firstName, lastName: lastParts.join(" "), type: assignment.workerType } }; }),
     statusHistory: item.statusHistory.map((history) => ({ id: history.id, fromStatus: history.fromStatus, toStatus: history.toStatus, reason: history.reason, createdAt: new Date(history.changedAt), changedByAdminUser: history.changedBy })),
     priceHistory: item.priceHistory.map((history) => ({ id: history.id, previousConfirmedPrice: history.previousConfirmedPrice === null ? null : new Prisma.Decimal(history.previousConfirmedPrice), newConfirmedPrice: new Prisma.Decimal(history.newConfirmedPrice), reason: history.reason, createdAt: new Date(history.changedAt), changedByAdminUser: history.changedBy })),
+    scheduleHistory: item.scheduleHistory.map((history) => ({ id: history.id, previousScheduledStart: history.previousScheduledStart ? new Date(history.previousScheduledStart) : null, previousScheduledEnd: history.previousScheduledEnd ? new Date(history.previousScheduledEnd) : null, newScheduledStart: new Date(history.newScheduledStart), newScheduledEnd: new Date(history.newScheduledEnd), reason: history.reason, createdAt: new Date(history.changedAt), changedByAdminUser: history.changedBy })),
   };
 }
 
@@ -104,4 +106,14 @@ test("serializes price history oldest first without fabricating legacy rows", as
   ] })) });
   assert.deepEqual(result?.priceHistory.map((item) => item.id), ["price-1", "price-2"]);
   assert.deepEqual(result?.priceHistory[0], { id: "price-1", previousConfirmedPrice: null, newConfirmedPrice: "250.00", reason: null, changedAt: "2026-08-13T12:00:00.000Z", changedBy: { id: "admin-1", name: "John Smith", email: "john@example.com" } });
+});
+
+test("serializes schedule history oldest first without fabricating legacy rows", async () => {
+  const result = await getAdminCleaningRequestDetail("request-1", { database: database(row({ confirmedSchedule: { start: "2026-08-16T14:00:00.000Z", end: "2026-08-16T16:00:00.000Z" }, scheduleHistory: [
+    { id: "schedule-2", previousScheduledStart: "2026-08-16T14:00:00.000Z", previousScheduledEnd: "2026-08-16T16:00:00.000Z", newScheduledStart: "2026-08-17T17:00:00.000Z", newScheduledEnd: "2026-08-17T19:00:00.000Z", reason: "Customer requested change", changedAt: "2026-08-14T12:00:00.000Z", changedBy: { id: "admin-2", name: "Maria Rodriguez", email: "maria@example.com" } },
+    { id: "schedule-1", previousScheduledStart: null, previousScheduledEnd: null, newScheduledStart: "2026-08-16T14:00:00.000Z", newScheduledEnd: "2026-08-16T16:00:00.000Z", reason: null, changedAt: "2026-08-13T12:00:00.000Z", changedBy: { id: "admin-1", name: "John Smith", email: "john@example.com" } },
+  ] })) });
+  assert.deepEqual(result?.scheduleHistory.map((item) => item.id), ["schedule-1", "schedule-2"]);
+  assert.equal(result?.scheduleHistory[0]?.previousScheduledStart, null);
+  assert.equal("passwordHash" in (result?.scheduleHistory[0]?.changedBy ?? {}), false);
 });

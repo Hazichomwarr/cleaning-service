@@ -63,8 +63,9 @@ model AdminUser {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  requestStatusHistory CleaningRequestStatusHistory[]
-  requestPriceHistory  CleaningRequestPriceHistory[]
+  requestStatusHistory   CleaningRequestStatusHistory[]
+  requestPriceHistory    CleaningRequestPriceHistory[]
+  requestScheduleHistory CleaningRequestScheduleHistory[]
 }
 
 model Customer {
@@ -207,10 +208,11 @@ model CleaningRequest {
   cancelledAt        DateTime?
   cancellationReason String?
 
-  requestExtras CleaningRequestExtra[]
-  assignments   CleaningAssignment[]
-  statusHistory CleaningRequestStatusHistory[]
-  priceHistory  CleaningRequestPriceHistory[]
+  requestExtras   CleaningRequestExtra[]
+  assignments     CleaningAssignment[]
+  statusHistory   CleaningRequestStatusHistory[]
+  priceHistory    CleaningRequestPriceHistory[]
+  scheduleHistory CleaningRequestScheduleHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -252,6 +254,27 @@ model CleaningRequestPriceHistory {
 
   previousConfirmedPrice Decimal? @db.Decimal(10, 2)
   newConfirmedPrice      Decimal  @db.Decimal(10, 2)
+
+  changedByAdminUserId String
+  changedByAdminUser   AdminUser @relation(fields: [changedByAdminUserId], references: [id], onDelete: Restrict)
+
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([cleaningRequestId, createdAt])
+  @@index([changedByAdminUserId, createdAt])
+}
+
+model CleaningRequestScheduleHistory {
+  id String @id @default(cuid())
+
+  cleaningRequestId String
+  cleaningRequest   CleaningRequest @relation(fields: [cleaningRequestId], references: [id], onDelete: Cascade)
+
+  previousScheduledStart DateTime?
+  previousScheduledEnd   DateTime?
+  newScheduledStart      DateTime
+  newScheduledEnd        DateTime
 
   changedByAdminUserId String
   changedByAdminUser   AdminUser @relation(fields: [changedByAdminUserId], references: [id], onDelete: Restrict)

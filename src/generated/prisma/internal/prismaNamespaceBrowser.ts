@@ -61,6 +61,7 @@ export const ModelName = {
   CleaningRequest: 'CleaningRequest',
   CleaningRequestStatusHistory: 'CleaningRequestStatusHistory',
   CleaningRequestPriceHistory: 'CleaningRequestPriceHistory',
+  CleaningRequestScheduleHistory: 'CleaningRequestScheduleHistory',
   CleaningRequestExtra: 'CleaningRequestExtra',
   CleaningAssignment: 'CleaningAssignment'
 } as const
@@ -244,6 +245,21 @@ export const CleaningRequestPriceHistoryScalarFieldEnum = {
 } as const
 
 export type CleaningRequestPriceHistoryScalarFieldEnum = (typeof CleaningRequestPriceHistoryScalarFieldEnum)[keyof typeof CleaningRequestPriceHistoryScalarFieldEnum]
+
+
+export const CleaningRequestScheduleHistoryScalarFieldEnum = {
+  id: 'id',
+  cleaningRequestId: 'cleaningRequestId',
+  previousScheduledStart: 'previousScheduledStart',
+  previousScheduledEnd: 'previousScheduledEnd',
+  newScheduledStart: 'newScheduledStart',
+  newScheduledEnd: 'newScheduledEnd',
+  changedByAdminUserId: 'changedByAdminUserId',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type CleaningRequestScheduleHistoryScalarFieldEnum = (typeof CleaningRequestScheduleHistoryScalarFieldEnum)[keyof typeof CleaningRequestScheduleHistoryScalarFieldEnum]
 
 
 export const CleaningRequestExtraScalarFieldEnum = {
