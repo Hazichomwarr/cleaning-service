@@ -19,6 +19,7 @@ function row(overrides: Partial<AdminCleaningRequestDetail> = {}) {
     confirmedSchedule: overrides.confirmedSchedule ?? null,
     assignments: overrides.assignments ?? [],
     statusHistory,
+    priceHistory: overrides.priceHistory ?? [],
     cancellation: overrides.cancellation ?? null,
     createdAt: overrides.createdAt ?? "2026-08-12T16:20:00.000Z", updatedAt: overrides.updatedAt ?? "2026-08-12T16:20:00.000Z",
   };
@@ -34,6 +35,7 @@ function row(overrides: Partial<AdminCleaningRequestDetail> = {}) {
     requestExtras: item.extras.map((extra, index) => ({ cleaningExtra: { id: extra.id, name: extra.name, displayOrder: item.extras.length - index } })),
     assignments: item.assignments.map((assignment) => { const [firstName, ...lastParts] = assignment.workerName.split(" "); return { id: assignment.id, workerId: assignment.workerId, assignedAt: new Date(assignment.assignedAt), worker: { firstName, lastName: lastParts.join(" "), type: assignment.workerType } }; }),
     statusHistory: item.statusHistory.map((history) => ({ id: history.id, fromStatus: history.fromStatus, toStatus: history.toStatus, reason: history.reason, createdAt: new Date(history.changedAt), changedByAdminUser: history.changedBy })),
+    priceHistory: item.priceHistory.map((history) => ({ id: history.id, previousConfirmedPrice: history.previousConfirmedPrice === null ? null : new Prisma.Decimal(history.previousConfirmedPrice), newConfirmedPrice: new Prisma.Decimal(history.newConfirmedPrice), reason: history.reason, createdAt: new Date(history.changedAt), changedByAdminUser: history.changedBy })),
   };
 }
 
@@ -93,4 +95,13 @@ test("serializes lifecycle history oldest first with safe actor fields", async (
   assert.deepEqual(result?.statusHistory[0]?.changedBy, { id: "admin-1", name: "John Smith", email: "john@example.com" });
   assert.equal(result?.statusHistory[0]?.reason, null);
   assert.equal("passwordHash" in (result?.statusHistory[0]?.changedBy ?? {}), false);
+});
+
+test("serializes price history oldest first without fabricating legacy rows", async () => {
+  const result = await getAdminCleaningRequestDetail("request-1", { database: database(row({ estimate: { outcome: CleaningEstimateOutcome.MANUAL_QUOTE_REQUIRED, estimatedPrice: null, confirmedPrice: "250.00" }, priceHistory: [
+    { id: "price-2", previousConfirmedPrice: "250.00", newConfirmedPrice: "275.50", reason: "Scope changed", changedAt: "2026-08-14T12:00:00.000Z", changedBy: { id: "admin-2", name: "Maria Rodriguez", email: "maria@example.com" } },
+    { id: "price-1", previousConfirmedPrice: null, newConfirmedPrice: "250.00", reason: null, changedAt: "2026-08-13T12:00:00.000Z", changedBy: { id: "admin-1", name: "John Smith", email: "john@example.com" } },
+  ] })) });
+  assert.deepEqual(result?.priceHistory.map((item) => item.id), ["price-1", "price-2"]);
+  assert.deepEqual(result?.priceHistory[0], { id: "price-1", previousConfirmedPrice: null, newConfirmedPrice: "250.00", reason: null, changedAt: "2026-08-13T12:00:00.000Z", changedBy: { id: "admin-1", name: "John Smith", email: "john@example.com" } });
 });

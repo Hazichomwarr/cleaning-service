@@ -5,6 +5,7 @@ import {
   type WorkerType,
 } from "../generated/prisma/client";
 import type { CleaningRequestStatusHistoryItem } from "./cleaning-request-lifecycle.service";
+import type { CleaningRequestPriceHistoryItem } from "./cleaning-request-price.service";
 
 export type AdminCleaningRequestDetail = {
   id: string;
@@ -23,6 +24,7 @@ export type AdminCleaningRequestDetail = {
   assignments: Array<{ id: string; workerId: string; workerName: string; workerType: WorkerType; assignedAt: string }>;
   cancellation: { cancelledAt: string | null; reason: string | null } | null;
   statusHistory: CleaningRequestStatusHistoryItem[];
+  priceHistory: CleaningRequestPriceHistoryItem[];
   createdAt: string;
   updatedAt: string;
 };
@@ -63,6 +65,14 @@ type DetailDatabaseRow = {
     id: string;
     fromStatus: CleaningRequestStatus;
     toStatus: CleaningRequestStatus;
+    reason: string | null;
+    createdAt: Date;
+    changedByAdminUser: { id: string; name: string; email: string };
+  }>;
+  priceHistory: Array<{
+    id: string;
+    previousConfirmedPrice: { toFixed: (digits: number) => string } | null;
+    newConfirmedPrice: { toFixed: (digits: number) => string };
     reason: string | null;
     createdAt: Date;
     changedByAdminUser: { id: string; name: string; email: string };
@@ -120,6 +130,17 @@ const detailSelect = {
       changedByAdminUser: { select: { id: true, name: true, email: true } },
     },
   },
+  priceHistory: {
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: {
+      id: true,
+      previousConfirmedPrice: true,
+      newConfirmedPrice: true,
+      reason: true,
+      createdAt: true,
+      changedByAdminUser: { select: { id: true, name: true, email: true } },
+    },
+  },
 };
 
 function toDateOnly(value: Date): string {
@@ -160,6 +181,17 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
         id: history.id,
         fromStatus: history.fromStatus,
         toStatus: history.toStatus,
+        reason: history.reason,
+        changedAt: history.createdAt.toISOString(),
+        changedBy: history.changedByAdminUser,
+      })),
+    priceHistory: row.priceHistory
+      .slice()
+      .sort((left, right) => left.createdAt.getTime() - right.createdAt.getTime() || left.id.localeCompare(right.id))
+      .map((history) => ({
+        id: history.id,
+        previousConfirmedPrice: history.previousConfirmedPrice?.toFixed(2) ?? null,
+        newConfirmedPrice: history.newConfirmedPrice.toFixed(2),
         reason: history.reason,
         changedAt: history.createdAt.toISOString(),
         changedBy: history.changedByAdminUser,

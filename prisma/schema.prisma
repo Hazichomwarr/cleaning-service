@@ -64,6 +64,7 @@ model AdminUser {
   updatedAt    DateTime @updatedAt
 
   requestStatusHistory CleaningRequestStatusHistory[]
+  requestPriceHistory  CleaningRequestPriceHistory[]
 }
 
 model Customer {
@@ -209,6 +210,7 @@ model CleaningRequest {
   requestExtras CleaningRequestExtra[]
   assignments   CleaningAssignment[]
   statusHistory CleaningRequestStatusHistory[]
+  priceHistory  CleaningRequestPriceHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -231,6 +233,25 @@ model CleaningRequestStatusHistory {
 
   fromStatus CleaningRequestStatus
   toStatus   CleaningRequestStatus
+
+  changedByAdminUserId String
+  changedByAdminUser   AdminUser @relation(fields: [changedByAdminUserId], references: [id], onDelete: Restrict)
+
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([cleaningRequestId, createdAt])
+  @@index([changedByAdminUserId, createdAt])
+}
+
+model CleaningRequestPriceHistory {
+  id String @id @default(cuid())
+
+  cleaningRequestId String
+  cleaningRequest   CleaningRequest @relation(fields: [cleaningRequestId], references: [id], onDelete: Cascade)
+
+  previousConfirmedPrice Decimal? @db.Decimal(10, 2)
+  newConfirmedPrice      Decimal  @db.Decimal(10, 2)
 
   changedByAdminUserId String
   changedByAdminUser   AdminUser @relation(fields: [changedByAdminUserId], references: [id], onDelete: Restrict)

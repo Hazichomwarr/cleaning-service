@@ -199,6 +199,7 @@ export type AdminUserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   requestStatusHistory?: Prisma.CleaningRequestStatusHistoryListRelationFilter
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryListRelationFilter
 }
 
 export type AdminUserOrderByWithRelationInput = {
@@ -210,6 +211,7 @@ export type AdminUserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   requestStatusHistory?: Prisma.CleaningRequestStatusHistoryOrderByRelationAggregateInput
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryOrderByRelationAggregateInput
 }
 
 export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
@@ -224,6 +226,7 @@ export type AdminUserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdminUser"> | Date | string
   requestStatusHistory?: Prisma.CleaningRequestStatusHistoryListRelationFilter
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryListRelationFilter
 }, "id" | "email">
 
 export type AdminUserOrderByWithAggregationInput = {
@@ -261,6 +264,7 @@ export type AdminUserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   requestStatusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutChangedByAdminUserInput
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutChangedByAdminUserInput
 }
 
 export type AdminUserUncheckedCreateInput = {
@@ -272,6 +276,7 @@ export type AdminUserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   requestStatusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutChangedByAdminUserInput
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutChangedByAdminUserInput
 }
 
 export type AdminUserUpdateInput = {
@@ -283,6 +288,7 @@ export type AdminUserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestStatusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutChangedByAdminUserNestedInput
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutChangedByAdminUserNestedInput
 }
 
 export type AdminUserUncheckedUpdateInput = {
@@ -294,6 +300,7 @@ export type AdminUserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestStatusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutChangedByAdminUserNestedInput
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutChangedByAdminUserNestedInput
 }
 
 export type AdminUserCreateManyInput = {
@@ -375,6 +382,20 @@ export type AdminUserUpdateOneRequiredWithoutRequestStatusHistoryNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutRequestStatusHistoryInput, Prisma.AdminUserUpdateWithoutRequestStatusHistoryInput>, Prisma.AdminUserUncheckedUpdateWithoutRequestStatusHistoryInput>
 }
 
+export type AdminUserCreateNestedOneWithoutRequestPriceHistoryInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutRequestPriceHistoryInput, Prisma.AdminUserUncheckedCreateWithoutRequestPriceHistoryInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutRequestPriceHistoryInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+}
+
+export type AdminUserUpdateOneRequiredWithoutRequestPriceHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.AdminUserCreateWithoutRequestPriceHistoryInput, Prisma.AdminUserUncheckedCreateWithoutRequestPriceHistoryInput>
+  connectOrCreate?: Prisma.AdminUserCreateOrConnectWithoutRequestPriceHistoryInput
+  upsert?: Prisma.AdminUserUpsertWithoutRequestPriceHistoryInput
+  connect?: Prisma.AdminUserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdminUserUpdateToOneWithWhereWithoutRequestPriceHistoryInput, Prisma.AdminUserUpdateWithoutRequestPriceHistoryInput>, Prisma.AdminUserUncheckedUpdateWithoutRequestPriceHistoryInput>
+}
+
 export type AdminUserCreateWithoutRequestStatusHistoryInput = {
   id?: string
   name: string
@@ -383,6 +404,7 @@ export type AdminUserCreateWithoutRequestStatusHistoryInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutChangedByAdminUserInput
 }
 
 export type AdminUserUncheckedCreateWithoutRequestStatusHistoryInput = {
@@ -393,6 +415,7 @@ export type AdminUserUncheckedCreateWithoutRequestStatusHistoryInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutChangedByAdminUserInput
 }
 
 export type AdminUserCreateOrConnectWithoutRequestStatusHistoryInput = {
@@ -419,6 +442,7 @@ export type AdminUserUpdateWithoutRequestStatusHistoryInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutChangedByAdminUserNestedInput
 }
 
 export type AdminUserUncheckedUpdateWithoutRequestStatusHistoryInput = {
@@ -429,6 +453,67 @@ export type AdminUserUncheckedUpdateWithoutRequestStatusHistoryInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestPriceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutChangedByAdminUserNestedInput
+}
+
+export type AdminUserCreateWithoutRequestPriceHistoryInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  requestStatusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutChangedByAdminUserInput
+}
+
+export type AdminUserUncheckedCreateWithoutRequestPriceHistoryInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash: string
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  requestStatusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutChangedByAdminUserInput
+}
+
+export type AdminUserCreateOrConnectWithoutRequestPriceHistoryInput = {
+  where: Prisma.AdminUserWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutRequestPriceHistoryInput, Prisma.AdminUserUncheckedCreateWithoutRequestPriceHistoryInput>
+}
+
+export type AdminUserUpsertWithoutRequestPriceHistoryInput = {
+  update: Prisma.XOR<Prisma.AdminUserUpdateWithoutRequestPriceHistoryInput, Prisma.AdminUserUncheckedUpdateWithoutRequestPriceHistoryInput>
+  create: Prisma.XOR<Prisma.AdminUserCreateWithoutRequestPriceHistoryInput, Prisma.AdminUserUncheckedCreateWithoutRequestPriceHistoryInput>
+  where?: Prisma.AdminUserWhereInput
+}
+
+export type AdminUserUpdateToOneWithWhereWithoutRequestPriceHistoryInput = {
+  where?: Prisma.AdminUserWhereInput
+  data: Prisma.XOR<Prisma.AdminUserUpdateWithoutRequestPriceHistoryInput, Prisma.AdminUserUncheckedUpdateWithoutRequestPriceHistoryInput>
+}
+
+export type AdminUserUpdateWithoutRequestPriceHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestStatusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutChangedByAdminUserNestedInput
+}
+
+export type AdminUserUncheckedUpdateWithoutRequestPriceHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestStatusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutChangedByAdminUserNestedInput
 }
 
 
@@ -438,10 +523,12 @@ export type AdminUserUncheckedUpdateWithoutRequestStatusHistoryInput = {
 
 export type AdminUserCountOutputType = {
   requestStatusHistory: number
+  requestPriceHistory: number
 }
 
 export type AdminUserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   requestStatusHistory?: boolean | AdminUserCountOutputTypeCountRequestStatusHistoryArgs
+  requestPriceHistory?: boolean | AdminUserCountOutputTypeCountRequestPriceHistoryArgs
 }
 
 /**
@@ -461,6 +548,13 @@ export type AdminUserCountOutputTypeCountRequestStatusHistoryArgs<ExtArgs extend
   where?: Prisma.CleaningRequestStatusHistoryWhereInput
 }
 
+/**
+ * AdminUserCountOutputType without action
+ */
+export type AdminUserCountOutputTypeCountRequestPriceHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CleaningRequestPriceHistoryWhereInput
+}
+
 
 export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -471,6 +565,7 @@ export type AdminUserSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   createdAt?: boolean
   updatedAt?: boolean
   requestStatusHistory?: boolean | Prisma.AdminUser$requestStatusHistoryArgs<ExtArgs>
+  requestPriceHistory?: boolean | Prisma.AdminUser$requestPriceHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminUser"]>
 
@@ -507,6 +602,7 @@ export type AdminUserSelectScalar = {
 export type AdminUserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["adminUser"]>
 export type AdminUserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   requestStatusHistory?: boolean | Prisma.AdminUser$requestStatusHistoryArgs<ExtArgs>
+  requestPriceHistory?: boolean | Prisma.AdminUser$requestPriceHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.AdminUserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AdminUserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -516,6 +612,7 @@ export type $AdminUserPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "AdminUser"
   objects: {
     requestStatusHistory: Prisma.$CleaningRequestStatusHistoryPayload<ExtArgs>[]
+    requestPriceHistory: Prisma.$CleaningRequestPriceHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -920,6 +1017,7 @@ readonly fields: AdminUserFieldRefs;
 export interface Prisma__AdminUserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   requestStatusHistory<T extends Prisma.AdminUser$requestStatusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$requestStatusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  requestPriceHistory<T extends Prisma.AdminUser$requestPriceHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdminUser$requestPriceHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestPriceHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1370,6 +1468,30 @@ export type AdminUser$requestStatusHistoryArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.CleaningRequestStatusHistoryScalarFieldEnum | Prisma.CleaningRequestStatusHistoryScalarFieldEnum[]
+}
+
+/**
+ * AdminUser.requestPriceHistory
+ */
+export type AdminUser$requestPriceHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CleaningRequestPriceHistory
+   */
+  select?: Prisma.CleaningRequestPriceHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CleaningRequestPriceHistory
+   */
+  omit?: Prisma.CleaningRequestPriceHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CleaningRequestPriceHistoryInclude<ExtArgs> | null
+  where?: Prisma.CleaningRequestPriceHistoryWhereInput
+  orderBy?: Prisma.CleaningRequestPriceHistoryOrderByWithRelationInput | Prisma.CleaningRequestPriceHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.CleaningRequestPriceHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CleaningRequestPriceHistoryScalarFieldEnum | Prisma.CleaningRequestPriceHistoryScalarFieldEnum[]
 }
 
 /**

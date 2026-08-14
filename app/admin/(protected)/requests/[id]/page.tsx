@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { CleaningEstimateOutcome, CleaningRequestStatus, type PropertyType, type WorkerType } from "@/src/generated/prisma/client";
 import { formatTimeWindow } from "@/src/lib/request-confirmation";
 import RequestLifecycleActions from "@/components/admin/requests/RequestLifecycleActions";
+import RequestPriceActions from "@/components/admin/requests/RequestPriceActions";
 import { getAdminCleaningRequestDetail, type AdminCleaningRequestDetail } from "@/src/services/admin-cleaning-request-detail.service";
 
 const statusLabels: Record<CleaningRequestStatus, string> = {
@@ -61,7 +62,7 @@ function EstimateSection({ detail }: { detail: AdminCleaningRequestDetail }) {
   if (detail.estimate.outcome === CleaningEstimateOutcome.AUTOMATIC_ESTIMATE) estimateText = amount ?? "Needs review";
   if (detail.estimate.outcome === CleaningEstimateOutcome.MANUAL_QUOTE_REQUIRED) estimateText = "Custom estimate required";
   if (detail.estimate.outcome === CleaningEstimateOutcome.ESTIMATE_UNAVAILABLE) estimateText = "Unavailable — needs review";
-  return <SectionCard title="Price"><dl><DetailRow label="Starting estimate" value={estimateText} /><DetailRow label="Confirmed price" value={formatMoney(detail.estimate.confirmedPrice) ?? "Not confirmed yet"} /></dl></SectionCard>;
+  return <SectionCard title="Price"><p className="text-sm text-slate-500">Starting estimate outcome: <span className="font-medium text-slate-700">{estimateText}</span></p><RequestPriceActions requestId={detail.id} status={detail.status} estimatedPrice={amount} confirmedPrice={detail.estimate.confirmedPrice} priceHistory={detail.priceHistory} /></SectionCard>;
 }
 
 function ScheduleSection({ detail }: { detail: AdminCleaningRequestDetail }) {
