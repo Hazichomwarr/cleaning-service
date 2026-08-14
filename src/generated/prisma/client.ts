@@ -82,6 +82,11 @@ export type PricingRule = Prisma.PricingRuleModel
  */
 export type CleaningRequest = Prisma.CleaningRequestModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model CleaningRequestStatusHistory
  * 
  */

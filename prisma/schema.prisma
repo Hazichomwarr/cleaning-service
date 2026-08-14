@@ -43,6 +43,27 @@ enum CleaningEstimateOutcome {
   ESTIMATE_UNAVAILABLE
 }
 
+enum NotificationChannel {
+  EMAIL
+}
+
+enum NotificationType {
+  NEW_REQUEST_ADMIN
+  REQUEST_ACCEPTED_CUSTOMER
+  REQUEST_DECLINED_CUSTOMER
+  REQUEST_CONFIRMED_CUSTOMER
+  UPCOMING_CLEANING_CUSTOMER
+  CLEANING_STARTED_CUSTOMER
+  CLEANING_COMPLETED_CUSTOMER
+}
+
+enum NotificationStatus {
+  PENDING
+  SENDING
+  SENT
+  FAILED
+}
+
 model CleaningService {
   id           String  @id @default(cuid())
   name         String
@@ -221,6 +242,7 @@ model CleaningRequest {
   priceHistory      CleaningRequestPriceHistory[]
   scheduleHistory   CleaningRequestScheduleHistory[]
   assignmentHistory CleaningRequestAssignmentHistory[]
+  notifications     Notification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -233,6 +255,36 @@ model CleaningRequest {
   @@index([serviceId])
   @@index([customerId])
   @@index([customerPropertyId])
+}
+
+model Notification {
+  id String @id @default(cuid())
+
+  type    NotificationType
+  channel NotificationChannel
+  status  NotificationStatus  @default(PENDING)
+
+  recipientEmail String
+  recipientName  String?
+  subject        String
+  content        String
+
+  providerMessageId String?
+  attemptCount      Int       @default(0)
+  lastAttemptAt     DateTime?
+  sentAt            DateTime?
+  lastFailedAt      DateTime?
+  lastErrorCode     String?
+
+  cleaningRequestId String?
+  cleaningRequest   CleaningRequest? @relation(fields: [cleaningRequestId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([type, createdAt])
+  @@index([cleaningRequestId, createdAt])
 }
 
 model CleaningRequestStatusHistory {

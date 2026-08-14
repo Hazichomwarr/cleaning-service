@@ -58,3 +58,33 @@ export const CleaningEstimateOutcome = {
 } as const
 
 export type CleaningEstimateOutcome = (typeof CleaningEstimateOutcome)[keyof typeof CleaningEstimateOutcome]
+
+
+export const NotificationChannel = {
+  EMAIL: 'EMAIL'
+} as const
+
+export type NotificationChannel = (typeof NotificationChannel)[keyof typeof NotificationChannel]
+
+
+export const NotificationType = {
+  NEW_REQUEST_ADMIN: 'NEW_REQUEST_ADMIN',
+  REQUEST_ACCEPTED_CUSTOMER: 'REQUEST_ACCEPTED_CUSTOMER',
+  REQUEST_DECLINED_CUSTOMER: 'REQUEST_DECLINED_CUSTOMER',
+  REQUEST_CONFIRMED_CUSTOMER: 'REQUEST_CONFIRMED_CUSTOMER',
+  UPCOMING_CLEANING_CUSTOMER: 'UPCOMING_CLEANING_CUSTOMER',
+  CLEANING_STARTED_CUSTOMER: 'CLEANING_STARTED_CUSTOMER',
+  CLEANING_COMPLETED_CUSTOMER: 'CLEANING_COMPLETED_CUSTOMER'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const NotificationStatus = {
+  PENDING: 'PENDING',
+  SENDING: 'SENDING',
+  SENT: 'SENT',
+  FAILED: 'FAILED'
+} as const
+
+export type NotificationStatus = (typeof NotificationStatus)[keyof typeof NotificationStatus]

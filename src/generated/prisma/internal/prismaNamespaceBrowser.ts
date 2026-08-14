@@ -59,6 +59,7 @@ export const ModelName = {
   Worker: 'Worker',
   PricingRule: 'PricingRule',
   CleaningRequest: 'CleaningRequest',
+  Notification: 'Notification',
   CleaningRequestStatusHistory: 'CleaningRequestStatusHistory',
   CleaningRequestPriceHistory: 'CleaningRequestPriceHistory',
   CleaningRequestScheduleHistory: 'CleaningRequestScheduleHistory',
@@ -220,6 +221,29 @@ export const CleaningRequestScalarFieldEnum = {
 } as const
 
 export type CleaningRequestScalarFieldEnum = (typeof CleaningRequestScalarFieldEnum)[keyof typeof CleaningRequestScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  channel: 'channel',
+  status: 'status',
+  recipientEmail: 'recipientEmail',
+  recipientName: 'recipientName',
+  subject: 'subject',
+  content: 'content',
+  providerMessageId: 'providerMessageId',
+  attemptCount: 'attemptCount',
+  lastAttemptAt: 'lastAttemptAt',
+  sentAt: 'sentAt',
+  lastFailedAt: 'lastFailedAt',
+  lastErrorCode: 'lastErrorCode',
+  cleaningRequestId: 'cleaningRequestId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const CleaningRequestStatusHistoryScalarFieldEnum = {
