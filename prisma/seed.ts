@@ -27,19 +27,22 @@ const cleaningServices = [
   {
     name: "Deep Cleaning",
     slug: "deep-cleaning",
-    description: "Detailed top-to-bottom cleaning for spaces that need extra attention.",
+    description:
+      "Detailed top-to-bottom cleaning for spaces that need extra attention.",
     displayOrder: 2,
   },
   {
     name: "Move-In / Move-Out",
     slug: "move-in-move-out",
-    description: "Thorough cleaning for customers moving into or out of a property.",
+    description:
+      "Thorough cleaning for customers moving into or out of a property.",
     displayOrder: 3,
   },
   {
     name: "Office Cleaning",
     slug: "office-cleaning",
-    description: "Professional cleaning for offices and workplace environments.",
+    description:
+      "Professional cleaning for offices and workplace environments.",
     displayOrder: 4,
   },
   {
@@ -51,12 +54,18 @@ const cleaningServices = [
   {
     name: "Post-Construction",
     slug: "post-construction",
-    description: "Cleaning focused on dust, debris, and residue after construction or renovation.",
+    description:
+      "Cleaning focused on dust, debris, and residue after construction or renovation.",
     displayOrder: 6,
   },
 ];
 
-const cleaningExtras: Array<{ name: string; description: string; displayOrder: number; isActive?: boolean }> = [
+const cleaningExtras: Array<{
+  name: string;
+  description: string;
+  displayOrder: number;
+  isActive?: boolean;
+}> = [
   {
     name: "Inside Oven",
     description: "Cleaning the interior surfaces of the oven.",
@@ -182,20 +191,35 @@ async function seedAdminUser() {
   const password = process.env.ADMIN_PASSWORD;
 
   if (!name || !email || !password) {
-    console.log("Admin provisioning skipped: ADMIN_NAME, ADMIN_EMAIL, and ADMIN_PASSWORD are not all configured.");
+    console.log(
+      "Admin provisioning skipped: ADMIN_NAME, ADMIN_EMAIL, and ADMIN_PASSWORD are not all configured.",
+    );
     return;
   }
 
-  if (password.length < 12) throw new Error("ADMIN_PASSWORD must be at least 12 characters.");
-
-  const existing = await prisma.adminUser.findUnique({ where: { email }, select: { id: true } });
-  if (existing) {
-    console.log("Admin provisioning skipped: administrator already exists.");
-    return;
+  if (password.length < 12) {
+    throw new Error("ADMIN_PASSWORD must be at least 12 characters.");
   }
 
-  await prisma.adminUser.create({ data: { name, email, passwordHash: await hash(password, 12), isActive: true } });
-  console.log("Initial administrator provisioned.");
+  const passwordHash = await hash(password, 12);
+
+  await prisma.adminUser.upsert({
+    where: { email },
+
+    update: {
+      name,
+      passwordHash,
+    },
+
+    create: {
+      name,
+      email,
+      passwordHash,
+      isActive: true,
+    },
+  });
+
+  console.log("Administrator provisioned.");
 }
 
 async function main() {
