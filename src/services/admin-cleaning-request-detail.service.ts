@@ -9,6 +9,7 @@ import type { CleaningRequestPriceHistoryItem } from "./cleaning-request-price.s
 import type { CleaningRequestScheduleHistoryItem } from "./cleaning-request-schedule.service";
 import { getCleaningRequestConfirmationReadiness, type ConfirmationReadiness } from "../lib/cleaning-request-confirmation";
 import type { CleaningRequestAssignmentHistoryItem } from "./cleaning-request-assignment.service";
+import { getCleaningRequestWorkflowReadiness, type CleaningRequestWorkflowReadiness } from "../lib/cleaning-request-workflow";
 
 export type AdminCleaningRequestDetail = {
   id: string;
@@ -31,6 +32,7 @@ export type AdminCleaningRequestDetail = {
   priceHistory: CleaningRequestPriceHistoryItem[];
   scheduleHistory: CleaningRequestScheduleHistoryItem[];
   confirmationReadiness: ConfirmationReadiness;
+  workflowReadiness?: CleaningRequestWorkflowReadiness;
   createdAt: string;
   updatedAt: string;
 };
@@ -189,6 +191,7 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
   const hasSchedule = row.scheduledStart !== null || row.scheduledEnd !== null;
   const hasCancellation = row.status === CleaningRequestStatus.CANCELLED || row.cancelledAt !== null;
   const confirmationReadiness = getCleaningRequestConfirmationReadiness({ status: row.status, confirmedPrice: row.confirmedPrice, scheduledStart: row.scheduledStart, scheduledEnd: row.scheduledEnd });
+  const workflowReadiness = getCleaningRequestWorkflowReadiness({ status: row.status, assignmentCount: row.assignments.length, confirmedPrice: row.confirmedPrice, scheduledStart: row.scheduledStart, scheduledEnd: row.scheduledEnd });
   return {
     id: row.id,
     requestNumber: row.requestNumber,
@@ -249,6 +252,7 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
         changedBy: history.changedByAdminUser,
       })),
     confirmationReadiness,
+    workflowReadiness,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   };

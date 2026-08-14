@@ -19,12 +19,13 @@ export type CleaningRequestStatusHistoryItem = { id: string; fromStatus: Cleanin
 function safeHistory(row: HistoryRow): { id: string; fromStatus: CleaningRequestStatus; toStatus: CleaningRequestStatus; reason: string | null; createdAt: string } { return { id: row.id, fromStatus: row.fromStatus, toStatus: row.toStatus, reason: row.reason, createdAt: row.createdAt.toISOString() }; }
 
 export async function transitionCleaningRequestStatusInTransaction(adminId: string, transaction: LifecycleTransaction, current: RequestRow, toStatus: CleaningRequestStatus, reason: string | null, transitionTime: Date, options: { allowAssignmentRollback?: boolean } = {}): Promise<CleaningRequestLifecycleResult> {
-  if (!canTransitionCleaningRequestStatus(current.status, toStatus)) return { success: false, reason: "INVALID_TRANSITION" };
-  if (current.status === CleaningRequestStatus.ASSIGNED && toStatus === CleaningRequestStatus.CONFIRMED && !options.allowAssignmentRollback) return { success: false, reason: "INVALID_TRANSITION" };
+  const fromStatus = current.status;
+  if (!canTransitionCleaningRequestStatus(fromStatus, toStatus)) return { success: false, reason: "INVALID_TRANSITION" };
+  if (fromStatus === CleaningRequestStatus.ASSIGNED && toStatus === CleaningRequestStatus.CONFIRMED && !options.allowAssignmentRollback) return { success: false, reason: "INVALID_TRANSITION" };
   if (toStatus === CleaningRequestStatus.CANCELLED && !reason) return { success: false, reason: "CANCELLATION_REASON_REQUIRED" };
-  const updated = await transaction.cleaningRequest.updateMany({ where: { id: current.id, status: current.status }, data: toStatus === CleaningRequestStatus.CANCELLED ? { status: toStatus, cancelledAt: transitionTime, cancellationReason: reason } : { status: toStatus } });
+  const updated = await transaction.cleaningRequest.updateMany({ where: { id: current.id, status: fromStatus }, data: toStatus === CleaningRequestStatus.CANCELLED ? { status: toStatus, cancelledAt: transitionTime, cancellationReason: reason } : { status: toStatus } });
   if (updated.count !== 1) return { success: false, reason: "STATUS_CONFLICT" };
-  const history = await transaction.cleaningRequestStatusHistory.create({ data: { cleaningRequestId: current.id, fromStatus: current.status, toStatus, changedByAdminUserId: adminId, reason, createdAt: transitionTime }, select: { id: true, fromStatus: true, toStatus: true, reason: true, createdAt: true } });
+  const history = await transaction.cleaningRequestStatusHistory.create({ data: { cleaningRequestId: current.id, fromStatus, toStatus, changedByAdminUserId: adminId, reason, createdAt: transitionTime }, select: { id: true, fromStatus: true, toStatus: true, reason: true, createdAt: true } });
   return { success: true, request: { id: current.id, requestNumber: current.requestNumber, status: toStatus }, transition: safeHistory(history) };
 }
 
