@@ -268,6 +268,7 @@ model Notification {
   recipientName  String?
   subject        String
   content        String
+  deduplicationKey String? @unique
 
   providerMessageId String?
   attemptCount      Int       @default(0)

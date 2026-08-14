@@ -18,6 +18,7 @@ type NotificationRow = {
   recipientName: string | null;
   subject: string;
   content: string;
+  deduplicationKey?: string | null;
   attemptCount: number;
   providerMessageId: string | null;
 };
@@ -25,7 +26,7 @@ type NotificationRow = {
 export type NotificationDatabase = {
   notification: {
     create: (args: { data: Record<string, unknown>; select?: Record<string, boolean> }) => Promise<NotificationRow>;
-    findUnique: (args: { where: { id: string }; select?: Record<string, boolean> }) => Promise<NotificationRow | null>;
+    findUnique: (args: { where: Record<string, unknown>; select?: Record<string, boolean> }) => Promise<NotificationRow | null>;
     updateMany: (args: { where: Record<string, unknown>; data: Record<string, unknown> }) => Promise<{ count: number }>;
   };
 };
@@ -41,6 +42,7 @@ type DeliveryResult =
 const notificationSelect = {
   id: true, type: true, channel: true, status: true, recipientEmail: true, recipientName: true,
   subject: true, content: true, attemptCount: true, providerMessageId: true,
+  deduplicationKey: true,
 };
 
 export type NotificationCreationResult =
@@ -66,6 +68,7 @@ export async function createEmailNotification(
         subject: parsed.data.subject,
         content: parsed.data.html,
         cleaningRequestId: parsed.data.cleaningRequestId,
+        deduplicationKey: parsed.data.deduplicationKey,
       },
       select: notificationSelect,
     });

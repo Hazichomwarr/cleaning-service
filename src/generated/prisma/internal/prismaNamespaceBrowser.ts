@@ -232,6 +232,7 @@ export const NotificationScalarFieldEnum = {
   recipientName: 'recipientName',
   subject: 'subject',
   content: 'content',
+  deduplicationKey: 'deduplicationKey',
   providerMessageId: 'providerMessageId',
   attemptCount: 'attemptCount',
   lastAttemptAt: 'lastAttemptAt',

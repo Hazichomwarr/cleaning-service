@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/internal/upcoming-cleaning-reminders",
+      "schedule": "0 * * * *"
+    }
+  ]
+}

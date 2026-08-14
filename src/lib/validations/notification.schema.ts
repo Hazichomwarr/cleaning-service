@@ -10,6 +10,7 @@ export const CreateEmailNotificationSchema = z.object({
   subject: z.string().trim().min(1).max(998),
   html: z.string().trim().min(1),
   cleaningRequestId: z.string().trim().min(1).optional(),
+  deduplicationKey: z.string().trim().min(1).max(500).optional(),
 }).strict();
 
 export type CreateEmailNotificationInput = z.infer<typeof CreateEmailNotificationSchema>;

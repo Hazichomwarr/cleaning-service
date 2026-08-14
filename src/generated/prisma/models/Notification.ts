@@ -43,6 +43,7 @@ export type NotificationMinAggregateOutputType = {
   recipientName: string | null
   subject: string | null
   content: string | null
+  deduplicationKey: string | null
   providerMessageId: string | null
   attemptCount: number | null
   lastAttemptAt: Date | null
@@ -63,6 +64,7 @@ export type NotificationMaxAggregateOutputType = {
   recipientName: string | null
   subject: string | null
   content: string | null
+  deduplicationKey: string | null
   providerMessageId: string | null
   attemptCount: number | null
   lastAttemptAt: Date | null
@@ -83,6 +85,7 @@ export type NotificationCountAggregateOutputType = {
   recipientName: number
   subject: number
   content: number
+  deduplicationKey: number
   providerMessageId: number
   attemptCount: number
   lastAttemptAt: number
@@ -113,6 +116,7 @@ export type NotificationMinAggregateInputType = {
   recipientName?: true
   subject?: true
   content?: true
+  deduplicationKey?: true
   providerMessageId?: true
   attemptCount?: true
   lastAttemptAt?: true
@@ -133,6 +137,7 @@ export type NotificationMaxAggregateInputType = {
   recipientName?: true
   subject?: true
   content?: true
+  deduplicationKey?: true
   providerMessageId?: true
   attemptCount?: true
   lastAttemptAt?: true
@@ -153,6 +158,7 @@ export type NotificationCountAggregateInputType = {
   recipientName?: true
   subject?: true
   content?: true
+  deduplicationKey?: true
   providerMessageId?: true
   attemptCount?: true
   lastAttemptAt?: true
@@ -260,6 +266,7 @@ export type NotificationGroupByOutputType = {
   recipientName: string | null
   subject: string
   content: string
+  deduplicationKey: string | null
   providerMessageId: string | null
   attemptCount: number
   lastAttemptAt: Date | null
@@ -303,6 +310,7 @@ export type NotificationWhereInput = {
   recipientName?: Prisma.StringNullableFilter<"Notification"> | string | null
   subject?: Prisma.StringFilter<"Notification"> | string
   content?: Prisma.StringFilter<"Notification"> | string
+  deduplicationKey?: Prisma.StringNullableFilter<"Notification"> | string | null
   providerMessageId?: Prisma.StringNullableFilter<"Notification"> | string | null
   attemptCount?: Prisma.IntFilter<"Notification"> | number
   lastAttemptAt?: Prisma.DateTimeNullableFilter<"Notification"> | Date | string | null
@@ -324,6 +332,7 @@ export type NotificationOrderByWithRelationInput = {
   recipientName?: Prisma.SortOrderInput | Prisma.SortOrder
   subject?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  deduplicationKey?: Prisma.SortOrderInput | Prisma.SortOrder
   providerMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
   lastAttemptAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -338,6 +347,7 @@ export type NotificationOrderByWithRelationInput = {
 
 export type NotificationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  deduplicationKey?: string
   AND?: Prisma.NotificationWhereInput | Prisma.NotificationWhereInput[]
   OR?: Prisma.NotificationWhereInput[]
   NOT?: Prisma.NotificationWhereInput | Prisma.NotificationWhereInput[]
@@ -358,7 +368,7 @@ export type NotificationWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Notification"> | Date | string
   cleaningRequest?: Prisma.XOR<Prisma.CleaningRequestNullableScalarRelationFilter, Prisma.CleaningRequestWhereInput> | null
-}, "id">
+}, "id" | "deduplicationKey">
 
 export type NotificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -369,6 +379,7 @@ export type NotificationOrderByWithAggregationInput = {
   recipientName?: Prisma.SortOrderInput | Prisma.SortOrder
   subject?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  deduplicationKey?: Prisma.SortOrderInput | Prisma.SortOrder
   providerMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
   lastAttemptAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -397,6 +408,7 @@ export type NotificationScalarWhereWithAggregatesInput = {
   recipientName?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   subject?: Prisma.StringWithAggregatesFilter<"Notification"> | string
   content?: Prisma.StringWithAggregatesFilter<"Notification"> | string
+  deduplicationKey?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   providerMessageId?: Prisma.StringNullableWithAggregatesFilter<"Notification"> | string | null
   attemptCount?: Prisma.IntWithAggregatesFilter<"Notification"> | number
   lastAttemptAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Notification"> | Date | string | null
@@ -417,6 +429,7 @@ export type NotificationCreateInput = {
   recipientName?: string | null
   subject: string
   content: string
+  deduplicationKey?: string | null
   providerMessageId?: string | null
   attemptCount?: number
   lastAttemptAt?: Date | string | null
@@ -437,6 +450,7 @@ export type NotificationUncheckedCreateInput = {
   recipientName?: string | null
   subject: string
   content: string
+  deduplicationKey?: string | null
   providerMessageId?: string | null
   attemptCount?: number
   lastAttemptAt?: Date | string | null
@@ -457,6 +471,7 @@ export type NotificationUpdateInput = {
   recipientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  deduplicationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -477,6 +492,7 @@ export type NotificationUncheckedUpdateInput = {
   recipientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  deduplicationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -497,6 +513,7 @@ export type NotificationCreateManyInput = {
   recipientName?: string | null
   subject: string
   content: string
+  deduplicationKey?: string | null
   providerMessageId?: string | null
   attemptCount?: number
   lastAttemptAt?: Date | string | null
@@ -517,6 +534,7 @@ export type NotificationUpdateManyMutationInput = {
   recipientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  deduplicationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -536,6 +554,7 @@ export type NotificationUncheckedUpdateManyInput = {
   recipientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  deduplicationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -566,6 +585,7 @@ export type NotificationCountOrderByAggregateInput = {
   recipientName?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  deduplicationKey?: Prisma.SortOrder
   providerMessageId?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
   lastAttemptAt?: Prisma.SortOrder
@@ -590,6 +610,7 @@ export type NotificationMaxOrderByAggregateInput = {
   recipientName?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  deduplicationKey?: Prisma.SortOrder
   providerMessageId?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
   lastAttemptAt?: Prisma.SortOrder
@@ -610,6 +631,7 @@ export type NotificationMinOrderByAggregateInput = {
   recipientName?: Prisma.SortOrder
   subject?: Prisma.SortOrder
   content?: Prisma.SortOrder
+  deduplicationKey?: Prisma.SortOrder
   providerMessageId?: Prisma.SortOrder
   attemptCount?: Prisma.SortOrder
   lastAttemptAt?: Prisma.SortOrder
@@ -688,6 +710,7 @@ export type NotificationCreateWithoutCleaningRequestInput = {
   recipientName?: string | null
   subject: string
   content: string
+  deduplicationKey?: string | null
   providerMessageId?: string | null
   attemptCount?: number
   lastAttemptAt?: Date | string | null
@@ -707,6 +730,7 @@ export type NotificationUncheckedCreateWithoutCleaningRequestInput = {
   recipientName?: string | null
   subject: string
   content: string
+  deduplicationKey?: string | null
   providerMessageId?: string | null
   attemptCount?: number
   lastAttemptAt?: Date | string | null
@@ -755,6 +779,7 @@ export type NotificationScalarWhereInput = {
   recipientName?: Prisma.StringNullableFilter<"Notification"> | string | null
   subject?: Prisma.StringFilter<"Notification"> | string
   content?: Prisma.StringFilter<"Notification"> | string
+  deduplicationKey?: Prisma.StringNullableFilter<"Notification"> | string | null
   providerMessageId?: Prisma.StringNullableFilter<"Notification"> | string | null
   attemptCount?: Prisma.IntFilter<"Notification"> | number
   lastAttemptAt?: Prisma.DateTimeNullableFilter<"Notification"> | Date | string | null
@@ -775,6 +800,7 @@ export type NotificationCreateManyCleaningRequestInput = {
   recipientName?: string | null
   subject: string
   content: string
+  deduplicationKey?: string | null
   providerMessageId?: string | null
   attemptCount?: number
   lastAttemptAt?: Date | string | null
@@ -794,6 +820,7 @@ export type NotificationUpdateWithoutCleaningRequestInput = {
   recipientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  deduplicationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -813,6 +840,7 @@ export type NotificationUncheckedUpdateWithoutCleaningRequestInput = {
   recipientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  deduplicationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -832,6 +860,7 @@ export type NotificationUncheckedUpdateManyWithoutCleaningRequestInput = {
   recipientName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subject?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  deduplicationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -853,6 +882,7 @@ export type NotificationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   recipientName?: boolean
   subject?: boolean
   content?: boolean
+  deduplicationKey?: boolean
   providerMessageId?: boolean
   attemptCount?: boolean
   lastAttemptAt?: boolean
@@ -874,6 +904,7 @@ export type NotificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   recipientName?: boolean
   subject?: boolean
   content?: boolean
+  deduplicationKey?: boolean
   providerMessageId?: boolean
   attemptCount?: boolean
   lastAttemptAt?: boolean
@@ -895,6 +926,7 @@ export type NotificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   recipientName?: boolean
   subject?: boolean
   content?: boolean
+  deduplicationKey?: boolean
   providerMessageId?: boolean
   attemptCount?: boolean
   lastAttemptAt?: boolean
@@ -916,6 +948,7 @@ export type NotificationSelectScalar = {
   recipientName?: boolean
   subject?: boolean
   content?: boolean
+  deduplicationKey?: boolean
   providerMessageId?: boolean
   attemptCount?: boolean
   lastAttemptAt?: boolean
@@ -927,7 +960,7 @@ export type NotificationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type NotificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "channel" | "status" | "recipientEmail" | "recipientName" | "subject" | "content" | "providerMessageId" | "attemptCount" | "lastAttemptAt" | "sentAt" | "lastFailedAt" | "lastErrorCode" | "cleaningRequestId" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
+export type NotificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "channel" | "status" | "recipientEmail" | "recipientName" | "subject" | "content" | "deduplicationKey" | "providerMessageId" | "attemptCount" | "lastAttemptAt" | "sentAt" | "lastFailedAt" | "lastErrorCode" | "cleaningRequestId" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
 export type NotificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cleaningRequest?: boolean | Prisma.Notification$cleaningRequestArgs<ExtArgs>
 }
@@ -952,6 +985,7 @@ export type $NotificationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     recipientName: string | null
     subject: string
     content: string
+    deduplicationKey: string | null
     providerMessageId: string | null
     attemptCount: number
     lastAttemptAt: Date | null
@@ -1393,6 +1427,7 @@ export interface NotificationFieldRefs {
   readonly recipientName: Prisma.FieldRef<"Notification", 'String'>
   readonly subject: Prisma.FieldRef<"Notification", 'String'>
   readonly content: Prisma.FieldRef<"Notification", 'String'>
+  readonly deduplicationKey: Prisma.FieldRef<"Notification", 'String'>
   readonly providerMessageId: Prisma.FieldRef<"Notification", 'String'>
   readonly attemptCount: Prisma.FieldRef<"Notification", 'Int'>
   readonly lastAttemptAt: Prisma.FieldRef<"Notification", 'DateTime'>
