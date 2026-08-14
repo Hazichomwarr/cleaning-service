@@ -18,8 +18,9 @@ export type CleaningRequestStatusHistoryItem = { id: string; fromStatus: Cleanin
 
 function safeHistory(row: HistoryRow): { id: string; fromStatus: CleaningRequestStatus; toStatus: CleaningRequestStatus; reason: string | null; createdAt: string } { return { id: row.id, fromStatus: row.fromStatus, toStatus: row.toStatus, reason: row.reason, createdAt: row.createdAt.toISOString() }; }
 
-export async function transitionCleaningRequestStatusInTransaction(adminId: string, transaction: LifecycleTransaction, current: RequestRow, toStatus: CleaningRequestStatus, reason: string | null, transitionTime: Date): Promise<CleaningRequestLifecycleResult> {
+export async function transitionCleaningRequestStatusInTransaction(adminId: string, transaction: LifecycleTransaction, current: RequestRow, toStatus: CleaningRequestStatus, reason: string | null, transitionTime: Date, options: { allowAssignmentRollback?: boolean } = {}): Promise<CleaningRequestLifecycleResult> {
   if (!canTransitionCleaningRequestStatus(current.status, toStatus)) return { success: false, reason: "INVALID_TRANSITION" };
+  if (current.status === CleaningRequestStatus.ASSIGNED && toStatus === CleaningRequestStatus.CONFIRMED && !options.allowAssignmentRollback) return { success: false, reason: "INVALID_TRANSITION" };
   if (toStatus === CleaningRequestStatus.CANCELLED && !reason) return { success: false, reason: "CANCELLATION_REASON_REQUIRED" };
   const updated = await transaction.cleaningRequest.updateMany({ where: { id: current.id, status: current.status }, data: toStatus === CleaningRequestStatus.CANCELLED ? { status: toStatus, cancelledAt: transitionTime, cancellationReason: reason } : { status: toStatus } });
   if (updated.count !== 1) return { success: false, reason: "STATUS_CONFLICT" };

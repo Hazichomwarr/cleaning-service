@@ -341,6 +341,23 @@ export type EnumCleaningRequestStatusWithAggregatesFilter<$PrismaModel = never> 
   _max?: Prisma.NestedEnumCleaningRequestStatusFilter<$PrismaModel>
 }
 
+export type EnumCleaningAssignmentHistoryActionFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningAssignmentHistoryAction | Prisma.EnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningAssignmentHistoryActionFilter<$PrismaModel> | $Enums.CleaningAssignmentHistoryAction
+}
+
+export type EnumCleaningAssignmentHistoryActionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningAssignmentHistoryAction | Prisma.EnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningAssignmentHistoryActionWithAggregatesFilter<$PrismaModel> | $Enums.CleaningAssignmentHistoryAction
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCleaningAssignmentHistoryActionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCleaningAssignmentHistoryActionFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -679,6 +696,23 @@ export type NestedEnumCleaningRequestStatusWithAggregatesFilter<$PrismaModel = n
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCleaningRequestStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCleaningRequestStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumCleaningAssignmentHistoryActionFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningAssignmentHistoryAction | Prisma.EnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningAssignmentHistoryActionFilter<$PrismaModel> | $Enums.CleaningAssignmentHistoryAction
+}
+
+export type NestedEnumCleaningAssignmentHistoryActionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CleaningAssignmentHistoryAction | Prisma.EnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  in?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CleaningAssignmentHistoryAction[] | Prisma.ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCleaningAssignmentHistoryActionWithAggregatesFilter<$PrismaModel> | $Enums.CleaningAssignmentHistoryAction
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCleaningAssignmentHistoryActionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCleaningAssignmentHistoryActionFilter<$PrismaModel>
 }
 
 

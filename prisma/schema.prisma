@@ -31,6 +31,11 @@ enum WorkerType {
   CONTRACTOR
 }
 
+enum CleaningAssignmentHistoryAction {
+  ASSIGNED
+  REMOVED
+}
+
 enum CleaningEstimateOutcome {
   AUTOMATIC_ESTIMATE
   MANUAL_QUOTE_REQUIRED
@@ -66,6 +71,7 @@ model AdminUser {
   requestStatusHistory   CleaningRequestStatusHistory[]
   requestPriceHistory    CleaningRequestPriceHistory[]
   requestScheduleHistory CleaningRequestScheduleHistory[]
+  assignmentHistory      CleaningRequestAssignmentHistory[]
 }
 
 model Customer {
@@ -137,7 +143,8 @@ model Worker {
   type      WorkerType
   isActive  Boolean    @default(true)
 
-  assignments CleaningAssignment[]
+  assignments       CleaningAssignment[]
+  assignmentHistory CleaningRequestAssignmentHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -208,11 +215,12 @@ model CleaningRequest {
   cancelledAt        DateTime?
   cancellationReason String?
 
-  requestExtras   CleaningRequestExtra[]
-  assignments     CleaningAssignment[]
-  statusHistory   CleaningRequestStatusHistory[]
-  priceHistory    CleaningRequestPriceHistory[]
-  scheduleHistory CleaningRequestScheduleHistory[]
+  requestExtras     CleaningRequestExtra[]
+  assignments       CleaningAssignment[]
+  statusHistory     CleaningRequestStatusHistory[]
+  priceHistory      CleaningRequestPriceHistory[]
+  scheduleHistory   CleaningRequestScheduleHistory[]
+  assignmentHistory CleaningRequestAssignmentHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -315,4 +323,26 @@ model CleaningAssignment {
   @@unique([cleaningRequestId, workerId])
   @@index([workerId, assignedAt])
   @@index([cleaningRequestId])
+}
+
+model CleaningRequestAssignmentHistory {
+  id String @id @default(cuid())
+
+  cleaningRequestId String
+  cleaningRequest   CleaningRequest @relation(fields: [cleaningRequestId], references: [id], onDelete: Cascade)
+
+  workerId String
+  worker   Worker @relation(fields: [workerId], references: [id], onDelete: Restrict)
+
+  action CleaningAssignmentHistoryAction
+
+  changedByAdminUserId String
+  changedByAdminUser   AdminUser @relation(fields: [changedByAdminUserId], references: [id], onDelete: Restrict)
+
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([cleaningRequestId, createdAt])
+  @@index([workerId, createdAt])
+  @@index([changedByAdminUserId, createdAt])
 }

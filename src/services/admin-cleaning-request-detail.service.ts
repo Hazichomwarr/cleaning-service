@@ -8,6 +8,7 @@ import type { CleaningRequestStatusHistoryItem } from "./cleaning-request-lifecy
 import type { CleaningRequestPriceHistoryItem } from "./cleaning-request-price.service";
 import type { CleaningRequestScheduleHistoryItem } from "./cleaning-request-schedule.service";
 import { getCleaningRequestConfirmationReadiness, type ConfirmationReadiness } from "../lib/cleaning-request-confirmation";
+import type { CleaningRequestAssignmentHistoryItem } from "./cleaning-request-assignment.service";
 
 export type AdminCleaningRequestDetail = {
   id: string;
@@ -23,7 +24,8 @@ export type AdminCleaningRequestDetail = {
   estimate: { outcome: CleaningEstimateOutcome; estimatedPrice: string | null; confirmedPrice: string | null };
   preferredSchedule: { date: string; timeWindow: string };
   confirmedSchedule: { start: string | null; end: string | null } | null;
-  assignments: Array<{ id: string; workerId: string; workerName: string; workerType: WorkerType; assignedAt: string }>;
+  assignments: Array<{ id: string; workerId: string; workerName: string; workerType: WorkerType; workerIsActive?: boolean; assignedAt: string }>;
+  assignmentHistory: CleaningRequestAssignmentHistoryItem[];
   cancellation: { cancelledAt: string | null; reason: string | null } | null;
   statusHistory: CleaningRequestStatusHistoryItem[];
   priceHistory: CleaningRequestPriceHistoryItem[];
@@ -64,7 +66,8 @@ type DetailDatabaseRow = {
   updatedAt: Date;
   service: { id: string; name: string; slug: string };
   requestExtras: Array<{ cleaningExtra: { id: string; name: string; displayOrder: number } }>;
-  assignments: Array<{ id: string; workerId: string; assignedAt: Date; worker: { firstName: string; lastName: string; type: WorkerType } }>;
+  assignments: Array<{ id: string; workerId: string; assignedAt: Date; worker: { id?: string; firstName: string; lastName: string; type: WorkerType; isActive?: boolean } }>;
+  assignmentHistory?: Array<{ id: string; action: "ASSIGNED" | "REMOVED"; reason: string | null; createdAt: Date; worker: { id?: string; firstName: string; lastName: string; type: WorkerType; isActive?: boolean }; changedByAdminUser: { id: string; name: string; email: string } }>;
   statusHistory: Array<{
     id: string;
     fromStatus: CleaningRequestStatus;
@@ -132,7 +135,11 @@ const detailSelect = {
   updatedAt: true,
   service: { select: { id: true, name: true, slug: true } },
   requestExtras: { select: { cleaningExtra: { select: { id: true, name: true, displayOrder: true } } } },
-  assignments: { select: { id: true, workerId: true, assignedAt: true, worker: { select: { firstName: true, lastName: true, type: true } } } },
+  assignments: { select: { id: true, workerId: true, assignedAt: true, worker: { select: { id: true, firstName: true, lastName: true, type: true, isActive: true } } } },
+  assignmentHistory: {
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: { id: true, action: true, reason: true, createdAt: true, worker: { select: { id: true, firstName: true, lastName: true, type: true, isActive: true } }, changedByAdminUser: { select: { id: true, name: true, email: true } } },
+  },
   statusHistory: {
     orderBy: [{ createdAt: "asc" }, { id: "asc" }],
     select: {
@@ -200,7 +207,11 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
     confirmedSchedule: hasSchedule ? { start: row.scheduledStart?.toISOString() ?? null, end: row.scheduledEnd?.toISOString() ?? null } : null,
     assignments: row.assignments
       .sort((left, right) => left.assignedAt.getTime() - right.assignedAt.getTime() || `${left.worker.lastName} ${left.worker.firstName}`.localeCompare(`${right.worker.lastName} ${right.worker.firstName}`))
-      .map((assignment) => ({ id: assignment.id, workerId: assignment.workerId, workerName: `${assignment.worker.firstName} ${assignment.worker.lastName}`, workerType: assignment.worker.type, assignedAt: assignment.assignedAt.toISOString() })),
+      .map((assignment) => ({ id: assignment.id, workerId: assignment.workerId, workerName: `${assignment.worker.firstName} ${assignment.worker.lastName}`, workerType: assignment.worker.type, workerIsActive: assignment.worker.isActive ?? true, assignedAt: assignment.assignedAt.toISOString() })),
+    assignmentHistory: (row.assignmentHistory ?? [])
+      .slice()
+      .sort((left, right) => left.createdAt.getTime() - right.createdAt.getTime() || left.id.localeCompare(right.id))
+      .map((item) => ({ id: item.id, action: item.action, worker: { id: item.worker.id ?? "", name: `${item.worker.firstName} ${item.worker.lastName}`, type: item.worker.type }, changedBy: item.changedByAdminUser, reason: item.reason, changedAt: item.createdAt.toISOString() })),
     cancellation: hasCancellation ? { cancelledAt: row.cancelledAt?.toISOString() ?? null, reason: row.cancellationReason } : null,
     statusHistory: row.statusHistory
       .slice()

@@ -215,6 +215,7 @@ export type WorkerWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
   assignments?: Prisma.CleaningAssignmentListRelationFilter
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryListRelationFilter
 }
 
 export type WorkerOrderByWithRelationInput = {
@@ -228,6 +229,7 @@ export type WorkerOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   assignments?: Prisma.CleaningAssignmentOrderByRelationAggregateInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryOrderByRelationAggregateInput
 }
 
 export type WorkerWhereUniqueInput = Prisma.AtLeast<{
@@ -244,6 +246,7 @@ export type WorkerWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Worker"> | Date | string
   assignments?: Prisma.CleaningAssignmentListRelationFilter
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryListRelationFilter
 }, "id">
 
 export type WorkerOrderByWithAggregationInput = {
@@ -287,6 +290,7 @@ export type WorkerCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutWorkerInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUncheckedCreateInput = {
@@ -300,6 +304,7 @@ export type WorkerUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutWorkerInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUpdateInput = {
@@ -313,6 +318,7 @@ export type WorkerUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignments?: Prisma.CleaningAssignmentUpdateManyWithoutWorkerNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateInput = {
@@ -326,6 +332,7 @@ export type WorkerUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerCreateManyInput = {
@@ -423,6 +430,20 @@ export type WorkerUpdateOneRequiredWithoutAssignmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkerUpdateToOneWithWhereWithoutAssignmentsInput, Prisma.WorkerUpdateWithoutAssignmentsInput>, Prisma.WorkerUncheckedUpdateWithoutAssignmentsInput>
 }
 
+export type WorkerCreateNestedOneWithoutAssignmentHistoryInput = {
+  create?: Prisma.XOR<Prisma.WorkerCreateWithoutAssignmentHistoryInput, Prisma.WorkerUncheckedCreateWithoutAssignmentHistoryInput>
+  connectOrCreate?: Prisma.WorkerCreateOrConnectWithoutAssignmentHistoryInput
+  connect?: Prisma.WorkerWhereUniqueInput
+}
+
+export type WorkerUpdateOneRequiredWithoutAssignmentHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkerCreateWithoutAssignmentHistoryInput, Prisma.WorkerUncheckedCreateWithoutAssignmentHistoryInput>
+  connectOrCreate?: Prisma.WorkerCreateOrConnectWithoutAssignmentHistoryInput
+  upsert?: Prisma.WorkerUpsertWithoutAssignmentHistoryInput
+  connect?: Prisma.WorkerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkerUpdateToOneWithWhereWithoutAssignmentHistoryInput, Prisma.WorkerUpdateWithoutAssignmentHistoryInput>, Prisma.WorkerUncheckedUpdateWithoutAssignmentHistoryInput>
+}
+
 export type WorkerCreateWithoutAssignmentsInput = {
   id?: string
   firstName: string
@@ -433,6 +454,7 @@ export type WorkerCreateWithoutAssignmentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerUncheckedCreateWithoutAssignmentsInput = {
@@ -445,6 +467,7 @@ export type WorkerUncheckedCreateWithoutAssignmentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutWorkerInput
 }
 
 export type WorkerCreateOrConnectWithoutAssignmentsInput = {
@@ -473,6 +496,7 @@ export type WorkerUpdateWithoutAssignmentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutWorkerNestedInput
 }
 
 export type WorkerUncheckedUpdateWithoutAssignmentsInput = {
@@ -485,6 +509,75 @@ export type WorkerUncheckedUpdateWithoutAssignmentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutWorkerNestedInput
+}
+
+export type WorkerCreateWithoutAssignmentHistoryInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  phone?: string | null
+  email?: string | null
+  type: $Enums.WorkerType
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutWorkerInput
+}
+
+export type WorkerUncheckedCreateWithoutAssignmentHistoryInput = {
+  id?: string
+  firstName: string
+  lastName: string
+  phone?: string | null
+  email?: string | null
+  type: $Enums.WorkerType
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutWorkerInput
+}
+
+export type WorkerCreateOrConnectWithoutAssignmentHistoryInput = {
+  where: Prisma.WorkerWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkerCreateWithoutAssignmentHistoryInput, Prisma.WorkerUncheckedCreateWithoutAssignmentHistoryInput>
+}
+
+export type WorkerUpsertWithoutAssignmentHistoryInput = {
+  update: Prisma.XOR<Prisma.WorkerUpdateWithoutAssignmentHistoryInput, Prisma.WorkerUncheckedUpdateWithoutAssignmentHistoryInput>
+  create: Prisma.XOR<Prisma.WorkerCreateWithoutAssignmentHistoryInput, Prisma.WorkerUncheckedCreateWithoutAssignmentHistoryInput>
+  where?: Prisma.WorkerWhereInput
+}
+
+export type WorkerUpdateToOneWithWhereWithoutAssignmentHistoryInput = {
+  where?: Prisma.WorkerWhereInput
+  data: Prisma.XOR<Prisma.WorkerUpdateWithoutAssignmentHistoryInput, Prisma.WorkerUncheckedUpdateWithoutAssignmentHistoryInput>
+}
+
+export type WorkerUpdateWithoutAssignmentHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignments?: Prisma.CleaningAssignmentUpdateManyWithoutWorkerNestedInput
+}
+
+export type WorkerUncheckedUpdateWithoutAssignmentHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumWorkerTypeFieldUpdateOperationsInput | $Enums.WorkerType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutWorkerNestedInput
 }
 
 
@@ -494,10 +587,12 @@ export type WorkerUncheckedUpdateWithoutAssignmentsInput = {
 
 export type WorkerCountOutputType = {
   assignments: number
+  assignmentHistory: number
 }
 
 export type WorkerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignments?: boolean | WorkerCountOutputTypeCountAssignmentsArgs
+  assignmentHistory?: boolean | WorkerCountOutputTypeCountAssignmentHistoryArgs
 }
 
 /**
@@ -517,6 +612,13 @@ export type WorkerCountOutputTypeCountAssignmentsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.CleaningAssignmentWhereInput
 }
 
+/**
+ * WorkerCountOutputType without action
+ */
+export type WorkerCountOutputTypeCountAssignmentHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CleaningRequestAssignmentHistoryWhereInput
+}
+
 
 export type WorkerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -529,6 +631,7 @@ export type WorkerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   assignments?: boolean | Prisma.Worker$assignmentsArgs<ExtArgs>
+  assignmentHistory?: boolean | Prisma.Worker$assignmentHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.WorkerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["worker"]>
 
@@ -571,6 +674,7 @@ export type WorkerSelectScalar = {
 export type WorkerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "phone" | "email" | "type" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["worker"]>
 export type WorkerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignments?: boolean | Prisma.Worker$assignmentsArgs<ExtArgs>
+  assignmentHistory?: boolean | Prisma.Worker$assignmentHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.WorkerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -580,6 +684,7 @@ export type $WorkerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Worker"
   objects: {
     assignments: Prisma.$CleaningAssignmentPayload<ExtArgs>[]
+    assignmentHistory: Prisma.$CleaningRequestAssignmentHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -986,6 +1091,7 @@ readonly fields: WorkerFieldRefs;
 export interface Prisma__WorkerClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   assignments<T extends Prisma.Worker$assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Worker$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignmentHistory<T extends Prisma.Worker$assignmentHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Worker$assignmentHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestAssignmentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1438,6 +1544,30 @@ export type Worker$assignmentsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.CleaningAssignmentScalarFieldEnum | Prisma.CleaningAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Worker.assignmentHistory
+ */
+export type Worker$assignmentHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CleaningRequestAssignmentHistory
+   */
+  select?: Prisma.CleaningRequestAssignmentHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CleaningRequestAssignmentHistory
+   */
+  omit?: Prisma.CleaningRequestAssignmentHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CleaningRequestAssignmentHistoryInclude<ExtArgs> | null
+  where?: Prisma.CleaningRequestAssignmentHistoryWhereInput
+  orderBy?: Prisma.CleaningRequestAssignmentHistoryOrderByWithRelationInput | Prisma.CleaningRequestAssignmentHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.CleaningRequestAssignmentHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CleaningRequestAssignmentHistoryScalarFieldEnum | Prisma.CleaningRequestAssignmentHistoryScalarFieldEnum[]
 }
 
 /**

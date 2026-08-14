@@ -448,6 +448,7 @@ export type CleaningRequestWhereInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryListRelationFilter
   priceHistory?: Prisma.CleaningRequestPriceHistoryListRelationFilter
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryListRelationFilter
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryListRelationFilter
 }
 
 export type CleaningRequestOrderByWithRelationInput = {
@@ -490,6 +491,7 @@ export type CleaningRequestOrderByWithRelationInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryOrderByRelationAggregateInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryOrderByRelationAggregateInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryOrderByRelationAggregateInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryOrderByRelationAggregateInput
 }
 
 export type CleaningRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -535,6 +537,7 @@ export type CleaningRequestWhereUniqueInput = Prisma.AtLeast<{
   statusHistory?: Prisma.CleaningRequestStatusHistoryListRelationFilter
   priceHistory?: Prisma.CleaningRequestPriceHistoryListRelationFilter
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryListRelationFilter
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryListRelationFilter
 }, "id" | "requestNumber">
 
 export type CleaningRequestOrderByWithAggregationInput = {
@@ -650,6 +653,7 @@ export type CleaningRequestCreateInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateInput = {
@@ -689,6 +693,7 @@ export type CleaningRequestUncheckedCreateInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUpdateInput = {
@@ -728,6 +733,7 @@ export type CleaningRequestUpdateInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateInput = {
@@ -767,6 +773,7 @@ export type CleaningRequestUncheckedUpdateInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestCreateManyInput = {
@@ -1209,6 +1216,20 @@ export type CleaningRequestUpdateOneRequiredWithoutAssignmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CleaningRequestUpdateToOneWithWhereWithoutAssignmentsInput, Prisma.CleaningRequestUpdateWithoutAssignmentsInput>, Prisma.CleaningRequestUncheckedUpdateWithoutAssignmentsInput>
 }
 
+export type CleaningRequestCreateNestedOneWithoutAssignmentHistoryInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutAssignmentHistoryInput, Prisma.CleaningRequestUncheckedCreateWithoutAssignmentHistoryInput>
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutAssignmentHistoryInput
+  connect?: Prisma.CleaningRequestWhereUniqueInput
+}
+
+export type CleaningRequestUpdateOneRequiredWithoutAssignmentHistoryNestedInput = {
+  create?: Prisma.XOR<Prisma.CleaningRequestCreateWithoutAssignmentHistoryInput, Prisma.CleaningRequestUncheckedCreateWithoutAssignmentHistoryInput>
+  connectOrCreate?: Prisma.CleaningRequestCreateOrConnectWithoutAssignmentHistoryInput
+  upsert?: Prisma.CleaningRequestUpsertWithoutAssignmentHistoryInput
+  connect?: Prisma.CleaningRequestWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CleaningRequestUpdateToOneWithWhereWithoutAssignmentHistoryInput, Prisma.CleaningRequestUpdateWithoutAssignmentHistoryInput>, Prisma.CleaningRequestUncheckedUpdateWithoutAssignmentHistoryInput>
+}
+
 export type CleaningRequestCreateWithoutServiceInput = {
   id?: string
   requestNumber: string
@@ -1245,6 +1266,7 @@ export type CleaningRequestCreateWithoutServiceInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutServiceInput = {
@@ -1283,6 +1305,7 @@ export type CleaningRequestUncheckedCreateWithoutServiceInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutServiceInput = {
@@ -1384,6 +1407,7 @@ export type CleaningRequestCreateWithoutCustomerInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutCustomerInput = {
@@ -1422,6 +1446,7 @@ export type CleaningRequestUncheckedCreateWithoutCustomerInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutCustomerInput = {
@@ -1486,6 +1511,7 @@ export type CleaningRequestCreateWithoutCustomerPropertyInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutCustomerPropertyInput = {
@@ -1524,6 +1550,7 @@ export type CleaningRequestUncheckedCreateWithoutCustomerPropertyInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutCustomerPropertyInput = {
@@ -1588,6 +1615,7 @@ export type CleaningRequestCreateWithoutStatusHistoryInput = {
   assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutStatusHistoryInput = {
@@ -1626,6 +1654,7 @@ export type CleaningRequestUncheckedCreateWithoutStatusHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutStatusHistoryInput = {
@@ -1680,6 +1709,7 @@ export type CleaningRequestUpdateWithoutStatusHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutStatusHistoryInput = {
@@ -1718,6 +1748,7 @@ export type CleaningRequestUncheckedUpdateWithoutStatusHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestCreateWithoutPriceHistoryInput = {
@@ -1756,6 +1787,7 @@ export type CleaningRequestCreateWithoutPriceHistoryInput = {
   assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutPriceHistoryInput = {
@@ -1794,6 +1826,7 @@ export type CleaningRequestUncheckedCreateWithoutPriceHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutCleaningRequestInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutPriceHistoryInput = {
@@ -1848,6 +1881,7 @@ export type CleaningRequestUpdateWithoutPriceHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutPriceHistoryInput = {
@@ -1886,6 +1920,7 @@ export type CleaningRequestUncheckedUpdateWithoutPriceHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutCleaningRequestNestedInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestCreateWithoutScheduleHistoryInput = {
@@ -1924,6 +1959,7 @@ export type CleaningRequestCreateWithoutScheduleHistoryInput = {
   assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutScheduleHistoryInput = {
@@ -1962,6 +1998,7 @@ export type CleaningRequestUncheckedCreateWithoutScheduleHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutCleaningRequestInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutScheduleHistoryInput = {
@@ -2016,6 +2053,7 @@ export type CleaningRequestUpdateWithoutScheduleHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutScheduleHistoryInput = {
@@ -2054,6 +2092,7 @@ export type CleaningRequestUncheckedUpdateWithoutScheduleHistoryInput = {
   assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutCleaningRequestNestedInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestCreateWithoutRequestExtrasInput = {
@@ -2092,6 +2131,7 @@ export type CleaningRequestCreateWithoutRequestExtrasInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutRequestExtrasInput = {
@@ -2130,6 +2170,7 @@ export type CleaningRequestUncheckedCreateWithoutRequestExtrasInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutRequestExtrasInput = {
@@ -2184,6 +2225,7 @@ export type CleaningRequestUpdateWithoutRequestExtrasInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutRequestExtrasInput = {
@@ -2222,6 +2264,7 @@ export type CleaningRequestUncheckedUpdateWithoutRequestExtrasInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestCreateWithoutAssignmentsInput = {
@@ -2260,6 +2303,7 @@ export type CleaningRequestCreateWithoutAssignmentsInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestUncheckedCreateWithoutAssignmentsInput = {
@@ -2298,6 +2342,7 @@ export type CleaningRequestUncheckedCreateWithoutAssignmentsInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
 }
 
 export type CleaningRequestCreateOrConnectWithoutAssignmentsInput = {
@@ -2352,6 +2397,7 @@ export type CleaningRequestUpdateWithoutAssignmentsInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutAssignmentsInput = {
@@ -2387,6 +2433,179 @@ export type CleaningRequestUncheckedUpdateWithoutAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestExtras?: Prisma.CleaningRequestExtraUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+}
+
+export type CleaningRequestCreateWithoutAssignmentHistoryInput = {
+  id?: string
+  requestNumber: string
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  service: Prisma.CleaningServiceCreateNestedOneWithoutRequestsInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutRequestsInput
+  customerProperty?: Prisma.CustomerPropertyCreateNestedOneWithoutRequestsInput
+  requestExtras?: Prisma.CleaningRequestExtraCreateNestedManyWithoutCleaningRequestInput
+  assignments?: Prisma.CleaningAssignmentCreateNestedManyWithoutCleaningRequestInput
+  statusHistory?: Prisma.CleaningRequestStatusHistoryCreateNestedManyWithoutCleaningRequestInput
+  priceHistory?: Prisma.CleaningRequestPriceHistoryCreateNestedManyWithoutCleaningRequestInput
+  scheduleHistory?: Prisma.CleaningRequestScheduleHistoryCreateNestedManyWithoutCleaningRequestInput
+}
+
+export type CleaningRequestUncheckedCreateWithoutAssignmentHistoryInput = {
+  id?: string
+  requestNumber: string
+  serviceId: string
+  customerId?: string | null
+  customerPropertyId?: string | null
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  addressLine1: string
+  addressLine2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  propertyType: $Enums.PropertyType
+  bedrooms?: number | null
+  bathrooms?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: number | null
+  preferredDate: Date | string
+  preferredTimeWindow: string
+  estimatedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome: $Enums.CleaningEstimateOutcome
+  confirmedPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Date | string | null
+  scheduledEnd?: Date | string | null
+  customerNotes?: string | null
+  internalNotes?: string | null
+  status?: $Enums.CleaningRequestStatus
+  cancelledAt?: Date | string | null
+  cancellationReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  requestExtras?: Prisma.CleaningRequestExtraUncheckedCreateNestedManyWithoutCleaningRequestInput
+  assignments?: Prisma.CleaningAssignmentUncheckedCreateNestedManyWithoutCleaningRequestInput
+  statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+  scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedCreateNestedManyWithoutCleaningRequestInput
+}
+
+export type CleaningRequestCreateOrConnectWithoutAssignmentHistoryInput = {
+  where: Prisma.CleaningRequestWhereUniqueInput
+  create: Prisma.XOR<Prisma.CleaningRequestCreateWithoutAssignmentHistoryInput, Prisma.CleaningRequestUncheckedCreateWithoutAssignmentHistoryInput>
+}
+
+export type CleaningRequestUpsertWithoutAssignmentHistoryInput = {
+  update: Prisma.XOR<Prisma.CleaningRequestUpdateWithoutAssignmentHistoryInput, Prisma.CleaningRequestUncheckedUpdateWithoutAssignmentHistoryInput>
+  create: Prisma.XOR<Prisma.CleaningRequestCreateWithoutAssignmentHistoryInput, Prisma.CleaningRequestUncheckedCreateWithoutAssignmentHistoryInput>
+  where?: Prisma.CleaningRequestWhereInput
+}
+
+export type CleaningRequestUpdateToOneWithWhereWithoutAssignmentHistoryInput = {
+  where?: Prisma.CleaningRequestWhereInput
+  data: Prisma.XOR<Prisma.CleaningRequestUpdateWithoutAssignmentHistoryInput, Prisma.CleaningRequestUncheckedUpdateWithoutAssignmentHistoryInput>
+}
+
+export type CleaningRequestUpdateWithoutAssignmentHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  service?: Prisma.CleaningServiceUpdateOneRequiredWithoutRequestsNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutRequestsNestedInput
+  customerProperty?: Prisma.CustomerPropertyUpdateOneWithoutRequestsNestedInput
+  requestExtras?: Prisma.CleaningRequestExtraUpdateManyWithoutCleaningRequestNestedInput
+  assignments?: Prisma.CleaningAssignmentUpdateManyWithoutCleaningRequestNestedInput
+  statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
+  priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
+  scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+}
+
+export type CleaningRequestUncheckedUpdateWithoutAssignmentHistoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  requestNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerPropertyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerName?: Prisma.StringFieldUpdateOperationsInput | string
+  customerEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine1?: Prisma.StringFieldUpdateOperationsInput | string
+  addressLine2?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  postalCode?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+  bedrooms?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bathrooms?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approximateSquareFeet?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  preferredDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredTimeWindow?: Prisma.StringFieldUpdateOperationsInput | string
+  estimatedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  estimateOutcome?: Prisma.EnumCleaningEstimateOutcomeFieldUpdateOperationsInput | $Enums.CleaningEstimateOutcome
+  confirmedPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  scheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  scheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  customerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  internalNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCleaningRequestStatusFieldUpdateOperationsInput | $Enums.CleaningRequestStatus
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestExtras?: Prisma.CleaningRequestExtraUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignments?: Prisma.CleaningAssignmentUncheckedUpdateManyWithoutCleaningRequestNestedInput
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
@@ -2461,6 +2680,7 @@ export type CleaningRequestUpdateWithoutServiceInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutServiceInput = {
@@ -2499,6 +2719,7 @@ export type CleaningRequestUncheckedUpdateWithoutServiceInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateManyWithoutServiceInput = {
@@ -2603,6 +2824,7 @@ export type CleaningRequestUpdateWithoutCustomerInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutCustomerInput = {
@@ -2641,6 +2863,7 @@ export type CleaningRequestUncheckedUpdateWithoutCustomerInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateManyWithoutCustomerInput = {
@@ -2745,6 +2968,7 @@ export type CleaningRequestUpdateWithoutCustomerPropertyInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateWithoutCustomerPropertyInput = {
@@ -2783,6 +3007,7 @@ export type CleaningRequestUncheckedUpdateWithoutCustomerPropertyInput = {
   statusHistory?: Prisma.CleaningRequestStatusHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   priceHistory?: Prisma.CleaningRequestPriceHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
   scheduleHistory?: Prisma.CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
+  assignmentHistory?: Prisma.CleaningRequestAssignmentHistoryUncheckedUpdateManyWithoutCleaningRequestNestedInput
 }
 
 export type CleaningRequestUncheckedUpdateManyWithoutCustomerPropertyInput = {
@@ -2829,6 +3054,7 @@ export type CleaningRequestCountOutputType = {
   statusHistory: number
   priceHistory: number
   scheduleHistory: number
+  assignmentHistory: number
 }
 
 export type CleaningRequestCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2837,6 +3063,7 @@ export type CleaningRequestCountOutputTypeSelect<ExtArgs extends runtime.Types.E
   statusHistory?: boolean | CleaningRequestCountOutputTypeCountStatusHistoryArgs
   priceHistory?: boolean | CleaningRequestCountOutputTypeCountPriceHistoryArgs
   scheduleHistory?: boolean | CleaningRequestCountOutputTypeCountScheduleHistoryArgs
+  assignmentHistory?: boolean | CleaningRequestCountOutputTypeCountAssignmentHistoryArgs
 }
 
 /**
@@ -2884,6 +3111,13 @@ export type CleaningRequestCountOutputTypeCountScheduleHistoryArgs<ExtArgs exten
   where?: Prisma.CleaningRequestScheduleHistoryWhereInput
 }
 
+/**
+ * CleaningRequestCountOutputType without action
+ */
+export type CleaningRequestCountOutputTypeCountAssignmentHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CleaningRequestAssignmentHistoryWhereInput
+}
+
 
 export type CleaningRequestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2925,6 +3159,7 @@ export type CleaningRequestSelect<ExtArgs extends runtime.Types.Extensions.Inter
   statusHistory?: boolean | Prisma.CleaningRequest$statusHistoryArgs<ExtArgs>
   priceHistory?: boolean | Prisma.CleaningRequest$priceHistoryArgs<ExtArgs>
   scheduleHistory?: boolean | Prisma.CleaningRequest$scheduleHistoryArgs<ExtArgs>
+  assignmentHistory?: boolean | Prisma.CleaningRequest$assignmentHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.CleaningRequestCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cleaningRequest"]>
 
@@ -3046,6 +3281,7 @@ export type CleaningRequestInclude<ExtArgs extends runtime.Types.Extensions.Inte
   statusHistory?: boolean | Prisma.CleaningRequest$statusHistoryArgs<ExtArgs>
   priceHistory?: boolean | Prisma.CleaningRequest$priceHistoryArgs<ExtArgs>
   scheduleHistory?: boolean | Prisma.CleaningRequest$scheduleHistoryArgs<ExtArgs>
+  assignmentHistory?: boolean | Prisma.CleaningRequest$assignmentHistoryArgs<ExtArgs>
   _count?: boolean | Prisma.CleaningRequestCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CleaningRequestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3070,6 +3306,7 @@ export type $CleaningRequestPayload<ExtArgs extends runtime.Types.Extensions.Int
     statusHistory: Prisma.$CleaningRequestStatusHistoryPayload<ExtArgs>[]
     priceHistory: Prisma.$CleaningRequestPriceHistoryPayload<ExtArgs>[]
     scheduleHistory: Prisma.$CleaningRequestScheduleHistoryPayload<ExtArgs>[]
+    assignmentHistory: Prisma.$CleaningRequestAssignmentHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3505,6 +3742,7 @@ export interface Prisma__CleaningRequestClient<T, Null = never, ExtArgs extends 
   statusHistory<T extends Prisma.CleaningRequest$statusHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$statusHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestStatusHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   priceHistory<T extends Prisma.CleaningRequest$priceHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$priceHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestPriceHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scheduleHistory<T extends Prisma.CleaningRequest$scheduleHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$scheduleHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestScheduleHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignmentHistory<T extends Prisma.CleaningRequest$assignmentHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CleaningRequest$assignmentHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestAssignmentHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4121,6 +4359,30 @@ export type CleaningRequest$scheduleHistoryArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.CleaningRequestScheduleHistoryScalarFieldEnum | Prisma.CleaningRequestScheduleHistoryScalarFieldEnum[]
+}
+
+/**
+ * CleaningRequest.assignmentHistory
+ */
+export type CleaningRequest$assignmentHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CleaningRequestAssignmentHistory
+   */
+  select?: Prisma.CleaningRequestAssignmentHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CleaningRequestAssignmentHistory
+   */
+  omit?: Prisma.CleaningRequestAssignmentHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CleaningRequestAssignmentHistoryInclude<ExtArgs> | null
+  where?: Prisma.CleaningRequestAssignmentHistoryWhereInput
+  orderBy?: Prisma.CleaningRequestAssignmentHistoryOrderByWithRelationInput | Prisma.CleaningRequestAssignmentHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.CleaningRequestAssignmentHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CleaningRequestAssignmentHistoryScalarFieldEnum | Prisma.CleaningRequestAssignmentHistoryScalarFieldEnum[]
 }
 
 /**

@@ -42,6 +42,14 @@ export const WorkerType = {
 export type WorkerType = (typeof WorkerType)[keyof typeof WorkerType]
 
 
+export const CleaningAssignmentHistoryAction = {
+  ASSIGNED: 'ASSIGNED',
+  REMOVED: 'REMOVED'
+} as const
+
+export type CleaningAssignmentHistoryAction = (typeof CleaningAssignmentHistoryAction)[keyof typeof CleaningAssignmentHistoryAction]
+
+
 export const CleaningEstimateOutcome = {
   AUTOMATIC_ESTIMATE: 'AUTOMATIC_ESTIMATE',
   MANUAL_QUOTE_REQUIRED: 'MANUAL_QUOTE_REQUIRED',

@@ -409,7 +409,8 @@ export const ModelName = {
   CleaningRequestPriceHistory: 'CleaningRequestPriceHistory',
   CleaningRequestScheduleHistory: 'CleaningRequestScheduleHistory',
   CleaningRequestExtra: 'CleaningRequestExtra',
-  CleaningAssignment: 'CleaningAssignment'
+  CleaningAssignment: 'CleaningAssignment',
+  CleaningRequestAssignmentHistory: 'CleaningRequestAssignmentHistory'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cleaningService" | "adminUser" | "customer" | "customerProperty" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "cleaningRequestStatusHistory" | "cleaningRequestPriceHistory" | "cleaningRequestScheduleHistory" | "cleaningRequestExtra" | "cleaningAssignment"
+    modelProps: "cleaningService" | "adminUser" | "customer" | "customerProperty" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "cleaningRequestStatusHistory" | "cleaningRequestPriceHistory" | "cleaningRequestScheduleHistory" | "cleaningRequestExtra" | "cleaningAssignment" | "cleaningRequestAssignmentHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1391,6 +1392,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CleaningRequestAssignmentHistory: {
+      payload: Prisma.$CleaningRequestAssignmentHistoryPayload<ExtArgs>
+      fields: Prisma.CleaningRequestAssignmentHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CleaningRequestAssignmentHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CleaningRequestAssignmentHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.CleaningRequestAssignmentHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CleaningRequestAssignmentHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.CleaningRequestAssignmentHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.CleaningRequestAssignmentHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.CleaningRequestAssignmentHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CleaningRequestAssignmentHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.CleaningRequestAssignmentHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>
+        }
+        update: {
+          args: Prisma.CleaningRequestAssignmentHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.CleaningRequestAssignmentHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CleaningRequestAssignmentHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CleaningRequestAssignmentHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.CleaningRequestAssignmentHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CleaningRequestAssignmentHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.CleaningRequestAssignmentHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCleaningRequestAssignmentHistory>
+        }
+        groupBy: {
+          args: Prisma.CleaningRequestAssignmentHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CleaningRequestAssignmentHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CleaningRequestAssignmentHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CleaningRequestAssignmentHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1630,6 +1705,19 @@ export const CleaningAssignmentScalarFieldEnum = {
 export type CleaningAssignmentScalarFieldEnum = (typeof CleaningAssignmentScalarFieldEnum)[keyof typeof CleaningAssignmentScalarFieldEnum]
 
 
+export const CleaningRequestAssignmentHistoryScalarFieldEnum = {
+  id: 'id',
+  cleaningRequestId: 'cleaningRequestId',
+  workerId: 'workerId',
+  action: 'action',
+  changedByAdminUserId: 'changedByAdminUserId',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type CleaningRequestAssignmentHistoryScalarFieldEnum = (typeof CleaningRequestAssignmentHistoryScalarFieldEnum)[keyof typeof CleaningRequestAssignmentHistoryScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1776,6 +1864,20 @@ export type EnumCleaningRequestStatusFieldRefInput<$PrismaModel> = FieldRefInput
  * Reference to a field of type 'CleaningRequestStatus[]'
  */
 export type ListEnumCleaningRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningRequestStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CleaningAssignmentHistoryAction'
+ */
+export type EnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningAssignmentHistoryAction'>
+    
+
+
+/**
+ * Reference to a field of type 'CleaningAssignmentHistoryAction[]'
+ */
+export type ListEnumCleaningAssignmentHistoryActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CleaningAssignmentHistoryAction[]'>
     
 
 
@@ -1956,6 +2058,7 @@ export type GlobalOmitConfig = {
   cleaningRequestScheduleHistory?: Prisma.CleaningRequestScheduleHistoryOmit
   cleaningRequestExtra?: Prisma.CleaningRequestExtraOmit
   cleaningAssignment?: Prisma.CleaningAssignmentOmit
+  cleaningRequestAssignmentHistory?: Prisma.CleaningRequestAssignmentHistoryOmit
 }
 
 /* Types for Logging */

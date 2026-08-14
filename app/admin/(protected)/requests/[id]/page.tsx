@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CleaningEstimateOutcome, CleaningRequestStatus, type PropertyType, type WorkerType } from "@/src/generated/prisma/client";
+import { CleaningEstimateOutcome, CleaningRequestStatus, type PropertyType } from "@/src/generated/prisma/client";
 import { formatTimeWindow } from "@/src/lib/request-confirmation";
 import RequestLifecycleActions from "@/components/admin/requests/RequestLifecycleActions";
 import RequestConfirmationActions from "@/components/admin/requests/RequestConfirmationActions";
 import RequestPriceActions from "@/components/admin/requests/RequestPriceActions";
 import RequestScheduleActions from "@/components/admin/requests/RequestScheduleActions";
+import RequestAssignmentActions from "@/components/admin/requests/RequestAssignmentActions";
 import { getAdminCleaningRequestDetail, type AdminCleaningRequestDetail } from "@/src/services/admin-cleaning-request-detail.service";
+import { getEligibleWorkersForCleaningRequest } from "@/src/services/cleaning-request-assignment.service";
 
 const statusLabels: Record<CleaningRequestStatus, string> = {
   NEW: "New", REVIEWING: "Reviewing", CONFIRMED: "Confirmed", ASSIGNED: "Assigned", IN_PROGRESS: "In progress", COMPLETED: "Completed", CANCELLED: "Cancelled",
@@ -14,7 +16,6 @@ const statusLabels: Record<CleaningRequestStatus, string> = {
 const propertyLabels: Record<PropertyType, string> = {
   HOUSE: "House", APARTMENT: "Apartment", OFFICE: "Office", COMMERCIAL: "Commercial space", AIRBNB: "Airbnb / Short-term rental", OTHER: "Other",
 };
-const workerTypeLabels: Record<WorkerType, string> = { CREW: "Crew", CONTRACTOR: "Contractor" };
 
 function formatPhone(value: string): string {
   const match = /^\+1(\d{3})(\d{3})(\d{4})$/.exec(value);
@@ -85,8 +86,8 @@ function ExtrasSection({ detail }: { detail: AdminCleaningRequestDetail }) {
   return <SectionCard title="Selected extras">{detail.extras.length > 0 ? <ul className="space-y-3">{detail.extras.map((extra) => <li key={extra.id} className="flex items-start gap-3 text-sm text-slate-700"><span className="mt-1 text-blue-600" aria-hidden="true">•</span><span>{extra.name}</span></li>)}</ul> : <EmptyText>No extras selected.</EmptyText>}</SectionCard>;
 }
 
-function AssignmentsSection({ detail }: { detail: AdminCleaningRequestDetail }) {
-  return <SectionCard title="Current assignments"><p className="mb-4 text-xs text-slate-500">Current assignment membership, not assignment history.</p>{detail.assignments.length > 0 ? <ul className="divide-y divide-slate-100">{detail.assignments.map((assignment) => <li key={assignment.id} className="flex items-start justify-between gap-4 py-3 first:pt-0 last:pb-0"><div><p className="font-semibold text-slate-900">{assignment.workerName}</p><p className="mt-1 text-sm text-slate-500">{workerTypeLabels[assignment.workerType]}</p></div><time className="shrink-0 text-right text-xs text-slate-500" dateTime={assignment.assignedAt}>Assigned<br />{formatBusinessDateTime(assignment.assignedAt)}</time></li>)}</ul> : <EmptyText>No workers assigned yet.</EmptyText>}</SectionCard>;
+function AssignmentsSection({ detail, eligibleWorkers }: { detail: AdminCleaningRequestDetail; eligibleWorkers: Awaited<ReturnType<typeof getEligibleWorkersForCleaningRequest>> }) {
+  return <RequestAssignmentActions requestId={detail.id} status={detail.status} assignments={detail.assignments} eligibleWorkers={eligibleWorkers} assignmentHistory={detail.assignmentHistory} />;
 }
 
 function CancellationSection({ detail }: { detail: AdminCleaningRequestDetail }) {
@@ -102,5 +103,6 @@ export default async function AdminRequestDetailPage({ params }: { params: Promi
   const { id } = await params;
   const detail = await getAdminCleaningRequestDetail(id);
   if (!detail) notFound();
-  return <div className="mx-auto max-w-7xl"><Link href="/admin/requests" className="inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">← Back to requests</Link><header className="mt-6 flex flex-col gap-4 border-b border-slate-200 pb-7 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-sm font-bold uppercase tracking-[0.14em] text-blue-700">{detail.requestNumber}</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{detail.service.name}</h1><p className="mt-2 text-base text-slate-600">{detail.customer.name}</p></div><StatusBadge status={detail.status} /></header><RequestLifecycleActions requestId={detail.id} status={detail.status} /><RequestConfirmationActions requestId={detail.id} status={detail.status} confirmedPrice={detail.estimate.confirmedPrice} confirmedSchedule={detail.confirmedSchedule} readiness={detail.confirmationReadiness} /><div className="mt-7 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.85fr)]"><div className="space-y-6"><CustomerSection detail={detail} /><div className="grid gap-6 sm:grid-cols-2"><PropertySection detail={detail} /><AddressSection detail={detail} /></div><ExtrasSection detail={detail} /><NotesSection title="Customer notes" value={detail.customerNotes} empty="No customer notes." /><NotesSection title="Internal notes" value={detail.internalNotes} empty="No internal notes yet." /></div><div className="space-y-6"><EstimateSection detail={detail} /><ScheduleSection detail={detail} /><AssignmentsSection detail={detail} /><CancellationSection detail={detail} /><StatusHistorySection detail={detail} /><SectionCard title="Request metadata"><dl><DetailRow label="Request created" value={formatBusinessDateTime(detail.createdAt)} /><DetailRow label="Last updated" value={formatBusinessDateTime(detail.updatedAt)} /></dl></SectionCard></div></div></div>;
+  const eligibleWorkers = await getEligibleWorkersForCleaningRequest(detail.id);
+  return <div className="mx-auto max-w-7xl"><Link href="/admin/requests" className="inline-flex text-sm font-semibold text-blue-700 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">← Back to requests</Link><header className="mt-6 flex flex-col gap-4 border-b border-slate-200 pb-7 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-sm font-bold uppercase tracking-[0.14em] text-blue-700">{detail.requestNumber}</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">{detail.service.name}</h1><p className="mt-2 text-base text-slate-600">{detail.customer.name}</p></div><StatusBadge status={detail.status} /></header><RequestLifecycleActions requestId={detail.id} status={detail.status} /><RequestConfirmationActions requestId={detail.id} status={detail.status} confirmedPrice={detail.estimate.confirmedPrice} confirmedSchedule={detail.confirmedSchedule} readiness={detail.confirmationReadiness} /><div className="mt-7 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.85fr)]"><div className="space-y-6"><CustomerSection detail={detail} /><div className="grid gap-6 sm:grid-cols-2"><PropertySection detail={detail} /><AddressSection detail={detail} /></div><ExtrasSection detail={detail} /><NotesSection title="Customer notes" value={detail.customerNotes} empty="No customer notes." /><NotesSection title="Internal notes" value={detail.internalNotes} empty="No internal notes yet." /></div><div className="space-y-6"><EstimateSection detail={detail} /><ScheduleSection detail={detail} /><AssignmentsSection detail={detail} eligibleWorkers={eligibleWorkers} /><CancellationSection detail={detail} /><StatusHistorySection detail={detail} /><SectionCard title="Request metadata"><dl><DetailRow label="Request created" value={formatBusinessDateTime(detail.createdAt)} /><DetailRow label="Last updated" value={formatBusinessDateTime(detail.updatedAt)} /></dl></SectionCard></div></div></div>;
 }

@@ -4,7 +4,7 @@ const allowedTransitions: Record<CleaningRequestStatus, readonly CleaningRequest
   [CleaningRequestStatus.NEW]: [CleaningRequestStatus.REVIEWING, CleaningRequestStatus.CANCELLED],
   [CleaningRequestStatus.REVIEWING]: [CleaningRequestStatus.CONFIRMED, CleaningRequestStatus.CANCELLED],
   [CleaningRequestStatus.CONFIRMED]: [CleaningRequestStatus.ASSIGNED, CleaningRequestStatus.CANCELLED],
-  [CleaningRequestStatus.ASSIGNED]: [CleaningRequestStatus.IN_PROGRESS, CleaningRequestStatus.CANCELLED],
+  [CleaningRequestStatus.ASSIGNED]: [CleaningRequestStatus.CONFIRMED, CleaningRequestStatus.IN_PROGRESS, CleaningRequestStatus.CANCELLED],
   [CleaningRequestStatus.IN_PROGRESS]: [CleaningRequestStatus.COMPLETED, CleaningRequestStatus.CANCELLED],
   [CleaningRequestStatus.COMPLETED]: [],
   [CleaningRequestStatus.CANCELLED]: [],

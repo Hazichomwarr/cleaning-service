@@ -82,3 +82,8 @@ export type CleaningRequestExtra = Prisma.CleaningRequestExtraModel
  * 
  */
 export type CleaningAssignment = Prisma.CleaningAssignmentModel
+/**
+ * Model CleaningRequestAssignmentHistory
+ * 
+ */
+export type CleaningRequestAssignmentHistory = Prisma.CleaningRequestAssignmentHistoryModel
