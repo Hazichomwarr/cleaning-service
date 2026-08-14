@@ -1,5 +1,8 @@
 import { CleaningEstimateOutcome, CleaningRequestStatus, Prisma } from "../generated/prisma/client";
+import { renderNewRequestAdminEmail } from "../emails/new-request-admin.email";
+import { getBusinessNotificationConfig } from "../lib/notifications/business-notification-config";
 import { getNextCleaningRequestNumber, isRequestNumberCollision } from "../lib/cleaning-request-number";
+import { deliverNotification, createEmailNotification, type NotificationDatabase } from "./notification.service";
 import {
   validateCleaningRequest,
   getBusinessYear,
@@ -21,11 +24,23 @@ type CreatedRequestRecord = {
   estimatedPrice: Prisma.Decimal | null;
 };
 
+type PersistedRequest = {
+  request: CreatedRequestRecord;
+  notificationId: string | null;
+};
+
 type RequestTransaction = {
   cleaningRequest: {
     findMany: (args: { where: { requestNumber: { startsWith: string } }; select: { requestNumber: true } }) => Promise<Array<{ requestNumber: string }>>;
     create: (args: { data: Record<string, unknown>; select: { id: true; requestNumber: true; status: true; estimateOutcome: true; estimatedPrice: true } }) => Promise<CreatedRequestRecord>;
   };
+  cleaningService?: {
+    findUnique: (args: { where: { id: string }; select: { name: true } }) => Promise<{ name: string } | null>;
+  };
+  cleaningExtra?: {
+    findMany: (args: { where: { id: { in: string[] } }; select: { name: true } }) => Promise<Array<{ name: string }>>;
+  };
+  notification?: NotificationDatabase["notification"];
 };
 
 type RequestDatabase = {
@@ -41,6 +56,8 @@ export type CleaningRequestCreationOptions = {
   database?: RequestDatabase;
   now?: Date;
   maxRequestNumberAttempts?: number;
+  businessNotificationEnv?: Record<string, string | undefined>;
+  emailProvider?: Parameters<typeof deliverNotification>[1] extends infer Options ? Options extends { emailProvider?: infer Provider } ? Provider : never : never;
 };
 
 export type CleaningRequestCreationFailureReason = "INVALID_INPUT" | "SERVICE_UNAVAILABLE" | "EXTRA_UNAVAILABLE" | "INTERNAL_ERROR";
@@ -115,8 +132,10 @@ async function persistRequest(
   estimate: PersistedEstimate,
   now: Date,
   maxAttempts: number,
-): Promise<CreatedRequestRecord> {
+  businessNotificationEnv: Record<string, string | undefined>,
+): Promise<PersistedRequest> {
   const year = now;
+  const businessRecipient = getBusinessNotificationConfig(businessNotificationEnv);
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     try {
@@ -128,7 +147,7 @@ async function persistRequest(
         });
         const requestNumber = getNextCleaningRequestNumber(existing.map((item) => item.requestNumber), year);
 
-        return transaction.cleaningRequest.create({
+        const created = await transaction.cleaningRequest.create({
           data: {
             requestNumber,
             serviceId: command.serviceId,
@@ -161,6 +180,50 @@ async function persistRequest(
           },
           select: { id: true, requestNumber: true, status: true, estimateOutcome: true, estimatedPrice: true },
         });
+
+        if (!businessRecipient.success) {
+          console.error("[notification] business recipient configuration unavailable", { errorCode: businessRecipient.errorCode, requestId: created.id, type: "NEW_REQUEST_ADMIN" });
+          return { request: created, notificationId: null };
+        }
+
+        if (!transaction.cleaningService || !transaction.cleaningExtra || !transaction.notification) throw new Error("Notification transaction boundary is unavailable.");
+        const service = await transaction.cleaningService.findUnique({ where: { id: command.serviceId }, select: { name: true } });
+        const extras = command.extraIds.length > 0
+          ? await transaction.cleaningExtra.findMany({ where: { id: { in: command.extraIds } }, select: { name: true } })
+          : [];
+        if (!service || extras.length !== command.extraIds.length) throw new Error("Unable to snapshot request references for notification.");
+
+        const notification = await createEmailNotification({
+          type: "NEW_REQUEST_ADMIN",
+          recipientEmail: businessRecipient.config.email,
+          recipientName: businessRecipient.config.name,
+          subject: `New cleaning request — ${created.requestNumber}`,
+          html: renderNewRequestAdminEmail({
+            requestId: created.id,
+            requestNumber: created.requestNumber,
+            customerName: command.customerName,
+            customerEmail: command.customerEmail,
+            customerPhone: command.customerPhone,
+            propertyType: command.propertyType,
+            bedrooms: command.bedrooms,
+            bathrooms: command.bathrooms,
+            serviceName: service.name,
+            extraNames: extras.map((extra) => extra.name),
+            preferredDate: command.preferredDate,
+            preferredTimeWindow: command.preferredTimeWindow,
+            estimatedPrice: created.estimatedPrice?.toFixed(2) ?? null,
+            estimateOutcome: created.estimateOutcome,
+            addressLine1: command.addressLine1,
+            addressLine2: command.addressLine2,
+            city: command.city,
+            state: command.state,
+            postalCode: command.postalCode,
+            customerNotes: command.customerNotes,
+          }),
+          cleaningRequestId: created.id,
+        }, { database: transaction as unknown as NotificationDatabase });
+        if (!notification.success) throw new Error("Unable to persist new-request notification intent.");
+        return { request: created, notificationId: notification.notification.id };
       });
     } catch (error) {
       if (!isRequestNumberCollision(error) || attempt === maxAttempts - 1) throw error;
@@ -209,16 +272,23 @@ export async function createCleaningRequest(
 
   try {
     const database = options.database ?? await getDefaultDatabase();
-    const created = await persistRequest(database, command, estimate, options.now ?? new Date(), options.maxRequestNumberAttempts ?? MAX_REQUEST_NUMBER_ATTEMPTS);
+    const created = await persistRequest(database, command, estimate, options.now ?? new Date(), options.maxRequestNumberAttempts ?? MAX_REQUEST_NUMBER_ATTEMPTS, options.businessNotificationEnv ?? process.env);
+    if (created.notificationId) {
+      try {
+        await deliverNotification(created.notificationId, { database: database as unknown as NotificationDatabase, emailProvider: options.emailProvider });
+      } catch {
+        console.error("[notification] new-request delivery failed unexpectedly", { notificationId: created.notificationId, type: "NEW_REQUEST_ADMIN" });
+      }
+    }
     return {
       success: true,
       request: {
-        id: created.id,
-        requestNumber: created.requestNumber,
+        id: created.request.id,
+        requestNumber: created.request.requestNumber,
         status: "NEW",
         estimate: {
-          outcome: created.estimateOutcome,
-          amount: created.estimatedPrice?.toFixed(2) ?? null,
+          outcome: created.request.estimateOutcome,
+          amount: created.request.estimatedPrice?.toFixed(2) ?? null,
           currency: "USD",
         },
       },

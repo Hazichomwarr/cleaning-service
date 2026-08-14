@@ -22,7 +22,7 @@ type NotificationRow = {
   providerMessageId: string | null;
 };
 
-type NotificationDatabase = {
+export type NotificationDatabase = {
   notification: {
     create: (args: { data: Record<string, unknown>; select?: Record<string, boolean> }) => Promise<NotificationRow>;
     findUnique: (args: { where: { id: string }; select?: Record<string, boolean> }) => Promise<NotificationRow | null>;
