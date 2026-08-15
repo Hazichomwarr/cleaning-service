@@ -33,6 +33,11 @@ export type AdminUser = Prisma.AdminUserModel
  */
 export type Customer = Prisma.CustomerModel
 /**
+ * Model CustomerVerificationChallenge
+ * 
+ */
+export type CustomerVerificationChallenge = Prisma.CustomerVerificationChallengeModel
+/**
  * Model CustomerProperty
  * 
  */

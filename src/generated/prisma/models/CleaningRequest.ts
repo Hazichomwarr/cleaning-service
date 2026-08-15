@@ -1150,10 +1150,6 @@ export type EnumCleaningEstimateOutcomeFieldUpdateOperationsInput = {
   set?: $Enums.CleaningEstimateOutcome
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type EnumCleaningRequestStatusFieldUpdateOperationsInput = {
   set?: $Enums.CleaningRequestStatus
 }

@@ -200,6 +200,7 @@ export type CustomerWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   properties?: Prisma.CustomerPropertyListRelationFilter
   requests?: Prisma.CleaningRequestListRelationFilter
+  verificationChallenges?: Prisma.CustomerVerificationChallengeListRelationFilter
 }
 
 export type CustomerOrderByWithRelationInput = {
@@ -212,6 +213,7 @@ export type CustomerOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   properties?: Prisma.CustomerPropertyOrderByRelationAggregateInput
   requests?: Prisma.CleaningRequestOrderByRelationAggregateInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeOrderByRelationAggregateInput
 }
 
 export type CustomerWhereUniqueInput = Prisma.AtLeast<{
@@ -227,6 +229,7 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   properties?: Prisma.CustomerPropertyListRelationFilter
   requests?: Prisma.CleaningRequestListRelationFilter
+  verificationChallenges?: Prisma.CustomerVerificationChallengeListRelationFilter
 }, "id">
 
 export type CustomerOrderByWithAggregationInput = {
@@ -265,6 +268,7 @@ export type CustomerCreateInput = {
   updatedAt?: Date | string
   properties?: Prisma.CustomerPropertyCreateNestedManyWithoutCustomerInput
   requests?: Prisma.CleaningRequestCreateNestedManyWithoutCustomerInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateInput = {
@@ -277,6 +281,7 @@ export type CustomerUncheckedCreateInput = {
   updatedAt?: Date | string
   properties?: Prisma.CustomerPropertyUncheckedCreateNestedManyWithoutCustomerInput
   requests?: Prisma.CleaningRequestUncheckedCreateNestedManyWithoutCustomerInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerUpdateInput = {
@@ -289,6 +294,7 @@ export type CustomerUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.CustomerPropertyUpdateManyWithoutCustomerNestedInput
   requests?: Prisma.CleaningRequestUpdateManyWithoutCustomerNestedInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateInput = {
@@ -301,6 +307,7 @@ export type CustomerUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.CustomerPropertyUncheckedUpdateManyWithoutCustomerNestedInput
   requests?: Prisma.CleaningRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerCreateManyInput = {
@@ -373,6 +380,20 @@ export type CustomerNullableScalarRelationFilter = {
   isNot?: Prisma.CustomerWhereInput | null
 }
 
+export type CustomerCreateNestedOneWithoutVerificationChallengesInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutVerificationChallengesInput, Prisma.CustomerUncheckedCreateWithoutVerificationChallengesInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutVerificationChallengesInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutVerificationChallengesNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutVerificationChallengesInput, Prisma.CustomerUncheckedCreateWithoutVerificationChallengesInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutVerificationChallengesInput
+  upsert?: Prisma.CustomerUpsertWithoutVerificationChallengesInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutVerificationChallengesInput, Prisma.CustomerUpdateWithoutVerificationChallengesInput>, Prisma.CustomerUncheckedUpdateWithoutVerificationChallengesInput>
+}
+
 export type CustomerCreateNestedOneWithoutPropertiesInput = {
   create?: Prisma.XOR<Prisma.CustomerCreateWithoutPropertiesInput, Prisma.CustomerUncheckedCreateWithoutPropertiesInput>
   connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutPropertiesInput
@@ -403,6 +424,70 @@ export type CustomerUpdateOneWithoutRequestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutRequestsInput, Prisma.CustomerUpdateWithoutRequestsInput>, Prisma.CustomerUncheckedUpdateWithoutRequestsInput>
 }
 
+export type CustomerCreateWithoutVerificationChallengesInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.CustomerPropertyCreateNestedManyWithoutCustomerInput
+  requests?: Prisma.CleaningRequestCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutVerificationChallengesInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  properties?: Prisma.CustomerPropertyUncheckedCreateNestedManyWithoutCustomerInput
+  requests?: Prisma.CleaningRequestUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutVerificationChallengesInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutVerificationChallengesInput, Prisma.CustomerUncheckedCreateWithoutVerificationChallengesInput>
+}
+
+export type CustomerUpsertWithoutVerificationChallengesInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutVerificationChallengesInput, Prisma.CustomerUncheckedUpdateWithoutVerificationChallengesInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutVerificationChallengesInput, Prisma.CustomerUncheckedCreateWithoutVerificationChallengesInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutVerificationChallengesInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutVerificationChallengesInput, Prisma.CustomerUncheckedUpdateWithoutVerificationChallengesInput>
+}
+
+export type CustomerUpdateWithoutVerificationChallengesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.CustomerPropertyUpdateManyWithoutCustomerNestedInput
+  requests?: Prisma.CleaningRequestUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutVerificationChallengesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  properties?: Prisma.CustomerPropertyUncheckedUpdateManyWithoutCustomerNestedInput
+  requests?: Prisma.CleaningRequestUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
 export type CustomerCreateWithoutPropertiesInput = {
   id?: string
   name: string
@@ -412,6 +497,7 @@ export type CustomerCreateWithoutPropertiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   requests?: Prisma.CleaningRequestCreateNestedManyWithoutCustomerInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutPropertiesInput = {
@@ -423,6 +509,7 @@ export type CustomerUncheckedCreateWithoutPropertiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   requests?: Prisma.CleaningRequestUncheckedCreateNestedManyWithoutCustomerInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutPropertiesInput = {
@@ -450,6 +537,7 @@ export type CustomerUpdateWithoutPropertiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requests?: Prisma.CleaningRequestUpdateManyWithoutCustomerNestedInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutPropertiesInput = {
@@ -461,6 +549,7 @@ export type CustomerUncheckedUpdateWithoutPropertiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requests?: Prisma.CleaningRequestUncheckedUpdateManyWithoutCustomerNestedInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerCreateWithoutRequestsInput = {
@@ -472,6 +561,7 @@ export type CustomerCreateWithoutRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   properties?: Prisma.CustomerPropertyCreateNestedManyWithoutCustomerInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutRequestsInput = {
@@ -483,6 +573,7 @@ export type CustomerUncheckedCreateWithoutRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   properties?: Prisma.CustomerPropertyUncheckedCreateNestedManyWithoutCustomerInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutRequestsInput = {
@@ -510,6 +601,7 @@ export type CustomerUpdateWithoutRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.CustomerPropertyUpdateManyWithoutCustomerNestedInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutRequestsInput = {
@@ -521,6 +613,7 @@ export type CustomerUncheckedUpdateWithoutRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   properties?: Prisma.CustomerPropertyUncheckedUpdateManyWithoutCustomerNestedInput
+  verificationChallenges?: Prisma.CustomerVerificationChallengeUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 
@@ -531,11 +624,13 @@ export type CustomerUncheckedUpdateWithoutRequestsInput = {
 export type CustomerCountOutputType = {
   properties: number
   requests: number
+  verificationChallenges: number
 }
 
 export type CustomerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   properties?: boolean | CustomerCountOutputTypeCountPropertiesArgs
   requests?: boolean | CustomerCountOutputTypeCountRequestsArgs
+  verificationChallenges?: boolean | CustomerCountOutputTypeCountVerificationChallengesArgs
 }
 
 /**
@@ -562,6 +657,13 @@ export type CustomerCountOutputTypeCountRequestsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.CleaningRequestWhereInput
 }
 
+/**
+ * CustomerCountOutputType without action
+ */
+export type CustomerCountOutputTypeCountVerificationChallengesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerVerificationChallengeWhereInput
+}
+
 
 export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -573,6 +675,7 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   properties?: boolean | Prisma.Customer$propertiesArgs<ExtArgs>
   requests?: boolean | Prisma.Customer$requestsArgs<ExtArgs>
+  verificationChallenges?: boolean | Prisma.Customer$verificationChallengesArgs<ExtArgs>
   _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customer"]>
 
@@ -610,6 +713,7 @@ export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   properties?: boolean | Prisma.Customer$propertiesArgs<ExtArgs>
   requests?: boolean | Prisma.Customer$requestsArgs<ExtArgs>
+  verificationChallenges?: boolean | Prisma.Customer$verificationChallengesArgs<ExtArgs>
   _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CustomerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -620,6 +724,7 @@ export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     properties: Prisma.$CustomerPropertyPayload<ExtArgs>[]
     requests: Prisma.$CleaningRequestPayload<ExtArgs>[]
+    verificationChallenges: Prisma.$CustomerVerificationChallengePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1025,6 +1130,7 @@ export interface Prisma__CustomerClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   properties<T extends Prisma.Customer$propertiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$propertiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requests<T extends Prisma.Customer$requestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$requestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CleaningRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  verificationChallenges<T extends Prisma.Customer$verificationChallengesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$verificationChallengesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerVerificationChallengePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1499,6 +1605,30 @@ export type Customer$requestsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.CleaningRequestScalarFieldEnum | Prisma.CleaningRequestScalarFieldEnum[]
+}
+
+/**
+ * Customer.verificationChallenges
+ */
+export type Customer$verificationChallengesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerVerificationChallenge
+   */
+  select?: Prisma.CustomerVerificationChallengeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerVerificationChallenge
+   */
+  omit?: Prisma.CustomerVerificationChallengeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerVerificationChallengeInclude<ExtArgs> | null
+  where?: Prisma.CustomerVerificationChallengeWhereInput
+  orderBy?: Prisma.CustomerVerificationChallengeOrderByWithRelationInput | Prisma.CustomerVerificationChallengeOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerVerificationChallengeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerVerificationChallengeScalarFieldEnum | Prisma.CustomerVerificationChallengeScalarFieldEnum[]
 }
 
 /**

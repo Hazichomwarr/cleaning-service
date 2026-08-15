@@ -54,6 +54,7 @@ export const ModelName = {
   CleaningService: 'CleaningService',
   AdminUser: 'AdminUser',
   Customer: 'Customer',
+  CustomerVerificationChallenge: 'CustomerVerificationChallenge',
   CustomerProperty: 'CustomerProperty',
   CleaningExtra: 'CleaningExtra',
   Worker: 'Worker',
@@ -122,6 +123,23 @@ export const CustomerScalarFieldEnum = {
 } as const
 
 export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
+export const CustomerVerificationChallengeScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  emailSnapshot: 'emailSnapshot',
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  attemptCount: 'attemptCount',
+  maxAttempts: 'maxAttempts',
+  verifiedAt: 'verifiedAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerVerificationChallengeScalarFieldEnum = (typeof CustomerVerificationChallengeScalarFieldEnum)[keyof typeof CustomerVerificationChallengeScalarFieldEnum]
 
 
 export const CustomerPropertyScalarFieldEnum = {

@@ -400,6 +400,7 @@ export const ModelName = {
   CleaningService: 'CleaningService',
   AdminUser: 'AdminUser',
   Customer: 'Customer',
+  CustomerVerificationChallenge: 'CustomerVerificationChallenge',
   CustomerProperty: 'CustomerProperty',
   CleaningExtra: 'CleaningExtra',
   Worker: 'Worker',
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cleaningService" | "adminUser" | "customer" | "customerProperty" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "notification" | "cleaningRequestStatusHistory" | "cleaningRequestPriceHistory" | "cleaningRequestScheduleHistory" | "cleaningRequestExtra" | "cleaningAssignment" | "cleaningRequestAssignmentHistory"
+    modelProps: "cleaningService" | "adminUser" | "customer" | "customerVerificationChallenge" | "customerProperty" | "cleaningExtra" | "worker" | "pricingRule" | "cleaningRequest" | "notification" | "cleaningRequestStatusHistory" | "cleaningRequestPriceHistory" | "cleaningRequestScheduleHistory" | "cleaningRequestExtra" | "cleaningAssignment" | "cleaningRequestAssignmentHistory"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -650,6 +651,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CustomerCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CustomerCountAggregateOutputType> | number
+        }
+      }
+    }
+    CustomerVerificationChallenge: {
+      payload: Prisma.$CustomerVerificationChallengePayload<ExtArgs>
+      fields: Prisma.CustomerVerificationChallengeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CustomerVerificationChallengeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CustomerVerificationChallengeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>
+        }
+        findFirst: {
+          args: Prisma.CustomerVerificationChallengeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CustomerVerificationChallengeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>
+        }
+        findMany: {
+          args: Prisma.CustomerVerificationChallengeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>[]
+        }
+        create: {
+          args: Prisma.CustomerVerificationChallengeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>
+        }
+        createMany: {
+          args: Prisma.CustomerVerificationChallengeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CustomerVerificationChallengeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>[]
+        }
+        delete: {
+          args: Prisma.CustomerVerificationChallengeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>
+        }
+        update: {
+          args: Prisma.CustomerVerificationChallengeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>
+        }
+        deleteMany: {
+          args: Prisma.CustomerVerificationChallengeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CustomerVerificationChallengeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CustomerVerificationChallengeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>[]
+        }
+        upsert: {
+          args: Prisma.CustomerVerificationChallengeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerVerificationChallengePayload>
+        }
+        aggregate: {
+          args: Prisma.CustomerVerificationChallengeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCustomerVerificationChallenge>
+        }
+        groupBy: {
+          args: Prisma.CustomerVerificationChallengeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerVerificationChallengeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CustomerVerificationChallengeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerVerificationChallengeCountAggregateOutputType> | number
         }
       }
     }
@@ -1620,6 +1695,23 @@ export const CustomerScalarFieldEnum = {
 export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
 
 
+export const CustomerVerificationChallengeScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  emailSnapshot: 'emailSnapshot',
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  attemptCount: 'attemptCount',
+  maxAttempts: 'maxAttempts',
+  verifiedAt: 'verifiedAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerVerificationChallengeScalarFieldEnum = (typeof CustomerVerificationChallengeScalarFieldEnum)[keyof typeof CustomerVerificationChallengeScalarFieldEnum]
+
+
 export const CustomerPropertyScalarFieldEnum = {
   id: 'id',
   customerId: 'customerId',
@@ -2189,6 +2281,7 @@ export type GlobalOmitConfig = {
   cleaningService?: Prisma.CleaningServiceOmit
   adminUser?: Prisma.AdminUserOmit
   customer?: Prisma.CustomerOmit
+  customerVerificationChallenge?: Prisma.CustomerVerificationChallengeOmit
   customerProperty?: Prisma.CustomerPropertyOmit
   cleaningExtra?: Prisma.CleaningExtraOmit
   worker?: Prisma.WorkerOmit

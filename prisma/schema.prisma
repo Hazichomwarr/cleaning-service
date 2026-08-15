@@ -104,6 +104,7 @@ model Customer {
 
   properties CustomerProperty[]
   requests   CleaningRequest[]
+  verificationChallenges CustomerVerificationChallenge[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -112,6 +113,27 @@ model Customer {
   @@index([email])
   @@index([phone])
   @@index([isActive])
+}
+
+model CustomerVerificationChallenge {
+  id String @id @default(cuid())
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  emailSnapshot String
+  codeHash String
+  expiresAt DateTime
+  attemptCount Int @default(0)
+  maxAttempts Int
+  verifiedAt DateTime?
+  consumedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([customerId, createdAt])
+  @@index([expiresAt])
 }
 
 model CustomerProperty {
