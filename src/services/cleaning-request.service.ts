@@ -40,6 +40,12 @@ type RequestTransaction = {
   cleaningExtra?: {
     findMany: (args: { where: { id: { in: string[] } }; select: { name: true } }) => Promise<Array<{ name: string }>>;
   };
+  customer?: {
+    findUnique: (args: { where: { id: string; isActive: true }; select: { id: true; name: true; email: true; phone: true } }) => Promise<{ id: string; name: string; email: string | null; phone: string | null } | null>;
+  };
+  customerProperty?: {
+    findUnique: (args: { where: { id: string; customerId: string; isActive: true }; select: { id: true; customerId: true; addressLine1: true; addressLine2: true; city: true; state: true; postalCode: true; propertyType: true; bedrooms: true; bathrooms: true; approximateSquareFeet: true } }) => Promise<{ id: string; customerId: string; addressLine1: string; addressLine2: string | null; city: string; state: string; postalCode: string; propertyType: ValidatedCleaningRequestCommand["propertyType"]; bedrooms: number | null; bathrooms: Prisma.Decimal | null; approximateSquareFeet: number | null } | null>;
+  };
   notification?: NotificationDatabase["notification"];
 };
 
@@ -58,9 +64,11 @@ export type CleaningRequestCreationOptions = {
   maxRequestNumberAttempts?: number;
   businessNotificationEnv?: Record<string, string | undefined>;
   emailProvider?: Parameters<typeof deliverNotification>[1] extends infer Options ? Options extends { emailProvider?: infer Provider } ? Provider : never : never;
+  /** Trusted context resolved from the signed returning-customer cookie by the server action. */
+  returningCustomerContext?: { customerId: string };
 };
 
-export type CleaningRequestCreationFailureReason = "INVALID_INPUT" | "SERVICE_UNAVAILABLE" | "EXTRA_UNAVAILABLE" | "INTERNAL_ERROR";
+export type CleaningRequestCreationFailureReason = "INVALID_INPUT" | "SERVICE_UNAVAILABLE" | "EXTRA_UNAVAILABLE" | "RETURNING_CUSTOMER_VERIFICATION_REQUIRED" | "RETURNING_CUSTOMER_PROPERTY_INVALID" | "RETURNING_CUSTOMER_PROFILE_INCOMPLETE" | "INTERNAL_ERROR";
 
 export type CleaningRequestCreationResult =
   | {
@@ -86,6 +94,39 @@ type PersistedEstimate = {
   estimateOutcome: CleaningEstimateOutcome;
   estimatedPrice: Prisma.Decimal | null;
 };
+
+class RequestLinkingError extends Error {
+  constructor(readonly reason: Extract<CleaningRequestCreationFailureReason, `RETURNING_CUSTOMER_${string}`>) {
+    super(reason);
+  }
+}
+
+type RequestSnapshot = {
+  customerId: string | null;
+  customerPropertyId: string | null;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  addressLine1: string;
+  addressLine2: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  propertyType: ValidatedCleaningRequestCommand["propertyType"];
+  bedrooms: number | null;
+  bathrooms: string | null;
+  approximateSquareFeet: number | null;
+};
+
+function getSavedPropertyId(input: unknown): string | null {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return null;
+  const value = (input as Record<string, unknown>).savedPropertyId;
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function getRequestSnapshot(command: ValidatedCleaningRequestCommand): RequestSnapshot {
+  return { customerId: null, customerPropertyId: null, customerName: command.customerName, customerEmail: command.customerEmail, customerPhone: command.customerPhone, addressLine1: command.addressLine1, addressLine2: command.addressLine2, city: command.city, state: command.state, postalCode: command.postalCode, propertyType: command.propertyType, bedrooms: command.bedrooms, bathrooms: command.bathrooms, approximateSquareFeet: null };
+}
 
 function mapPricingResult(result: ResidentialPricingResult): PersistedEstimate | null {
   if (result.success) {
@@ -133,6 +174,8 @@ async function persistRequest(
   now: Date,
   maxAttempts: number,
   businessNotificationEnv: Record<string, string | undefined>,
+  returningCustomerContext: CleaningRequestCreationOptions["returningCustomerContext"],
+  savedPropertyId: string | null,
 ): Promise<PersistedRequest> {
   const year = now;
   const businessRecipient = getBusinessNotificationConfig(businessNotificationEnv);
@@ -146,22 +189,55 @@ async function persistRequest(
           select: { requestNumber: true },
         });
         const requestNumber = getNextCleaningRequestNumber(existing.map((item) => item.requestNumber), year);
+        const snapshot = getRequestSnapshot(command);
+
+        if (returningCustomerContext) {
+          if (!transaction.customer) throw new Error("Returning customer transaction boundary is unavailable.");
+          const customer = await transaction.customer.findUnique({ where: { id: returningCustomerContext.customerId, isActive: true }, select: { id: true, name: true, email: true, phone: true } });
+          if (!customer) throw new RequestLinkingError("RETURNING_CUSTOMER_VERIFICATION_REQUIRED");
+          if (!customer.name.trim() || !customer.email?.trim() || !customer.phone?.trim()) throw new RequestLinkingError("RETURNING_CUSTOMER_PROFILE_INCOMPLETE");
+          snapshot.customerId = customer.id;
+          snapshot.customerName = customer.name;
+          snapshot.customerEmail = customer.email.trim().toLowerCase();
+          snapshot.customerPhone = customer.phone.trim();
+
+          if (savedPropertyId) {
+            if (!transaction.customerProperty) throw new Error("Saved property transaction boundary is unavailable.");
+            const property = await transaction.customerProperty.findUnique({ where: { id: savedPropertyId, customerId: customer.id, isActive: true }, select: { id: true, customerId: true, addressLine1: true, addressLine2: true, city: true, state: true, postalCode: true, propertyType: true, bedrooms: true, bathrooms: true, approximateSquareFeet: true } });
+            if (!property) throw new RequestLinkingError("RETURNING_CUSTOMER_PROPERTY_INVALID");
+            snapshot.customerPropertyId = property.id;
+            snapshot.addressLine1 = property.addressLine1;
+            snapshot.addressLine2 = property.addressLine2;
+            snapshot.city = property.city;
+            snapshot.state = property.state;
+            snapshot.postalCode = property.postalCode;
+            snapshot.propertyType = property.propertyType;
+            snapshot.bedrooms = property.bedrooms;
+            snapshot.bathrooms = property.bathrooms?.toString() ?? null;
+            snapshot.approximateSquareFeet = property.approximateSquareFeet;
+          }
+        } else if (savedPropertyId) {
+          throw new RequestLinkingError("RETURNING_CUSTOMER_VERIFICATION_REQUIRED");
+        }
 
         const created = await transaction.cleaningRequest.create({
           data: {
             requestNumber,
             serviceId: command.serviceId,
-            customerName: command.customerName,
-            customerEmail: command.customerEmail,
-            customerPhone: command.customerPhone,
-            addressLine1: command.addressLine1,
-            addressLine2: command.addressLine2,
-            city: command.city,
-            state: command.state,
-            postalCode: command.postalCode,
-            propertyType: command.propertyType,
-            bedrooms: command.bedrooms,
-            bathrooms: command.bathrooms === null ? null : new Prisma.Decimal(command.bathrooms),
+            customerId: snapshot.customerId,
+            customerPropertyId: snapshot.customerPropertyId,
+            customerName: snapshot.customerName,
+            customerEmail: snapshot.customerEmail,
+            customerPhone: snapshot.customerPhone,
+            addressLine1: snapshot.addressLine1,
+            addressLine2: snapshot.addressLine2,
+            city: snapshot.city,
+            state: snapshot.state,
+            postalCode: snapshot.postalCode,
+            propertyType: snapshot.propertyType,
+            bedrooms: snapshot.bedrooms,
+            bathrooms: snapshot.bathrooms === null ? null : new Prisma.Decimal(snapshot.bathrooms),
+            approximateSquareFeet: snapshot.approximateSquareFeet,
             preferredDate: toPreferredDateTime(command.preferredDate),
             preferredTimeWindow: command.preferredTimeWindow,
             estimatedPrice: estimate.estimatedPrice,
@@ -201,23 +277,23 @@ async function persistRequest(
           html: renderNewRequestAdminEmail({
             requestId: created.id,
             requestNumber: created.requestNumber,
-            customerName: command.customerName,
-            customerEmail: command.customerEmail,
-            customerPhone: command.customerPhone,
-            propertyType: command.propertyType,
-            bedrooms: command.bedrooms,
-            bathrooms: command.bathrooms,
+            customerName: snapshot.customerName,
+            customerEmail: snapshot.customerEmail,
+            customerPhone: snapshot.customerPhone,
+            propertyType: snapshot.propertyType,
+            bedrooms: snapshot.bedrooms,
+            bathrooms: snapshot.bathrooms,
             serviceName: service.name,
             extraNames: extras.map((extra) => extra.name),
             preferredDate: command.preferredDate,
             preferredTimeWindow: command.preferredTimeWindow,
             estimatedPrice: created.estimatedPrice?.toFixed(2) ?? null,
             estimateOutcome: created.estimateOutcome,
-            addressLine1: command.addressLine1,
-            addressLine2: command.addressLine2,
-            city: command.city,
-            state: command.state,
-            postalCode: command.postalCode,
+            addressLine1: snapshot.addressLine1,
+            addressLine2: snapshot.addressLine2,
+            city: snapshot.city,
+            state: snapshot.state,
+            postalCode: snapshot.postalCode,
             customerNotes: command.customerNotes,
           }),
           cleaningRequestId: created.id,
@@ -255,6 +331,7 @@ export async function createCleaningRequest(
   }
 
   const command = validation.data;
+  const savedPropertyId = getSavedPropertyId(input);
   const pricingResolver = options.pricingResolver ?? getResidentialStartingEstimate;
   let pricingResult: ResidentialPricingResult;
 
@@ -272,7 +349,7 @@ export async function createCleaningRequest(
 
   try {
     const database = options.database ?? await getDefaultDatabase();
-    const created = await persistRequest(database, command, estimate, options.now ?? new Date(), options.maxRequestNumberAttempts ?? MAX_REQUEST_NUMBER_ATTEMPTS, options.businessNotificationEnv ?? process.env);
+    const created = await persistRequest(database, command, estimate, options.now ?? new Date(), options.maxRequestNumberAttempts ?? MAX_REQUEST_NUMBER_ATTEMPTS, options.businessNotificationEnv ?? process.env, options.returningCustomerContext, savedPropertyId);
     if (created.notificationId) {
       try {
         await deliverNotification(created.notificationId, { database: database as unknown as NotificationDatabase, emailProvider: options.emailProvider });
@@ -293,7 +370,8 @@ export async function createCleaningRequest(
         },
       },
     };
-  } catch {
+  } catch (error) {
+    if (error instanceof RequestLinkingError) return { success: false, reason: error.reason };
     return { success: false, reason: "INTERNAL_ERROR" };
   }
 }

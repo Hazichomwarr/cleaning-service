@@ -8,7 +8,7 @@ import type { VerifiedCustomerPropertyOption } from "@/src/services/verified-cus
 
 type Mode = "start" | "code" | "verified";
 
-export default function ReturningCustomerVerification() {
+export default function ReturningCustomerVerification({ onPropertySelect }: { onPropertySelect?: (propertyId: string | null) => void }) {
   const [mode, setMode] = useState<Mode>("start");
   const [identity, setIdentity] = useState("");
   const [code, setCode] = useState("");
@@ -49,13 +49,18 @@ export default function ReturningCustomerVerification() {
     setProperties(propertyResult.success ? propertyResult.properties : []);
   };
 
+  const selectProperty = (propertyId: string | null) => {
+    setSelectedPropertyId(propertyId);
+    onPropertySelect?.(propertyId);
+  };
+
   return (
     <section className="mb-8 rounded-3xl border border-blue-100 bg-blue-50/70 p-5 sm:p-7" aria-labelledby="returning-customer-title">
       {mode === "verified" ? (
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.14em] text-blue-700">You’re verified</p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Welcome back.</h2>
-          {propertiesLoading ? <p className="mt-2 text-sm leading-6 text-slate-600">Loading your saved properties…</p> : properties?.length ? <div className="mt-6"><h3 className="text-lg font-semibold text-slate-950">Choose a saved property</h3><div className="mt-3 grid gap-3 md:grid-cols-2">{properties.map((property) => <article key={property.id} className={`rounded-2xl border bg-white p-4 ${selectedPropertyId === property.id ? "border-blue-500 ring-2 ring-blue-100" : "border-slate-200"}`}><h4 className="font-semibold text-slate-950">{property.label || `${property.address.line1}`}</h4><p className="mt-1 text-sm text-slate-600">{property.address.line1}{property.address.line2 ? `, ${property.address.line2}` : ""}<br />{property.address.city}, {property.address.state} {property.address.postalCode}</p><p className="mt-2 text-xs text-slate-500">{propertyTypeLabel(property.propertyType)}{property.bedrooms === null ? "" : ` · ${property.bedrooms} bedroom${property.bedrooms === 1 ? "" : "s"}`}{property.bathrooms === null ? "" : ` · ${property.bathrooms} bathroom${property.bathrooms === "1" ? "" : "s"}`}{property.approximateSquareFeet === null ? "" : ` · ${property.approximateSquareFeet.toLocaleString()} sq ft`}</p><button type="button" onClick={() => setSelectedPropertyId(property.id)} className="mt-4 min-h-10 rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">{selectedPropertyId === property.id ? "Selected" : "Use this property"}</button></article>)}</div><button type="button" onClick={() => setSelectedPropertyId(null)} className="mt-4 text-sm font-semibold text-blue-700 underline underline-offset-4">Use a different property</button></div> : <div className="mt-4"><p className="text-sm leading-6 text-slate-600">We don’t have a saved property for you yet. You can continue with a new property below.</p></div>}
+          {propertiesLoading ? <p className="mt-2 text-sm leading-6 text-slate-600">Loading your saved properties…</p> : properties?.length ? <div className="mt-6"><h3 className="text-lg font-semibold text-slate-950">Choose a saved property</h3><div className="mt-3 grid gap-3 md:grid-cols-2">{properties.map((property) => <article key={property.id} className={`rounded-2xl border bg-white p-4 ${selectedPropertyId === property.id ? "border-blue-500 ring-2 ring-blue-100" : "border-slate-200"}`}><h4 className="font-semibold text-slate-950">{property.label || `${property.address.line1}`}</h4><p className="mt-1 text-sm text-slate-600">{property.address.line1}{property.address.line2 ? `, ${property.address.line2}` : ""}<br />{property.address.city}, {property.address.state} {property.address.postalCode}</p><p className="mt-2 text-xs text-slate-500">{propertyTypeLabel(property.propertyType)}{property.bedrooms === null ? "" : ` · ${property.bedrooms} bedroom${property.bedrooms === 1 ? "" : "s"}`}{property.bathrooms === null ? "" : ` · ${property.bathrooms} bathroom${property.bathrooms === "1" ? "" : "s"}`}{property.approximateSquareFeet === null ? "" : ` · ${property.approximateSquareFeet.toLocaleString()} sq ft`}</p><button type="button" onClick={() => selectProperty(property.id)} className="mt-4 min-h-10 rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">{selectedPropertyId === property.id ? "Selected" : "Use this property"}</button></article>)}</div><button type="button" onClick={() => selectProperty(null)} className="mt-4 text-sm font-semibold text-blue-700 underline underline-offset-4">Use a different property</button></div> : <div className="mt-4"><p className="text-sm leading-6 text-slate-600">We don’t have a saved property for you yet. You can continue with a new property below.</p></div>}
         </div>
       ) : (
         <>

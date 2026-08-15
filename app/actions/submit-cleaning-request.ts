@@ -1,5 +1,7 @@
 "use server";
 
+import { cookies } from "next/headers";
+import { CUSTOMER_VERIFICATION_COOKIE, readCustomerVerificationState } from "../../src/lib/customer-verification-state";
 import {
   createCleaningRequest,
   type CleaningRequestCreationResult,
@@ -18,7 +20,10 @@ export type SubmitCleaningRequestResult =
  */
 export async function submitCleaningRequest(input: unknown): Promise<SubmitCleaningRequestResult> {
   try {
-    const result = await createCleaningRequest(input);
+    const cookieStore = await cookies();
+    const token = cookieStore.get(CUSTOMER_VERIFICATION_COOKIE)?.value;
+    const verified = token ? readCustomerVerificationState(token) : null;
+    const result = await createCleaningRequest(input, verified ? { returningCustomerContext: { customerId: verified.customerId } } : {});
 
     if (!result.success) return result;
 

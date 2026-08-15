@@ -132,9 +132,11 @@ function isComplete(step: number, draft: CleaningRequestDraft): boolean {
 export default function CleaningRequestForm({
   services,
   extras,
+  savedPropertyId = null,
 }: {
   services: CatalogItem[];
   extras: CatalogItem[];
+  savedPropertyId?: string | null;
 }) {
   const [draft, setDraft] = useState(emptyDraft);
   const [currentStep, setCurrentStep] = useState(0);
@@ -235,6 +237,7 @@ export default function CleaningRequestForm({
       state: draft.state,
       postalCode: draft.postalCode,
       customerNotes: draft.customerNotes,
+      savedPropertyId,
     };
 
     try {
@@ -277,6 +280,12 @@ export default function CleaningRequestForm({
           ? "One of the selected extras is no longer available. Please review your selections."
           : submission.reason === "INTERNAL_ERROR"
             ? "We couldn't send your request right now. Your information is still here. Please try again."
+            : submission.reason === "RETURNING_CUSTOMER_VERIFICATION_REQUIRED"
+              ? "Your returning-customer verification is no longer valid. Please verify again or continue as a new customer."
+              : submission.reason === "RETURNING_CUSTOMER_PROPERTY_INVALID"
+                ? "That saved property is no longer available. Please choose another property and try again."
+                : submission.reason === "RETURNING_CUSTOMER_PROFILE_INCOMPLETE"
+                  ? "We couldn’t use the saved customer profile for this request. Please continue as a new customer."
             : "Please review the highlighted information and try again."
       : null;
 

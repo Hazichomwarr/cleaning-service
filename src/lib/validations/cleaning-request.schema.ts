@@ -48,6 +48,10 @@ const preferredTimeWindow = z.preprocess(
 );
 
 export const CleaningRequestInputSchema = z.object({
+  savedPropertyId: z.preprocess(
+    (value) => (typeof value === "string" ? value.trim() : value),
+    z.string().min(1).optional().nullable(),
+  ),
   serviceId: z.preprocess(
     (value) => (typeof value === "string" ? value.trim() : value),
     z.string().min(1, "Choose a cleaning service."),
