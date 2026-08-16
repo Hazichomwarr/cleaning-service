@@ -97,8 +97,8 @@ export default function PropertyStep({
             </fieldset>
 
             <fieldset>
-              <legend className="text-sm font-semibold text-slate-900">Bathrooms</legend>
-              <p className="mt-1 text-sm text-slate-500">Bathrooms help us understand your space but do not change this starting estimate.</p>
+              <legend className="text-sm font-semibold text-slate-900">Bathrooms <span className="font-normal text-slate-400">(optional)</span></legend>
+              <p className="mt-1 text-sm text-slate-500">Bathrooms help us understand your space but do not change this starting estimate. You can leave this blank.</p>
               <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-7">
                 {bathroomOptions.map((bathroom) => (
                   <button

@@ -28,10 +28,18 @@ const bathroomValue = z.preprocess(
   (value) => {
     if (value === undefined || value === null) return null;
     if (typeof value === "number" && Number.isFinite(value)) return String(value);
-    return typeof value === "string" ? value.trim() : value;
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      return trimmed === "" ? null : trimmed;
+    }
+    return value;
   },
-  z.union([z.null(), z.string().regex(/^\d+(?:\.\d)?$/, "Enter a valid bathroom count.")]).superRefine((value, context) => {
+  z.union([z.null(), z.string()]).superRefine((value, context) => {
     if (value === null) return;
+    if (!/^\d+(?:\.\d)?$/.test(value)) {
+      context.addIssue({ code: "custom", message: "Enter a valid bathroom count." });
+      return;
+    }
     const numericValue = Number(value);
     if (!Number.isFinite(numericValue) || numericValue <= 0) {
       context.addIssue({ code: "custom", message: "Enter a positive bathroom count." });

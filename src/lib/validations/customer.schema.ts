@@ -4,11 +4,20 @@ import { PROPERTY_TYPES } from "./cleaning-request.schema";
 const optionalText = (max: number) => z.preprocess((value) => typeof value === "string" ? value.trim() : value, z.string().max(max).optional().nullable());
 const optionalNumber = z.preprocess((value) => value === "" || value === undefined ? null : value, z.number().finite().optional().nullable());
 const bathroom = z.preprocess((value) => {
-  if (value === "" || value === undefined || value === null) return null;
+  if (value === undefined || value === null) return null;
   if (typeof value === "number" && Number.isFinite(value)) return String(value);
-  return typeof value === "string" ? value.trim() : value;
-}, z.union([z.null(), z.string().regex(/^\d+(?:\.\d)?$/, "Enter a bathroom count with at most one decimal place.")]).superRefine((value, context) => {
-  if (value !== null && Number(value) <= 0) context.addIssue({ code: "custom", message: "Enter a positive bathroom count." });
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed === "" ? null : trimmed;
+  }
+  return value;
+}, z.union([z.null(), z.string()]).superRefine((value, context) => {
+  if (value === null) return;
+  if (!/^\d+(?:\.\d)?$/.test(value)) {
+    context.addIssue({ code: "custom", message: "Enter a bathroom count with at most one decimal place." });
+    return;
+  }
+  if (Number(value) <= 0) context.addIssue({ code: "custom", message: "Enter a positive bathroom count." });
 }));
 
 export const CustomerPropertyInputSchema = z.object({

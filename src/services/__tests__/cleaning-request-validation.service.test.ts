@@ -45,6 +45,14 @@ for (const propertyType of ["OFFICE", "COMMERCIAL", "OTHER"] as const) {
   });
 }
 
+for (const propertyType of ["HOUSE", "APARTMENT", "AIRBNB", "OFFICE", "COMMERCIAL", "OTHER"] as const) {
+  test(`${propertyType} accepts an omitted bathroom count`, async () => {
+    const result = await validateCleaningRequest(input({ propertyType, bathrooms: undefined }), { now, referenceReader: reader() });
+    assert.equal(result.success, true);
+    if (result.success) assert.equal(result.data.bathrooms, null);
+  });
+}
+
 test("accepts five bedrooms even without a pricing rule", async () => {
   const result = await validateCleaningRequest(input({ bedrooms: 5 }), { now, referenceReader: reader() });
   assert.equal(result.success, true);
@@ -60,7 +68,23 @@ for (const bedrooms of [undefined, 0, 2.5]) {
 
 test("validates bathrooms to one decimal place without rounding", async () => {
   assert.equal((await validateCleaningRequest(input({ bathrooms: 2 }), { now, referenceReader: reader() })).success, true);
+  assert.equal((await validateCleaningRequest(input({ bathrooms: 1 }), { now, referenceReader: reader() })).success, true);
+  assert.equal((await validateCleaningRequest(input({ bathrooms: 1.5 }), { now, referenceReader: reader() })).success, true);
   assert.equal((await validateCleaningRequest(input({ bathrooms: "1.25" }), { now, referenceReader: reader() })).success, false);
+});
+
+test("rejects non-positive or malformed bathrooms with one field error", async () => {
+  for (const bathrooms of [0, -1, "0", "-1", "not-a-number", "1.25"]) {
+    const result = await validateCleaningRequest(input({ bathrooms }), { now, referenceReader: reader() });
+    assert.equal(result.success, false);
+    if (!result.success) assert.equal(result.fieldErrors?.bathrooms?.length, 1);
+  }
+});
+
+test("normalizes a blank bathroom count to null", async () => {
+  const result = await validateCleaningRequest(input({ bathrooms: "   " }), { now, referenceReader: reader() });
+  assert.equal(result.success, true);
+  if (result.success) assert.equal(result.data.bathrooms, null);
 });
 
 test("deduplicates extras and permits no extras", async () => {
