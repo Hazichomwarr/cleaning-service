@@ -1,11 +1,9 @@
 import { Prisma, CleaningRequestStatus, NotificationStatus, NotificationType } from "../generated/prisma/client";
-import { formatBusinessDateTimeRange } from "../lib/business-time";
+import { BUSINESS_TIME_ZONE, formatBusinessDateTimeRange, parseBusinessDateTime } from "../lib/business-time";
 import { renderUpcomingCleaningCustomerEmail, upcomingCleaningCustomerSubject } from "../emails/upcoming-cleaning-customer.email";
 import { createEmailNotification, deliverNotification, type NotificationDatabase } from "./notification.service";
 import type { EmailProvider } from "../lib/email/resend-email.provider";
 
-const REMINDER_MINIMUM_HOURS = 23;
-const REMINDER_MAXIMUM_HOURS = 25;
 export const UPCOMING_REMINDER_BATCH_SIZE = 100;
 
 type ReminderRequest = {
@@ -26,8 +24,28 @@ type ReminderDatabase = NotificationDatabase & {
 };
 
 export type ReminderWindow = { start: Date; end: Date };
+
+function businessDateKey(value: Date): string {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: BUSINESS_TIME_ZONE, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(value);
+  const values = Object.fromEntries(parts.filter((part) => part.type !== "literal").map((part) => [part.type, Number(part.value)]));
+  return `${values.year.toString().padStart(4, "0")}-${values.month.toString().padStart(2, "0")}-${values.day.toString().padStart(2, "0")}`;
+}
+
+function addCalendarDays(dateKey: string, days: number): string {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  const result = new Date(Date.UTC(year, month - 1, day + days));
+  return `${result.getUTCFullYear().toString().padStart(4, "0")}-${(result.getUTCMonth() + 1).toString().padStart(2, "0")}-${result.getUTCDate().toString().padStart(2, "0")}`;
+}
+
+function businessMidnight(dateKey: string): Date {
+  const result = parseBusinessDateTime(dateKey, "00:00");
+  if ("error" in result) throw new Error(`Unable to resolve business date ${dateKey}`);
+  return result.date;
+}
+
 export function getUpcomingCleaningReminderWindow(now: Date): ReminderWindow {
-  return { start: new Date(now.getTime() + REMINDER_MINIMUM_HOURS * 60 * 60 * 1000), end: new Date(now.getTime() + REMINDER_MAXIMUM_HOURS * 60 * 60 * 1000) };
+  const tomorrow = addCalendarDays(businessDateKey(now), 1);
+  return { start: businessMidnight(tomorrow), end: businessMidnight(addCalendarDays(tomorrow, 1)) };
 }
 
 export function isWithinUpcomingCleaningReminderWindow(value: Date, window: ReminderWindow): boolean {

@@ -33,4 +33,6 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+The upcoming-cleaning reminder runs once daily at 13:00 UTC, a morning invocation in New York across standard and daylight time. Vercel Hobby cron timing has hourly precision rather than exact execution time, so the processor selects the next New York calendar day when it runs.
+
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

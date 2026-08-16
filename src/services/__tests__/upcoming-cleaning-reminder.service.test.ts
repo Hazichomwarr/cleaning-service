@@ -45,13 +45,41 @@ function database(rows: ReturnType<typeof request>[]) {
   return db;
 }
 
-test("defines a half-open 23–25 hour window", () => {
+test("selects the next New York calendar day", () => {
   const window = getUpcomingCleaningReminderWindow(now);
-  assert.equal(window.start.toISOString(), "2026-08-15T14:00:00.000Z");
-  assert.equal(window.end.toISOString(), "2026-08-15T16:00:00.000Z");
-  assert.equal(isWithinUpcomingCleaningReminderWindow(new Date("2026-08-15T14:30:00Z"), window), true);
-  assert.equal(isWithinUpcomingCleaningReminderWindow(new Date("2026-08-15T13:59:59Z"), window), false);
+  assert.equal(window.start.toISOString(), "2026-08-15T04:00:00.000Z");
+  assert.equal(window.end.toISOString(), "2026-08-16T04:00:00.000Z");
+  assert.equal(isWithinUpcomingCleaningReminderWindow(new Date("2026-08-15T04:00:00Z"), window), true);
+  assert.equal(isWithinUpcomingCleaningReminderWindow(new Date("2026-08-16T03:59:59Z"), window), true);
   assert.equal(isWithinUpcomingCleaningReminderWindow(window.end, window), false);
+});
+
+test("includes tomorrow morning, afternoon, and evening but excludes today and the day after tomorrow", async () => {
+  const rows = [
+    request({ id: "morning", scheduledStart: new Date("2026-08-17T12:00:00Z"), scheduledEnd: new Date("2026-08-17T14:00:00Z") }),
+    request({ id: "afternoon", scheduledStart: new Date("2026-08-17T17:00:00Z"), scheduledEnd: new Date("2026-08-17T19:00:00Z") }),
+    request({ id: "evening", scheduledStart: new Date("2026-08-18T00:00:00Z"), scheduledEnd: new Date("2026-08-18T02:00:00Z") }),
+    request({ id: "today", scheduledStart: new Date("2026-08-16T17:00:00Z"), scheduledEnd: new Date("2026-08-16T19:00:00Z") }),
+    request({ id: "day-after", scheduledStart: new Date("2026-08-18T17:00:00Z"), scheduledEnd: new Date("2026-08-18T19:00:00Z") }),
+  ];
+  const db = database(rows as ReturnType<typeof request>[]);
+  const result = await processUpcomingCleaningReminders({ database: db, now: new Date("2026-08-16T16:00:00Z"), emailProvider: { async sendEmail() { return { success: true as const, providerMessageId: "re" }; } } });
+  assert.equal(result.created, 3);
+  assert.equal(db.notifications.size, 3);
+});
+
+test("uses New York calendar boundaries and remains DST-safe", () => {
+  const beforeMidnight = getUpcomingCleaningReminderWindow(new Date("2026-08-15T03:59:59Z"));
+  const afterMidnight = getUpcomingCleaningReminderWindow(new Date("2026-08-15T04:00:00Z"));
+  assert.equal(beforeMidnight.start.toISOString(), "2026-08-15T04:00:00.000Z");
+  assert.equal(afterMidnight.start.toISOString(), "2026-08-16T04:00:00.000Z");
+
+  const spring = getUpcomingCleaningReminderWindow(new Date("2026-03-07T17:00:00Z"));
+  assert.equal(spring.start.toISOString(), "2026-03-08T05:00:00.000Z");
+  assert.equal(spring.end.toISOString(), "2026-03-09T04:00:00.000Z");
+  const fall = getUpcomingCleaningReminderWindow(new Date("2026-10-31T16:00:00Z"));
+  assert.equal(fall.start.toISOString(), "2026-11-01T04:00:00.000Z");
+  assert.equal(fall.end.toISOString(), "2026-11-02T05:00:00.000Z");
 });
 
 test("uses request occurrence identity and creates only one reminder across runs", async () => {
@@ -72,6 +100,10 @@ test("only confirmed/assigned requests with complete schedule, price, and email 
     request({ id: "confirmed", status: CleaningRequestStatus.CONFIRMED }),
     request({ id: "assigned", status: CleaningRequestStatus.ASSIGNED }),
     request({ id: "reviewing", status: CleaningRequestStatus.REVIEWING }),
+    request({ id: "new", status: CleaningRequestStatus.NEW }),
+    request({ id: "in-progress", status: CleaningRequestStatus.IN_PROGRESS }),
+    request({ id: "completed", status: CleaningRequestStatus.COMPLETED }),
+    request({ id: "cancelled", status: CleaningRequestStatus.CANCELLED }),
     request({ id: "no-price", confirmedPrice: null }),
     request({ id: "no-email", customerEmail: "invalid" }),
     request({ id: "no-schedule", scheduledEnd: null }),
