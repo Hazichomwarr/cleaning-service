@@ -378,7 +378,7 @@ export default function CleaningRequestForm({
   };
 
   return (
-    <main className="min-h-screen bg-[#f4f7fb] text-slate-950">
+    <main id="request-form" className="min-h-screen bg-[#f4f7fb] text-slate-950">
       <header className="border-b border-slate-200/80 bg-white/90">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
           <Link

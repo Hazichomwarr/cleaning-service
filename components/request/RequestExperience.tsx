@@ -35,10 +35,14 @@ export default function RequestExperience({ services, extras }: { services: Cata
     document.getElementById("returning-property-chooser")?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
+  const showRegularRequest = () => {
+    document.getElementById("request-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <>
       <div className="mx-auto max-w-7xl px-5 pt-8 sm:pt-12 lg:px-8 lg:pt-16">
-        <ReturningCustomerVerification key={verificationResetSignal} onStateChange={onVerificationStateChange} onPropertySelect={chooseSavedProperty} onDifferentProperty={chooseDifferentProperty} />
+        <ReturningCustomerVerification key={verificationResetSignal} onStateChange={onVerificationStateChange} onPropertySelect={chooseSavedProperty} onDifferentProperty={chooseDifferentProperty} onContinueRegular={showRegularRequest} />
       </div>
       {verificationState === "VERIFIED_CHOOSING_PROPERTY" ? (
         <p className="mx-auto max-w-4xl px-5 pb-16 text-center text-sm text-slate-500">Choose a saved property above to start your shorter request, or continue with a different property.</p>

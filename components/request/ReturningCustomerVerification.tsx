@@ -6,7 +6,7 @@ import { verifyReturningCustomerCodeAction } from "@/app/actions/verify-returnin
 import { getReturningCustomerPropertiesAction } from "@/app/actions/get-returning-customer-properties";
 import type { VerifiedCustomerPropertyOption } from "@/src/services/verified-customer-properties.service";
 
-type Mode = "start" | "code" | "verified";
+type Mode = "entry" | "start" | "code" | "verified";
 
 export type ReturningCustomerVerificationState = "UNVERIFIED" | "VERIFIED_CHOOSING_PROPERTY" | "VERIFIED";
 
@@ -14,10 +14,11 @@ type ReturningCustomerVerificationProps = {
   onStateChange?: (state: ReturningCustomerVerificationState) => void;
   onPropertySelect?: (property: VerifiedCustomerPropertyOption) => void;
   onDifferentProperty?: () => void;
+  onContinueRegular?: () => void;
 };
 
-export default function ReturningCustomerVerification({ onStateChange, onPropertySelect, onDifferentProperty }: ReturningCustomerVerificationProps) {
-  const [mode, setMode] = useState<Mode>("start");
+export default function ReturningCustomerVerification({ onStateChange, onPropertySelect, onDifferentProperty, onContinueRegular }: ReturningCustomerVerificationProps) {
+  const [mode, setMode] = useState<Mode>("entry");
   const [identity, setIdentity] = useState("");
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
@@ -65,7 +66,7 @@ export default function ReturningCustomerVerification({ onStateChange, onPropert
   };
 
   const startAsNewCustomer = () => {
-    setMode("start");
+    setMode("entry");
     setCode("");
     setProperties(null);
     setSelectedPropertyId(null);
@@ -86,7 +87,15 @@ export default function ReturningCustomerVerification({ onStateChange, onPropert
         <>
           <p className="text-sm font-bold uppercase tracking-[0.14em] text-blue-700">Already booked with us before?</p>
           <h2 id="returning-customer-title" className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Welcome back</h2>
-          {mode === "start" ? (
+          {mode === "entry" ? (
+            <>
+              <p className="mt-2 text-sm leading-6 text-slate-600">Returning customers can verify their identity to use saved details. New customers can continue with the regular request below.</p>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <button type="button" onClick={() => setMode("start")} className="min-h-12 rounded-xl bg-blue-600 px-5 font-semibold text-white transition hover:bg-blue-700">Continue as a returning customer</button>
+                <button type="button" onClick={onContinueRegular} className="min-h-12 rounded-xl border border-slate-300 bg-white px-5 font-semibold text-slate-800 transition hover:border-blue-400 hover:text-blue-700">Continue with a regular request</button>
+              </div>
+            </>
+          ) : mode === "start" ? (
             <>
               <p className="mt-2 text-sm leading-6 text-slate-600">Enter the email or phone number you’ve used with us before.</p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
