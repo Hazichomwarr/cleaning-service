@@ -20,7 +20,7 @@ function identityLockKeys(identity: { email: string | null; phone: string | null
 async function lockIdentity(transaction: RegistrationTransaction, identity: { email: string | null; phone: string | null }): Promise<void> {
   if (!transaction.$queryRaw) return;
   for (const key of identityLockKeys(identity)) {
-    await transaction.$queryRaw(Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${`cleaning-service:customer-registration:${key}`}))`);
+    await transaction.$queryRaw(Prisma.sql`SELECT 1::int AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${`cleaning-service:customer-registration:${key}`}))) AS advisory_lock`);
   }
 }
 
