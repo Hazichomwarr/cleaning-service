@@ -23,7 +23,9 @@ export async function submitCleaningRequest(input: unknown): Promise<SubmitClean
     const cookieStore = await cookies();
     const token = cookieStore.get(CUSTOMER_VERIFICATION_COOKIE)?.value;
     const verified = token ? readCustomerVerificationState(token) : null;
-    const result = await createCleaningRequest(input, verified ? { returningCustomerContext: { customerId: verified.customerId } } : {});
+    const inputRecord = input && typeof input === "object" && !Array.isArray(input) ? input as Record<string, unknown> : null;
+    const returningCustomerRequested = inputRecord?.useReturningCustomerContext === true;
+    const result = await createCleaningRequest(input, { returningCustomerRequested, ...(verified && returningCustomerRequested ? { returningCustomerContext: { customerId: verified.customerId } } : {}) });
 
     if (!result.success) return result;
 

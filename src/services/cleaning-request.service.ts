@@ -66,6 +66,8 @@ export type CleaningRequestCreationOptions = {
   emailProvider?: Parameters<typeof deliverNotification>[1] extends infer Options ? Options extends { emailProvider?: infer Provider } ? Provider : never : never;
   /** Trusted context resolved from the signed returning-customer cookie by the server action. */
   returningCustomerContext?: { customerId: string };
+  /** UX intent only; it never authorizes a customer and must be paired with the signed context. */
+  returningCustomerRequested?: boolean;
 };
 
 export type CleaningRequestCreationFailureReason = "INVALID_INPUT" | "SERVICE_UNAVAILABLE" | "EXTRA_UNAVAILABLE" | "RETURNING_CUSTOMER_VERIFICATION_REQUIRED" | "RETURNING_CUSTOMER_PROPERTY_INVALID" | "RETURNING_CUSTOMER_PROFILE_INCOMPLETE" | "INTERNAL_ERROR";
@@ -104,14 +106,14 @@ class RequestLinkingError extends Error {
 type RequestSnapshot = {
   customerId: string | null;
   customerPropertyId: string | null;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  addressLine1: string;
+  customerName: string | null;
+  customerEmail: string | null;
+  customerPhone: string | null;
+  addressLine1: string | null;
   addressLine2: string | null;
-  city: string;
-  state: string;
-  postalCode: string;
+  city: string | null;
+  state: string | null;
+  postalCode: string | null;
   propertyType: ValidatedCleaningRequestCommand["propertyType"];
   bedrooms: number | null;
   bathrooms: string | null;
@@ -126,6 +128,10 @@ function getSavedPropertyId(input: unknown): string | null {
 
 function getRequestSnapshot(command: ValidatedCleaningRequestCommand): RequestSnapshot {
   return { customerId: null, customerPropertyId: null, customerName: command.customerName, customerEmail: command.customerEmail, customerPhone: command.customerPhone, addressLine1: command.addressLine1, addressLine2: command.addressLine2, city: command.city, state: command.state, postalCode: command.postalCode, propertyType: command.propertyType, bedrooms: command.bedrooms, bathrooms: command.bathrooms, approximateSquareFeet: null };
+}
+
+function assertCompleteRequestSnapshot(snapshot: RequestSnapshot): asserts snapshot is RequestSnapshot & { customerName: string; customerEmail: string; customerPhone: string; addressLine1: string; city: string; state: string; postalCode: string } {
+  if (!snapshot.customerName || !snapshot.customerEmail || !snapshot.customerPhone || !snapshot.addressLine1 || !snapshot.city || !snapshot.state || !snapshot.postalCode) throw new Error("Request snapshot is incomplete.");
 }
 
 function mapPricingResult(result: ResidentialPricingResult): PersistedEstimate | null {
@@ -176,6 +182,7 @@ async function persistRequest(
   businessNotificationEnv: Record<string, string | undefined>,
   returningCustomerContext: CleaningRequestCreationOptions["returningCustomerContext"],
   savedPropertyId: string | null,
+  returningCustomerRequested: boolean,
 ): Promise<PersistedRequest> {
   const year = now;
   const businessRecipient = getBusinessNotificationConfig(businessNotificationEnv);
@@ -216,9 +223,10 @@ async function persistRequest(
             snapshot.bathrooms = property.bathrooms?.toString() ?? null;
             snapshot.approximateSquareFeet = property.approximateSquareFeet;
           }
-        } else if (savedPropertyId) {
+        } else if (savedPropertyId || returningCustomerRequested) {
           throw new RequestLinkingError("RETURNING_CUSTOMER_VERIFICATION_REQUIRED");
         }
+        assertCompleteRequestSnapshot(snapshot);
 
         const created = await transaction.cleaningRequest.create({
           data: {
@@ -313,7 +321,8 @@ export async function createCleaningRequest(
   input: unknown,
   options: CleaningRequestCreationOptions = {},
 ): Promise<CleaningRequestCreationResult> {
-  const validator = options.validator ?? validateCleaningRequest;
+  const savedPropertyId = getSavedPropertyId(input);
+  const validator = options.validator ?? ((value: unknown) => validateCleaningRequest(value, { allowReturningCustomer: Boolean(options.returningCustomerContext || options.returningCustomerRequested || savedPropertyId) }));
   let validation: CleaningRequestValidationResult;
 
   try {
@@ -331,7 +340,6 @@ export async function createCleaningRequest(
   }
 
   const command = validation.data;
-  const savedPropertyId = getSavedPropertyId(input);
   const pricingResolver = options.pricingResolver ?? getResidentialStartingEstimate;
   let pricingResult: ResidentialPricingResult;
 
@@ -349,7 +357,7 @@ export async function createCleaningRequest(
 
   try {
     const database = options.database ?? await getDefaultDatabase();
-    const created = await persistRequest(database, command, estimate, options.now ?? new Date(), options.maxRequestNumberAttempts ?? MAX_REQUEST_NUMBER_ATTEMPTS, options.businessNotificationEnv ?? process.env, options.returningCustomerContext, savedPropertyId);
+    const created = await persistRequest(database, command, estimate, options.now ?? new Date(), options.maxRequestNumberAttempts ?? MAX_REQUEST_NUMBER_ATTEMPTS, options.businessNotificationEnv ?? process.env, options.returningCustomerContext, savedPropertyId, Boolean(options.returningCustomerRequested));
     if (created.notificationId) {
       try {
         await deliverNotification(created.notificationId, { database: database as unknown as NotificationDatabase, emailProvider: options.emailProvider });

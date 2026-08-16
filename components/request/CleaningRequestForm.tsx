@@ -14,14 +14,14 @@ import type {
   PropertyType,
 } from "@/src/types/cleaning-request-draft";
 import {
-  getEarliestRequestErrorStep,
   getRequestFieldLabel,
   isResidentialPropertyType,
   mapEstimateResult,
-  REQUEST_STEP,
   toggleRequestExtra,
   updateRequestDraft,
 } from "@/src/lib/request-form";
+import { getRequestFlowSectionForField, getRequestFlowStepIndex, getRequestFlowSteps, type RequestFlowMode, type RequestFlowSection } from "@/src/lib/request-flow";
+import type { VerifiedCustomerPropertyOption } from "@/src/services/verified-customer-properties.service";
 import {
   toRequestConfirmationData,
   type RequestConfirmationData,
@@ -35,39 +35,6 @@ import ScheduleStep from "./ScheduleStep";
 import ContactStep from "./ContactStep";
 import ReviewStep from "./ReviewStep";
 import RequestConfirmation from "./RequestConfirmation";
-
-const steps = [
-  {
-    label: "Property",
-    title: "Tell us about the property",
-    description: "A few details help us prepare a useful starting estimate.",
-  },
-  {
-    label: "Service",
-    title: "What kind of cleaning do you need?",
-    description: "Choose the service that fits your space.",
-  },
-  {
-    label: "Extras",
-    title: "Anything extra you’d like us to handle?",
-    description: "Choose as many as you need, or skip this step.",
-  },
-  {
-    label: "Schedule",
-    title: "When would you like us to come?",
-    description: "Share your preferred timing and we’ll confirm availability.",
-  },
-  {
-    label: "Your details",
-    title: "Where should we reach you?",
-    description: "We’ll use these details to follow up about your request.",
-  },
-  {
-    label: "Review",
-    title: "Review your request",
-    description: "Make sure everything looks right before the next step.",
-  },
-];
 
 const emptyDraft: CleaningRequestDraft = {
   serviceId: "",
@@ -102,8 +69,8 @@ type SubmissionState =
     }
   | { status: "success"; request: RequestConfirmationData };
 
-function isComplete(step: number, draft: CleaningRequestDraft): boolean {
-  if (step === REQUEST_STEP.PROPERTY)
+function isComplete(section: RequestFlowSection, draft: CleaningRequestDraft): boolean {
+  if (section === "PROPERTY")
     return (
       Boolean(draft.propertyType) &&
       (!isResidentialPropertyType(draft.propertyType) ||
@@ -113,10 +80,10 @@ function isComplete(step: number, draft: CleaningRequestDraft): boolean {
           draft.bedrooms > 0,
         ))
     );
-  if (step === REQUEST_STEP.SERVICE) return Boolean(draft.serviceId);
-  if (step === REQUEST_STEP.SCHEDULE)
+  if (section === "SERVICE") return Boolean(draft.serviceId);
+  if (section === "SCHEDULE")
     return Boolean(draft.preferredDate && draft.preferredTimeWindow);
-  if (step === REQUEST_STEP.DETAILS)
+  if (section === "CONTACT")
     return Boolean(
       draft.customerName &&
       draft.customerEmail &&
@@ -132,11 +99,19 @@ function isComplete(step: number, draft: CleaningRequestDraft): boolean {
 export default function CleaningRequestForm({
   services,
   extras,
-  savedPropertyId = null,
+  mode = "NEW_CUSTOMER",
+  selectedSavedProperty = null,
+  onChangeProperty,
+  onRequestAnother,
+  onReturningCustomerRecovery,
 }: {
   services: CatalogItem[];
   extras: CatalogItem[];
-  savedPropertyId?: string | null;
+  mode?: RequestFlowMode;
+  selectedSavedProperty?: VerifiedCustomerPropertyOption | null;
+  onChangeProperty?: () => void;
+  onRequestAnother?: () => void;
+  onReturningCustomerRecovery?: () => void;
 }) {
   const [draft, setDraft] = useState(emptyDraft);
   const [currentStep, setCurrentStep] = useState(0);
@@ -146,6 +121,41 @@ export default function CleaningRequestForm({
   });
   const submissionInFlight = useRef(false);
   const estimateSequence = useRef(0);
+  const previousMode = useRef(mode);
+  const steps = getRequestFlowSteps(mode);
+
+  useEffect(() => {
+    if (previousMode.current !== mode) {
+      previousMode.current = mode;
+      setCurrentStep(0);
+    }
+  }, [mode]);
+
+  useEffect(() => {
+    if (!selectedSavedProperty) return;
+    // The selected property is an external UX selection; mirror its safe display DTO into the existing draft.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDraft((current) => ({
+      ...current,
+      propertyType: selectedSavedProperty.propertyType,
+      bedrooms: selectedSavedProperty.bedrooms ?? undefined,
+      bathrooms: selectedSavedProperty.bathrooms ?? "",
+      addressLine1: selectedSavedProperty.address.line1,
+      addressLine2: selectedSavedProperty.address.line2 ?? "",
+      city: selectedSavedProperty.address.city,
+      state: selectedSavedProperty.address.state,
+      postalCode: selectedSavedProperty.address.postalCode,
+    }));
+    setCurrentStep(0);
+  }, [selectedSavedProperty]);
+
+  useEffect(() => {
+    if (mode !== "RETURNING_NEW_PROPERTY" || selectedSavedProperty) return;
+    // Clear stale saved-property display values when switching to manual property entry.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDraft((current) => ({ ...current, propertyType: "", bedrooms: undefined, bathrooms: "", addressLine1: "", addressLine2: "", city: "", state: "", postalCode: "" }));
+    setCurrentStep(0);
+  }, [mode, selectedSavedProperty]);
 
   useEffect(() => {
     if (!draft.propertyType) {
@@ -237,7 +247,8 @@ export default function CleaningRequestForm({
       state: draft.state,
       postalCode: draft.postalCode,
       customerNotes: draft.customerNotes,
-      savedPropertyId,
+      savedPropertyId: selectedSavedProperty?.id ?? null,
+      useReturningCustomerContext: mode !== "NEW_CUSTOMER",
     };
 
     try {
@@ -259,11 +270,14 @@ export default function CleaningRequestForm({
         fieldErrors: result.fieldErrors,
       });
       if (result.reason === "INVALID_INPUT" && result.fieldErrors) {
-        setCurrentStep(getEarliestRequestErrorStep(result.fieldErrors));
+        const section = getRequestFlowSectionForField(Object.keys(result.fieldErrors)[0] ?? "", mode);
+        setCurrentStep(Math.max(0, getRequestFlowStepIndex(mode, section)));
       } else if (result.reason === "SERVICE_UNAVAILABLE") {
-        setCurrentStep(REQUEST_STEP.SERVICE);
+        setCurrentStep(getRequestFlowStepIndex(mode, "SERVICE"));
       } else if (result.reason === "EXTRA_UNAVAILABLE") {
-        setCurrentStep(REQUEST_STEP.EXTRAS);
+        setCurrentStep(getRequestFlowStepIndex(mode, "EXTRAS"));
+      } else if (result.reason === "RETURNING_CUSTOMER_VERIFICATION_REQUIRED" || result.reason === "RETURNING_CUSTOMER_PROPERTY_INVALID") {
+        onReturningCustomerRecovery?.();
       }
     } catch {
       setSubmission({ status: "error", reason: "INTERNAL_ERROR" });
@@ -294,12 +308,13 @@ export default function CleaningRequestForm({
     setDraft(emptyDraft);
     setEstimate({ status: "idle" });
     setSubmission({ status: "idle" });
-    setCurrentStep(REQUEST_STEP.PROPERTY);
+    setCurrentStep(0);
+    onRequestAnother?.();
   };
 
   const renderStep = () => {
-    switch (currentStep) {
-      case REQUEST_STEP.PROPERTY:
+    switch (steps[currentStep]?.id) {
+      case "PROPERTY":
         return (
           <PropertyStep
             draft={draft}
@@ -309,7 +324,7 @@ export default function CleaningRequestForm({
             onBathroomsChange={(bathrooms) => update("bathrooms", bathrooms)}
           />
         );
-      case REQUEST_STEP.SERVICE:
+      case "SERVICE":
         return (
           <ServiceStep
             services={services}
@@ -317,7 +332,7 @@ export default function CleaningRequestForm({
             onSelect={chooseService}
           />
         );
-      case REQUEST_STEP.EXTRAS:
+      case "EXTRAS":
         return (
           <ExtrasStep
             extras={extras}
@@ -327,7 +342,7 @@ export default function CleaningRequestForm({
             }
           />
         );
-      case REQUEST_STEP.SCHEDULE:
+      case "SCHEDULE":
         return (
           <ScheduleStep
             preferredDate={draft.preferredDate}
@@ -338,7 +353,7 @@ export default function CleaningRequestForm({
             }
           />
         );
-      case REQUEST_STEP.DETAILS:
+      case "CONTACT":
         return <ContactStep draft={draft} onChange={update} />;
       default:
         return (
@@ -347,7 +362,16 @@ export default function CleaningRequestForm({
             services={services}
             extras={extras}
             estimate={estimate}
-            onEdit={setCurrentStep}
+            mode={mode}
+            selectedSavedProperty={selectedSavedProperty}
+            onEdit={(section) => {
+              if (section === "PROPERTY" && mode === "RETURNING_SAVED_PROPERTY") {
+                onChangeProperty?.();
+                return;
+              }
+              setCurrentStep(getRequestFlowStepIndex(mode, section));
+            }}
+            onNotesChange={(notes) => update("customerNotes", notes)}
           />
         );
     }
@@ -439,7 +463,7 @@ export default function CleaningRequestForm({
                     </div>
                   ) : null}
                   {services.length === 0 &&
-                  currentStep === REQUEST_STEP.SERVICE ? (
+                  steps[currentStep]?.id === "SERVICE" ? (
                     <EstimateCard state={{ status: "unavailable" }} />
                   ) : (
                     renderStep()
@@ -469,7 +493,7 @@ export default function CleaningRequestForm({
                       )
                     }
                     disabled={
-                      !isComplete(currentStep, draft) ||
+                      !isComplete(steps[currentStep]?.id ?? "REVIEW", draft) ||
                       submission.status === "submitting"
                     }
                     className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"

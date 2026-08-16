@@ -1,5 +1,6 @@
 import {
   CleaningRequestInputSchema,
+  ReturningCleaningRequestInputSchema,
   type ParsedCleaningRequestInput,
   type PreferredTimeWindow,
   type PropertyType,
@@ -18,14 +19,14 @@ export type ValidatedCleaningRequestCommand = {
   extraIds: string[];
   preferredDate: string;
   preferredTimeWindow: PreferredTimeWindow;
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  addressLine1: string;
+  customerName: string | null;
+  customerEmail: string | null;
+  customerPhone: string | null;
+  addressLine1: string | null;
   addressLine2: string | null;
-  city: string;
-  state: string;
-  postalCode: string;
+  city: string | null;
+  state: string | null;
+  postalCode: string | null;
   customerNotes: string | null;
 };
 
@@ -41,6 +42,7 @@ export type CleaningRequestValidationResult =
 export type ValidationOptions = {
   referenceReader?: CleaningRequestReferenceReader;
   now?: Date;
+  allowReturningCustomer?: boolean;
 };
 
 function getBusinessDate(now: Date): string {
@@ -92,9 +94,11 @@ async function getDefaultReferenceReader(): Promise<CleaningRequestReferenceRead
 }
 
 function normalizeParsedInput(input: ParsedCleaningRequestInput): Omit<ValidatedCleaningRequestCommand, "serviceId" | "extraIds"> & { serviceId: string; extraIds: string[] } | { field: string; message: string } {
-  if (!US_STATE_CODES.has(input.state)) return { field: "state", message: "Enter a valid US state code." };
-  const phone = normalizePhone(input.customerPhone);
-  if (!phone) return { field: "customerPhone", message: "Enter a valid US phone number." };
+  const state = input.state ?? null;
+  if (state !== null && !US_STATE_CODES.has(state)) return { field: "state", message: "Enter a valid US state code." };
+  const rawPhone = input.customerPhone ?? null;
+  const phone = rawPhone === null ? null : normalizePhone(rawPhone);
+  if (rawPhone !== null && !phone) return { field: "customerPhone", message: "Enter a valid US phone number." };
 
   return {
     serviceId: input.serviceId,
@@ -104,20 +108,20 @@ function normalizeParsedInput(input: ParsedCleaningRequestInput): Omit<Validated
     extraIds: [...new Set(input.extraIds)],
     preferredDate: input.preferredDate,
     preferredTimeWindow: input.preferredTimeWindow,
-    customerName: input.customerName,
-    customerEmail: input.customerEmail,
+    customerName: input.customerName ?? null,
+    customerEmail: input.customerEmail ?? null,
     customerPhone: phone,
-    addressLine1: input.addressLine1,
+    addressLine1: input.addressLine1 ?? null,
     addressLine2: input.addressLine2 || null,
-    city: input.city,
-    state: input.state,
-    postalCode: input.postalCode,
+    city: input.city ?? null,
+    state: input.state ?? null,
+    postalCode: input.postalCode ?? null,
     customerNotes: input.customerNotes || null,
   };
 }
 
 export async function validateCleaningRequest(input: unknown, options: ValidationOptions = {}): Promise<CleaningRequestValidationResult> {
-  const parsed = CleaningRequestInputSchema.safeParse(input);
+  const parsed = (options.allowReturningCustomer ? ReturningCleaningRequestInputSchema : CleaningRequestInputSchema).safeParse(input);
   if (!parsed.success) return { success: false, reason: "INVALID_INPUT", fieldErrors: toFieldErrors(parsed.error) };
 
   const normalized = normalizeParsedInput(parsed.data);
