@@ -12,7 +12,7 @@ export type AdminNavigationItem = {
     | "/admin"
     | "/admin/requests"
     | "/admin/customers"
-    | "/admin/schedule"
+    // | "/admin/schedule"
     | "/admin/workers";
   icon: LucideIcon;
 };
