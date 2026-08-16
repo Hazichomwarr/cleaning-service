@@ -14,6 +14,7 @@
     "test:upcoming-reminder": "tsx --test src/emails/__tests__/upcoming-cleaning-customer.email.test.ts src/services/__tests__/upcoming-cleaning-reminder.service.test.ts app/api/internal/upcoming-cleaning-reminders/route.test.ts",
     "test:cleaning-milestones": "tsx --test src/emails/__tests__/cleaning-milestone-customer.email.test.ts src/services/__tests__/cleaning-milestone-notification.service.test.ts",
     "test:customer-matching": "tsx --test src/services/__tests__/customer-matching.service.test.ts",
+    "test:customer-registration": "tsx --test src/services/__tests__/customer-registration.service.test.ts",
     "test:customer-verification": "tsx --test src/emails/__tests__/returning-customer-verification.email.test.ts src/lib/__tests__/customer-verification-state.test.ts src/services/__tests__/customer-verification.service.test.ts",
     "test:verified-properties": "tsx --test src/services/__tests__/verified-customer-properties.service.test.ts",
     "test:request-linking": "tsx --test src/services/__tests__/returning-customer-request-linking.service.test.ts",

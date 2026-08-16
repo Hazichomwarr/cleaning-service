@@ -18,6 +18,7 @@ type FakeNotificationApi = {
 };
 type FakeTransaction = {
   cleaningRequest: { findMany: () => Promise<Array<{ requestNumber: string }>>; create: (args: { data: Record<string, unknown> }) => Promise<Record<string, unknown>> };
+  customer: { findUnique: () => Promise<null>; findMany: () => Promise<Array<{ id: string; isActive: boolean }>>; create: (args: { data: Record<string, unknown> }) => Promise<{ id: string }> };
   cleaningService: { findUnique: () => Promise<{ name: string } | null> };
   cleaningExtra: { findMany: () => Promise<Array<{ name: string }>> };
   notification: FakeNotificationApi;
@@ -25,6 +26,7 @@ type FakeTransaction = {
 
 function database(options: { failNotification?: boolean } = {}) {
   const requests: Array<Record<string, unknown>> = [];
+  const customers: Array<Record<string, unknown>> = [];
   const notifications: FakeNotification[] = [];
   let nextRequestId = 1;
   const notificationApi = {
@@ -53,6 +55,7 @@ function database(options: { failNotification?: boolean } = {}) {
     async $transaction<T>(callback: (transaction: FakeTransaction) => Promise<T>) {
       const requestSnapshot = requests.length;
       const notificationSnapshot = notifications.length;
+      const customerSnapshot = customers.length;
       try {
         return await callback({
           cleaningRequest: {
@@ -63,6 +66,15 @@ function database(options: { failNotification?: boolean } = {}) {
               return { id: request.id as string, requestNumber: request.requestNumber as string, status: request.status, estimateOutcome: request.estimateOutcome, estimatedPrice: request.estimatedPrice as Prisma.Decimal | null };
             },
           },
+          customer: {
+            async findUnique() { return null; },
+            async findMany() { return customers.map((customer) => ({ id: customer.id as string, isActive: true })); },
+            async create({ data }: { data: Record<string, unknown> }) {
+              const customer = { id: `customer-${customers.length + 1}`, ...data };
+              customers.push(customer);
+              return { id: customer.id };
+            },
+          },
           cleaningService: { async findUnique() { return { name: "Standard Cleaning" }; } },
           cleaningExtra: { async findMany() { return [{ name: "Inside Oven" }]; } },
           notification: notificationApi,
@@ -70,11 +82,12 @@ function database(options: { failNotification?: boolean } = {}) {
       } catch (error) {
         requests.splice(requestSnapshot);
         notifications.splice(notificationSnapshot);
+        customers.splice(customerSnapshot);
         throw error;
       }
     },
   };
-  return database;
+  return { ...database, customers };
 }
 
 function optionsFor(db: ReturnType<typeof database>, overrides: Partial<CleaningRequestCreationOptions> = {}): CleaningRequestCreationOptions {
@@ -119,6 +132,7 @@ test("notification intent failure rolls back request creation", async () => {
   assert.deepEqual(result, { success: false, reason: "INTERNAL_ERROR" });
   assert.equal(db.requests.length, 0);
   assert.equal(db.notifications.length, 0);
+  assert.equal(db.customers.length, 0);
 });
 
 test("missing business recipient configuration does not block request creation or fabricate history", async () => {

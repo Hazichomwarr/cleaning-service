@@ -13,6 +13,7 @@ import {
   getResidentialStartingEstimate,
   type ResidentialPricingResult,
 } from "./cleaning-pricing.service";
+import { createCustomerForNewRequestIfSafe } from "./customer-registration.service";
 
 const MAX_REQUEST_NUMBER_ATTEMPTS = 5;
 
@@ -42,6 +43,8 @@ type RequestTransaction = {
   };
   customer?: {
     findUnique: (args: { where: { id: string; isActive: true }; select: { id: true; name: true; email: true; phone: true } }) => Promise<{ id: string; name: string; email: string | null; phone: string | null } | null>;
+    findMany?: (args: Record<string, unknown>) => Promise<Array<{ id: string; isActive: boolean }>>;
+    create?: (args: Record<string, unknown>) => Promise<{ id: string }>;
   };
   customerProperty?: {
     findUnique: (args: { where: { id: string; customerId: string; isActive: true }; select: { id: true; customerId: true; addressLine1: true; addressLine2: true; city: true; state: true; postalCode: true; propertyType: true; bedrooms: true; bathrooms: true; approximateSquareFeet: true } }) => Promise<{ id: string; customerId: string; addressLine1: string; addressLine2: string | null; city: string; state: string; postalCode: string; propertyType: ValidatedCleaningRequestCommand["propertyType"]; bedrooms: number | null; bathrooms: Prisma.Decimal | null; approximateSquareFeet: number | null } | null>;
@@ -225,6 +228,9 @@ async function persistRequest(
           }
         } else if (savedPropertyId || returningCustomerRequested) {
           throw new RequestLinkingError("RETURNING_CUSTOMER_VERIFICATION_REQUIRED");
+        } else {
+          if (!transaction.customer?.findMany || !transaction.customer.create) throw new Error("Customer registration transaction boundary is unavailable.");
+          snapshot.customerId = await createCustomerForNewRequestIfSafe(transaction as unknown as Parameters<typeof createCustomerForNewRequestIfSafe>[0], command);
         }
         assertCompleteRequestSnapshot(snapshot);
 

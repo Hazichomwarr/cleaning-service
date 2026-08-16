@@ -27,8 +27,9 @@ function pricingSuccess(amount = "200.00") {
   };
 }
 
-function fakeDatabase(options: { existing?: string[]; collisionCount?: number; failCreate?: boolean } = {}) {
+function fakeDatabase(options: { existing?: string[]; collisionCount?: number; failCreate?: boolean; customers?: Array<{ id: string; email: string | null; phone: string | null; isActive: boolean }> } = {}) {
   let records = [...(options.existing ?? [])].map((requestNumber) => ({ requestNumber }));
+  let customers = [...(options.customers ?? [])];
   let collisionsLeft = options.collisionCount ?? 0;
   let transactionCalls = 0;
   let lastData: Record<string, unknown> | undefined;
@@ -37,6 +38,7 @@ function fakeDatabase(options: { existing?: string[]; collisionCount?: number; f
     $transaction: async <T,>(callback: (transaction: { cleaningRequest: { findMany: (args: unknown) => Promise<Array<{ requestNumber: string }>>; create: (args: { data: Record<string, unknown>; select: unknown }) => Promise<never> } }) => Promise<T>) => {
       transactionCalls += 1;
       const before = [...records];
+      const customersBefore = [...customers];
       let attemptedNumber: string | undefined;
       const transaction = {
         cleaningRequest: {
@@ -60,12 +62,22 @@ function fakeDatabase(options: { existing?: string[]; collisionCount?: number; f
             return created as never;
           },
         },
+        customer: {
+          findUnique: async () => null,
+          findMany: async () => customers.map(({ id, isActive }) => ({ id, isActive })),
+          create: async ({ data }: { data: Record<string, unknown> }) => {
+            const customer = { id: `customer-${customers.length + 1}`, name: data.name as string, email: data.email as string | null, phone: data.phone as string | null, isActive: true };
+            customers = [...customers, customer];
+            return { id: customer.id };
+          },
+        },
       };
 
       try {
         return await callback(transaction);
       } catch (error) {
         records = before;
+        customers = customersBefore;
         if (typeof attemptedNumber === "string" && error && typeof error === "object" && "code" in error && error.code === "P2002") {
           records = [...records, { requestNumber: attemptedNumber }];
         }
@@ -74,6 +86,7 @@ function fakeDatabase(options: { existing?: string[]; collisionCount?: number; f
     },
     get transactionCalls() { return transactionCalls; },
     get records() { return records; },
+    get customers() { return customers; },
     get lastData() { return lastData; },
   };
 
@@ -105,6 +118,45 @@ test("creates an automatic residential request with a Decimal snapshot", async (
   assert.equal(database.lastData?.scheduledEnd, null);
   assert.equal(database.lastData?.cancelledAt, null);
   assert.equal(database.lastData?.cancellationReason, null);
+});
+
+test("creates and links a new Customer without creating a saved property", async () => {
+  const database = fakeDatabase();
+  const result = await createCleaningRequest({}, optionsFor(database));
+  assert.equal(result.success, true);
+  assert.equal(database.customers.length, 1);
+  assert.deepEqual(database.customers[0], { id: "customer-1", name: "Jane Smith", email: "jane@example.com", phone: "+19735551234", isActive: true });
+  assert.equal(database.lastData?.customerId, "customer-1");
+  assert.equal(database.lastData?.customerPropertyId, null);
+  assert.equal(database.lastData?.customerName, "Jane Smith");
+  assert.equal(database.lastData?.customerEmail, "jane@example.com");
+  assert.equal(database.lastData?.customerPhone, "+19735551234");
+});
+
+test("normalizes the new Customer independently from request snapshots", async () => {
+  const database = fakeDatabase();
+  const result = await createCleaningRequest({}, optionsFor(database, {
+    validator: async () => validValidation({ customerEmail: "Jane@Example.COM", customerPhone: "(973) 555-1234" }),
+  }));
+  assert.equal(result.success, true);
+  assert.equal(database.customers[0].email, "jane@example.com");
+  assert.equal(database.customers[0].phone, "+19735551234");
+  assert.equal(database.lastData?.customerEmail, "Jane@Example.COM");
+  assert.equal(database.lastData?.customerPhone, "(973) 555-1234");
+});
+
+test("does not create or link for active, inactive, or conflicting identity collisions", async () => {
+  for (const customers of [
+    [{ id: "active", email: "jane@example.com", phone: null, isActive: true }],
+    [{ id: "inactive", email: "jane@example.com", phone: null, isActive: false }],
+    [{ id: "email-owner", email: "jane@example.com", phone: null, isActive: true }, { id: "phone-owner", email: null, phone: "+19735551234", isActive: true }],
+  ]) {
+    const database = fakeDatabase({ customers });
+    const result = await createCleaningRequest({}, optionsFor(database));
+    assert.equal(result.success, true);
+    assert.equal(database.customers.length, customers.length);
+    assert.equal(database.lastData?.customerId, null);
+  }
 });
 
 for (const [label, propertyType, pricingResult, expectedOutcome] of [
@@ -188,4 +240,5 @@ test("rolls back the transaction when persistence fails", async () => {
   const result = await createCleaningRequest({}, optionsFor(database));
   assert.deepEqual(result, { success: false, reason: "INTERNAL_ERROR" });
   assert.deepEqual(database.records, []);
+  assert.deepEqual(database.customers, []);
 });
