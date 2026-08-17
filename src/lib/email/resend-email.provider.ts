@@ -3,6 +3,7 @@ import { formatResendSender, getResendConfig } from "./resend-config";
 
 export type SendEmailInput = {
   to: string;
+  cc?: string;
   subject: string;
   html: string;
   idempotencyKey: string;
@@ -40,6 +41,7 @@ export function createResendEmailProvider(
           {
             from: formatResendSender(configured.config),
             to: input.to,
+            ...(input.cc ? { cc: input.cc } : {}),
             subject: input.subject,
             html: input.html,
           },

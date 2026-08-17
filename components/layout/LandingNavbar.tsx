@@ -1,8 +1,9 @@
 "use client";
 
-import { Menu, Phone, Sparkles, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import BusinessLogo from "@/components/branding/BusinessLogo";
 
 const navigationItems = [
   { label: "Services", href: "#services" },
@@ -29,9 +30,7 @@ export default function LandingNavbar() {
           onClick={closeMenu}
           className="flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
         >
-          <span className="flex size-10 items-center justify-center rounded-xl bg-blue-600 text-white">
-            <Sparkles aria-hidden="true" className="size-5" />
-          </span>
+          <BusinessLogo size={40} alt="" priority />
 
           <span className="flex flex-col">
             <span className="text-lg font-semibold tracking-tight text-slate-950">

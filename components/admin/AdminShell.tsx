@@ -1,10 +1,11 @@
 "use client";
 
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ADMIN_NAV_ITEMS, isAdminNavigationItemActive } from "@/src/lib/admin-navigation";
+import BusinessLogo from "@/components/branding/BusinessLogo";
 
 type AdminShellProps = {
   admin: { name: string; email: string };
@@ -15,7 +16,7 @@ type AdminShellProps = {
 function AdminBrand({ compact = false }: { compact?: boolean }) {
   return (
     <Link href="/admin" className="inline-flex items-center gap-3 text-slate-950">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white"><Sparkles className="size-4" aria-hidden="true" /></span>
+      <BusinessLogo size={36} alt="" />
       <span className={compact ? "text-base font-semibold tracking-tight" : "text-lg font-semibold tracking-tight"}>Just Cleaning <span className="font-normal text-slate-500">Admin</span></span>
     </Link>
   );

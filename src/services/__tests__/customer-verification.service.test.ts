@@ -51,6 +51,8 @@ test("creates a hashed email challenge for email and phone matches without expos
   assert.equal(challenge.emailSnapshot, "jane@example.com");
   assert.notEqual(challenge.codeHash, codeFrom(sent));
   assert.equal(challenge.codeHash.includes(codeFrom(sent)), false);
+  assert.equal(sent.to, "jane@example.com");
+  assert.equal("cc" in sent, false);
   assert.match(sent.idempotencyKey, /^customer-verification\/challenge-/);
 });
 

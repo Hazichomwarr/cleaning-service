@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Phone, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Phone } from "lucide-react";
 import Link from "next/link";
 import { getCleaningEstimate } from "@/app/actions/get-cleaning-estimate";
 import {
@@ -35,6 +35,7 @@ import ScheduleStep from "./ScheduleStep";
 import ContactStep from "./ContactStep";
 import ReviewStep from "./ReviewStep";
 import RequestConfirmation from "./RequestConfirmation";
+import BusinessLogo from "@/components/branding/BusinessLogo";
 
 const emptyDraft: CleaningRequestDraft = {
   serviceId: "",
@@ -385,9 +386,7 @@ export default function CleaningRequestForm({
             href="/"
             className="flex items-center gap-2 text-lg font-semibold tracking-tight"
           >
-            <span className="flex size-9 items-center justify-center rounded-xl bg-blue-600 text-white">
-              <Sparkles aria-hidden="true" className="size-4" />
-            </span>
+            <BusinessLogo size={36} alt="" />
             Just Cleaning
           </Link>
           <a

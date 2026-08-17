@@ -81,7 +81,7 @@ export async function createEmailNotification(
 
 export async function deliverNotification(
   notificationId: string,
-  options: { database?: NotificationDatabase; emailProvider?: EmailProvider; now?: Date } = {},
+  options: { database?: NotificationDatabase; emailProvider?: EmailProvider; now?: Date; ccEmail?: string } = {},
 ): Promise<DeliveryResult> {
   const database = options.database ?? (await import("../lib/db/prisma")).prisma as unknown as NotificationDatabase;
   const current = await database.notification.findUnique({ where: { id: notificationId }, select: notificationSelect });
@@ -109,6 +109,7 @@ export async function deliverNotification(
   try {
     result = await provider.sendEmail({
       to: current.recipientEmail,
+      ...(current.type === "NEW_REQUEST_ADMIN" && options.ccEmail ? { cc: options.ccEmail } : {}),
       subject: current.subject,
       html: current.content,
       idempotencyKey: `notification/${notificationId}`,

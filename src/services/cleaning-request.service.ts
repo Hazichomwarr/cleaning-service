@@ -1,5 +1,6 @@
 import { CleaningEstimateOutcome, CleaningRequestStatus, Prisma } from "../generated/prisma/client";
 import { renderNewRequestAdminEmail } from "../emails/new-request-admin.email";
+import { getOptionalResendCcEmail } from "../lib/email/resend-config";
 import { getBusinessNotificationConfig } from "../lib/notifications/business-notification-config";
 import { getNextCleaningRequestNumber, isRequestNumberCollision } from "../lib/cleaning-request-number";
 import { deliverNotification, createEmailNotification, type NotificationDatabase } from "./notification.service";
@@ -366,7 +367,7 @@ export async function createCleaningRequest(
     const created = await persistRequest(database, command, estimate, options.now ?? new Date(), options.maxRequestNumberAttempts ?? MAX_REQUEST_NUMBER_ATTEMPTS, options.businessNotificationEnv ?? process.env, options.returningCustomerContext, savedPropertyId, Boolean(options.returningCustomerRequested));
     if (created.notificationId) {
       try {
-        await deliverNotification(created.notificationId, { database: database as unknown as NotificationDatabase, emailProvider: options.emailProvider });
+        await deliverNotification(created.notificationId, { database: database as unknown as NotificationDatabase, emailProvider: options.emailProvider, ccEmail: getOptionalResendCcEmail(options.businessNotificationEnv ?? process.env) });
       } catch {
         console.error("[notification] new-request delivery failed unexpectedly", { notificationId: created.notificationId, type: "NEW_REQUEST_ADMIN" });
       }

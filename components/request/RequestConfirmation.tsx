@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, Clipboard, ClipboardCheck, Sparkles } from "lucide-react";
+import BusinessLogo from "@/components/branding/BusinessLogo";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -38,6 +39,7 @@ export default function RequestConfirmation({ data, onRequestAnother }: RequestC
   return (
     <section className="px-5 py-8 sm:px-10 sm:py-12" aria-live="polite">
       <div className="mx-auto max-w-2xl text-center">
+        <BusinessLogo size={56} className="mx-auto" />
         <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
           <CheckCircle2 className="size-9" aria-hidden="true" />
         </div>

@@ -6,7 +6,7 @@ import { createEmailNotification, deliverNotification } from "../notification.se
 
 type State = {
   id: string;
-  type: "NEW_REQUEST_ADMIN";
+  type: "NEW_REQUEST_ADMIN" | "REQUEST_CONFIRMED_CUSTOMER";
   channel: "EMAIL";
   status: NotificationStatus;
   recipientEmail: string;
@@ -26,7 +26,7 @@ function database(initial: Partial<State> = {}) {
     recipientEmail: "old@example.com", recipientName: "Jane", subject: "Original subject",
     content: "<p>Original content</p>", attemptCount: 0, providerMessageId: null, ...initial,
   };
-  const calls: Array<{ idempotencyKey: string }> = [];
+  const calls: Array<{ idempotencyKey: string; cc?: string }> = [];
   let sendDelay: Promise<void> | null = null;
   const db = {
     state,
@@ -56,13 +56,15 @@ function database(initial: Partial<State> = {}) {
 
 function provider(options: { success?: boolean; errorCode?: "PROVIDER_REJECTED" } = {}) {
   return {
-    async sendEmail(input: { idempotencyKey: string }) {
+    async sendEmail(input: { idempotencyKey: string; cc?: string }) {
       sentKeys.push(input.idempotencyKey);
+      sentInputs.push(input);
       return options.success === false ? { success: false as const, errorCode: options.errorCode ?? "PROVIDER_REJECTED" } : { success: true as const, providerMessageId: "re_123" };
     },
   };
 }
 const sentKeys: string[] = [];
+const sentInputs: Array<{ idempotencyKey: string; cc?: string }> = [];
 
 test("creates a pending email notification with normalized and immutable snapshots", async () => {
   const db = database();
@@ -97,6 +99,20 @@ test("sends pending notifications and records provider acceptance", async () => 
   assert.equal(db.state.attemptCount, 1);
   assert.equal(db.state.sentAt, now);
   assert.deepEqual(sentKeys, ["notification/notification-1"]);
+});
+
+test("adds configured CC only to NEW_REQUEST_ADMIN delivery", async () => {
+  sentInputs.length = 0;
+  const db = database();
+  await deliverNotification("notification-1", { database: db as never, emailProvider: provider(), ccEmail: "cofounder@example.com" });
+  assert.equal(sentInputs[0]?.cc, "cofounder@example.com");
+});
+
+test("never adds business CC to customer delivery", async () => {
+  sentInputs.length = 0;
+  const db = database({ type: "REQUEST_CONFIRMED_CUSTOMER" });
+  await deliverNotification("notification-1", { database: db as never, emailProvider: provider(), ccEmail: "cofounder@example.com" });
+  assert.equal("cc" in (sentInputs[0] ?? {}), false);
 });
 
 test("preserves failed intent and retries the same notification with the same idempotency key", async () => {

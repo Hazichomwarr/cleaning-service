@@ -27,3 +27,11 @@ export function getResendConfig(env: Record<string, string | undefined> = proces
 export function formatResendSender(config: ResendConfig): string {
   return `${config.fromName} <${config.fromEmail}>`;
 }
+
+/** Returns a safe, normalized optional CC. Invalid configuration is omitted. */
+export function getOptionalResendCcEmail(
+  env: Record<string, string | undefined> = process.env,
+): string | undefined {
+  const email = env.RESEND_CC_EMAIL?.trim().toLowerCase();
+  return email && /^\S+@\S+\.\S+$/.test(email) ? email : undefined;
+}

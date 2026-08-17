@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { formatResendSender, getResendConfig } from "../resend-config";
+import { formatResendSender, getOptionalResendCcEmail, getResendConfig } from "../resend-config";
 import { createResendEmailProvider } from "../resend-email.provider";
 
 test("validates server-only sender configuration without exposing secrets", () => {
@@ -23,4 +23,10 @@ test("missing Resend configuration becomes a controlled delivery failure", async
   const provider = createResendEmailProvider({});
   const result = await provider.sendEmail({ to: "customer@example.com", subject: "Test", html: "<p>Test</p>", idempotencyKey: "notification/test" });
   assert.deepEqual(result, { success: false, errorCode: "CONFIGURATION_ERROR" });
+});
+
+test("normalizes an optional CC and ignores blank or malformed values", () => {
+  assert.equal(getOptionalResendCcEmail({ RESEND_CC_EMAIL: " COFOUNDER@EXAMPLE.COM " }), "cofounder@example.com");
+  assert.equal(getOptionalResendCcEmail({ RESEND_CC_EMAIL: " " }), undefined);
+  assert.equal(getOptionalResendCcEmail({ RESEND_CC_EMAIL: "not-an-email" }), undefined);
 });
