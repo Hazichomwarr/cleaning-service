@@ -1,3 +1,5 @@
+import { BUSINESS } from "@/src/config/business";
+
 type ScheduleStepProps = {
   preferredDate: string;
   preferredTimeWindow: string;
@@ -52,7 +54,7 @@ export default function ScheduleStep({
       </div>
 
       <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5 text-sm leading-6 text-blue-950">
-        Your date and time are preferences, not a confirmed appointment. The Just Cleaning team will review availability before confirming your visit.
+        Your date and time are preferences, not a confirmed appointment. The {BUSINESS.name} team will review availability before confirming your visit.
       </div>
     </div>
   );

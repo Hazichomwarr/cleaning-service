@@ -4,6 +4,7 @@ import { Menu, Phone, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import BusinessLogo from "@/components/branding/BusinessLogo";
+import { BUSINESS } from "@/src/config/business";
 
 const navigationItems = [
   { label: "Services", href: "#services" },
@@ -30,16 +31,7 @@ export default function LandingNavbar() {
           onClick={closeMenu}
           className="flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
         >
-          <BusinessLogo size={40} alt="" priority />
-
-          <span className="flex flex-col">
-            <span className="text-lg font-semibold tracking-tight text-slate-950">
-              JUST CLEANING
-            </span>
-            <span className="text-xs text-slate-500">
-              Clean spaces. Happy places.
-            </span>
-          </span>
+          <BusinessLogo size={112} priority />
         </Link>
 
         <div className="hidden items-center gap-8 lg:flex">
@@ -57,11 +49,11 @@ export default function LandingNavbar() {
           </ul>
 
           <a
-            href="tel:+19084145613"
+            href={`tel:${BUSINESS.phone.href}`}
             className="flex items-center gap-2 text-sm font-semibold text-slate-800 transition hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-4"
           >
             <Phone aria-hidden="true" className="size-4 text-green-600" />
-            <span>(908) 414 5613</span>
+            <span>{BUSINESS.phone.display}</span>
           </a>
 
           <Link
@@ -111,11 +103,11 @@ export default function LandingNavbar() {
             </ul>
 
             <a
-              href="tel:+19084145613"
+              href={`tel:${BUSINESS.phone.href}`}
               className="flex items-center gap-3 rounded-lg px-3 py-3 font-semibold text-slate-800 transition hover:bg-slate-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
             >
               <Phone aria-hidden="true" className="size-5 text-blue-600" />
-              <span>(908) 414 5613</span>
+              <span>{BUSINESS.phone.display}</span>
             </a>
 
             <Link

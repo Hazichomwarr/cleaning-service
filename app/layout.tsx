@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { BUSINESS } from "@/src/config/business";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Just Cleaning LLC | Professional Home & Commercial Cleaning",
+  title: `${BUSINESS.name} LLC | Professional Home & Commercial Cleaning`,
 
   description:
     "Professional home and commercial cleaning services you can request online. From routine cleaning and deep cleaning to move-in, move-out, office, and Airbnb cleaning.",
 
   keywords: [
-    "Just Cleaning LLC",
+    `${BUSINESS.name} LLC`,
     "professional cleaning services",
     "house cleaning",
     "home cleaning",
@@ -33,16 +34,16 @@ export const metadata: Metadata = {
   ],
 
   openGraph: {
-    title: "Just Cleaning LLC | A Cleaner Space, Without the Stress",
+    title: `${BUSINESS.name} LLC | A Cleaner Space, Without the Stress`,
     description:
       "Reliable professional cleaning for homes and businesses. Request your cleaning online and choose a time that works for you.",
     type: "website",
-    siteName: "Just Cleaning LLC",
+    siteName: `${BUSINESS.name} LLC`,
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Just Cleaning LLC | Professional Cleaning Services",
+    title: `${BUSINESS.name} LLC | Professional Cleaning Services`,
     description:
       "Professional home and commercial cleaning, scheduled around your life.",
   },

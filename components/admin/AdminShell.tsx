@@ -16,8 +16,8 @@ type AdminShellProps = {
 function AdminBrand({ compact = false }: { compact?: boolean }) {
   return (
     <Link href="/admin" className="inline-flex items-center gap-3 text-slate-950">
-      <BusinessLogo size={36} alt="" />
-      <span className={compact ? "text-base font-semibold tracking-tight" : "text-lg font-semibold tracking-tight"}>Just Cleaning <span className="font-normal text-slate-500">Admin</span></span>
+      <BusinessLogo size={108} />
+      <span className={compact ? "text-base font-semibold tracking-tight font-normal text-slate-500" : "text-lg font-normal tracking-tight text-slate-500"}>Admin</span>
     </Link>
   );
 }

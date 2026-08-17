@@ -1,5 +1,7 @@
-import { Clock3, Mail, MapPin, Phone, Sparkles } from "lucide-react";
+import { Clock3, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
+import BusinessLogo from "@/components/branding/BusinessLogo";
+import { BUSINESS } from "@/src/config/business";
 
 const navigationLinks = [
   { label: "Services", href: "#services" },
@@ -28,18 +30,7 @@ export default function Footer() {
               href="/"
               className="inline-flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-4 focus-visible:ring-offset-slate-950"
             >
-              <span className="flex size-11 items-center justify-center rounded-xl bg-blue-600 text-white">
-                <Sparkles aria-hidden="true" className="size-5" />
-              </span>
-
-              <span>
-                <span className="block text-lg font-semibold tracking-tight">
-                  Ab Clean
-                </span>
-                <span className="block text-xs text-slate-400">
-                  Clean spaces. Happy places.
-                </span>
-              </span>
+              <BusinessLogo size={176} className="rounded-sm" />
             </Link>
 
             <p className="mt-6 leading-7 text-slate-400">
@@ -47,23 +38,6 @@ export default function Footer() {
               space, your schedule, and the details that matter.
             </p>
 
-            <div className="mt-7 flex items-center gap-3">
-              <a
-                href="#"
-                aria-label="Visit Brisa Clean on Instagram"
-                className="flex size-10 items-center justify-center rounded-full border border-white/10 text-slate-300 transition hover:border-blue-400 hover:bg-blue-400/10 hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-              >
-                {/* <Instagram aria-hidden="true" className="size-5" /> */}
-              </a>
-
-              <a
-                href="#"
-                aria-label="Visit Brisa Clean on Facebook"
-                className="flex size-10 items-center justify-center rounded-full border border-white/10 text-slate-300 transition hover:border-blue-400 hover:bg-blue-400/10 hover:text-blue-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-              >
-                {/* <Facebook aria-hidden="true" className="size-5" /> */}
-              </a>
-            </div>
           </div>
 
           <div>
@@ -112,27 +86,14 @@ export default function Footer() {
             <ul className="mt-6 space-y-5">
               <li>
                 <a
-                  href="tel:+19084145613"
+                  href={`tel:${BUSINESS.phone.href}`}
                   className="flex items-start gap-3 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 >
                   <Phone
                     aria-hidden="true"
                     className="mt-0.5 size-5 shrink-0 text-blue-300"
                   />
-                  <span>(908) 414 5613</span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  href="mailto:hello@brisaclean.com"
-                  className="flex items-start gap-3 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-                >
-                  <Mail
-                    aria-hidden="true"
-                    className="mt-0.5 size-5 shrink-0 text-blue-300"
-                  />
-                  <span>hello@brisaclean.com</span>
+                  <span>{BUSINESS.phone.display}</span>
                 </a>
               </li>
 
@@ -162,7 +123,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-5 border-t border-white/10 pt-7 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {currentYear} Just Cleaning LLC. All rights reserved.</p>
+          <p>© {currentYear} {BUSINESS.name} LLC. All rights reserved.</p>
 
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             <Link

@@ -6,6 +6,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
+import { BUSINESS } from "@/src/config/business";
 
 const assurances = [
   "No obligation to book",
@@ -77,11 +78,11 @@ export default function FinalCTA() {
               </Link>
 
               <a
-                href="tel:+19084145613"
+                href={`tel:${BUSINESS.phone.href}`}
                 className="inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-7 py-4 font-semibold text-white transition hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-blue-600"
               >
                 <Phone aria-hidden="true" className="size-5" />
-                Call (908) 414 5613
+                Call {BUSINESS.phone.display}
               </a>
             </div>
           </div>

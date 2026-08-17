@@ -36,6 +36,7 @@ import ContactStep from "./ContactStep";
 import ReviewStep from "./ReviewStep";
 import RequestConfirmation from "./RequestConfirmation";
 import BusinessLogo from "@/components/branding/BusinessLogo";
+import { BUSINESS } from "@/src/config/business";
 
 const emptyDraft: CleaningRequestDraft = {
   serviceId: "",
@@ -386,15 +387,14 @@ export default function CleaningRequestForm({
             href="/"
             className="flex items-center gap-2 text-lg font-semibold tracking-tight"
           >
-            <BusinessLogo size={36} alt="" />
-            Just Cleaning
+            <BusinessLogo size={112} />
           </Link>
           <a
-            href="tel:+19084145613"
+            href={`tel:${BUSINESS.phone.href}`}
             className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700"
           >
             <Phone aria-hidden="true" className="size-4 text-blue-600" />
-            <span className="hidden sm:inline">Questions? (908) 414-5613</span>
+            <span className="hidden sm:inline">Questions? {BUSINESS.phone.display}</span>
             <span className="sm:hidden">Call us</span>
           </a>
         </div>

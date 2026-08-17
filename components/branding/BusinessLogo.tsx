@@ -1,8 +1,9 @@
 import Image from "next/image";
+import { BUSINESS } from "@/src/config/business";
 
 export default function BusinessLogo({
   size = 40,
-  alt = "Just Cleaning",
+  alt = BUSINESS.name,
   priority = false,
   className,
 }: {
@@ -13,11 +14,12 @@ export default function BusinessLogo({
 }) {
   return (
     <Image
-      src="/images/logo.png"
+      src={BUSINESS.logoSrc}
       alt={alt}
       width={size}
-      height={size}
+      height={Math.round(size * (502 / 752))}
       priority={priority}
+      style={{ width: size, height: "auto" }}
       className={`shrink-0 object-contain ${className ?? ""}`}
     />
   );

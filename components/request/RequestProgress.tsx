@@ -1,3 +1,5 @@
+import { BUSINESS } from "@/src/config/business";
+
 type RequestProgressProps = {
   currentStep: number;
   totalSteps: number;
@@ -41,7 +43,7 @@ export default function RequestProgress({
 
       <div className="flex justify-end">
         <a
-          href="tel:+19084145613"
+          href={`tel:${BUSINESS.phone.href}`}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 transition-colors hover:text-blue-700"
         >
           <svg
@@ -59,7 +61,7 @@ export default function RequestProgress({
             />
           </svg>
           Prefer to book by phone?
-          <span className="font-semibold text-blue-700">(908) 414-5613</span>
+          <span className="font-semibold text-blue-700">{BUSINESS.phone.display}</span>
         </a>
       </div>
     </div>
