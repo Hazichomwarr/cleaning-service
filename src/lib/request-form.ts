@@ -5,10 +5,9 @@ import type { EstimateState } from "../../components/request/EstimateCard";
 export const REQUEST_STEP = {
   PROPERTY: 0,
   SERVICE: 1,
-  EXTRAS: 2,
-  SCHEDULE: 3,
-  DETAILS: 4,
-  REVIEW: 5,
+  SCHEDULE: 2,
+  DETAILS: 3,
+  REVIEW: 4,
 } as const;
 
 export const requestFieldSteps: Record<string, number> = {
@@ -16,7 +15,6 @@ export const requestFieldSteps: Record<string, number> = {
   propertyType: REQUEST_STEP.PROPERTY,
   bedrooms: REQUEST_STEP.PROPERTY,
   bathrooms: REQUEST_STEP.PROPERTY,
-  extraIds: REQUEST_STEP.EXTRAS,
   preferredDate: REQUEST_STEP.SCHEDULE,
   preferredTimeWindow: REQUEST_STEP.SCHEDULE,
   customerName: REQUEST_STEP.DETAILS,
@@ -53,12 +51,6 @@ export function updateRequestDraft<K extends keyof CleaningRequestDraft>(
   value: CleaningRequestDraft[K],
 ): CleaningRequestDraft {
   return { ...draft, [field]: value };
-}
-
-export function toggleRequestExtra(extraIds: string[], extraId: string): string[] {
-  return extraIds.includes(extraId)
-    ? extraIds.filter((id) => id !== extraId)
-    : [...extraIds, extraId];
 }
 
 export function mapEstimateResult(result: PublicCleaningEstimateResult): EstimateState {

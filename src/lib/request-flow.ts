@@ -1,5 +1,5 @@
 export type RequestFlowMode = "NEW_CUSTOMER" | "RETURNING_SAVED_PROPERTY" | "RETURNING_NEW_PROPERTY";
-export type RequestFlowSection = "PROPERTY" | "SERVICE" | "EXTRAS" | "SCHEDULE" | "CONTACT" | "REVIEW";
+export type RequestFlowSection = "PROPERTY" | "SERVICE" | "SCHEDULE" | "CONTACT" | "REVIEW";
 
 export type RequestFlowStep = {
   id: RequestFlowSection;
@@ -11,16 +11,15 @@ export type RequestFlowStep = {
 const stepDefinitions: Record<RequestFlowSection, RequestFlowStep> = {
   PROPERTY: { id: "PROPERTY", label: "Property", title: "Tell us about the property", description: "A few details help us prepare a useful starting estimate." },
   SERVICE: { id: "SERVICE", label: "Service", title: "What kind of cleaning do you need?", description: "Choose the service that fits your space." },
-  EXTRAS: { id: "EXTRAS", label: "Extras", title: "Anything extra you’d like us to handle?", description: "Choose as many as you need, or skip this step." },
   SCHEDULE: { id: "SCHEDULE", label: "Schedule", title: "When would you like us to come?", description: "Share your preferred timing and we’ll confirm availability." },
   CONTACT: { id: "CONTACT", label: "Your details", title: "Where should we reach you?", description: "We’ll use these details to follow up about your request." },
   REVIEW: { id: "REVIEW", label: "Review", title: "Review your request", description: "Make sure everything looks right before the next step." },
 };
 
 const flowSections: Record<RequestFlowMode, RequestFlowSection[]> = {
-  NEW_CUSTOMER: ["PROPERTY", "SERVICE", "EXTRAS", "SCHEDULE", "CONTACT", "REVIEW"],
-  RETURNING_SAVED_PROPERTY: ["SERVICE", "EXTRAS", "SCHEDULE", "REVIEW"],
-  RETURNING_NEW_PROPERTY: ["PROPERTY", "SERVICE", "EXTRAS", "SCHEDULE", "REVIEW"],
+  NEW_CUSTOMER: ["PROPERTY", "SERVICE", "SCHEDULE", "CONTACT", "REVIEW"],
+  RETURNING_SAVED_PROPERTY: ["SERVICE", "SCHEDULE", "REVIEW"],
+  RETURNING_NEW_PROPERTY: ["PROPERTY", "SERVICE", "SCHEDULE", "REVIEW"],
 };
 
 export function getRequestFlowSteps(mode: RequestFlowMode): RequestFlowStep[] {
@@ -37,7 +36,7 @@ export function getRequestFlowSections(mode: RequestFlowMode): RequestFlowSectio
 
 const fieldSections: Record<string, RequestFlowSection> = {
   serviceId: "SERVICE", propertyType: "PROPERTY", bedrooms: "PROPERTY", bathrooms: "PROPERTY",
-  extraIds: "EXTRAS", preferredDate: "SCHEDULE", preferredTimeWindow: "SCHEDULE",
+  preferredDate: "SCHEDULE", preferredTimeWindow: "SCHEDULE",
   customerName: "CONTACT", customerEmail: "CONTACT", customerPhone: "CONTACT",
   addressLine1: "PROPERTY", addressLine2: "PROPERTY", city: "PROPERTY", state: "PROPERTY", postalCode: "PROPERTY",
   customerNotes: "REVIEW",

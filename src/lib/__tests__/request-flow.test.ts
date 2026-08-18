@@ -3,15 +3,15 @@ import test from "node:test";
 import { getRequestFlowSectionForField, getRequestFlowStepIndex, getRequestFlowSteps, type RequestFlowMode } from "../request-flow";
 import { validateCleaningRequest } from "../../services/cleaning-request-validation.service";
 
-test("defines the six-step new-customer flow", () => {
-  assert.deepEqual(getRequestFlowSteps("NEW_CUSTOMER").map((step) => step.id), ["PROPERTY", "SERVICE", "EXTRAS", "SCHEDULE", "CONTACT", "REVIEW"]);
-  assert.equal(getRequestFlowSteps("NEW_CUSTOMER").length, 6);
+test("defines the five-step new-customer flow", () => {
+  assert.deepEqual(getRequestFlowSteps("NEW_CUSTOMER").map((step) => step.id), ["PROPERTY", "SERVICE", "SCHEDULE", "CONTACT", "REVIEW"]);
+  assert.equal(getRequestFlowSteps("NEW_CUSTOMER").length, 5);
   assert.equal(getRequestFlowSteps("NEW_CUSTOMER")[0].label, "Property");
 });
 
-test("defines four saved-property and five different-property steps", () => {
-  assert.deepEqual(getRequestFlowSteps("RETURNING_SAVED_PROPERTY").map((step) => step.id), ["SERVICE", "EXTRAS", "SCHEDULE", "REVIEW"]);
-  assert.deepEqual(getRequestFlowSteps("RETURNING_NEW_PROPERTY").map((step) => step.id), ["PROPERTY", "SERVICE", "EXTRAS", "SCHEDULE", "REVIEW"]);
+test("defines three saved-property and four different-property steps", () => {
+  assert.deepEqual(getRequestFlowSteps("RETURNING_SAVED_PROPERTY").map((step) => step.id), ["SERVICE", "SCHEDULE", "REVIEW"]);
+  assert.deepEqual(getRequestFlowSteps("RETURNING_NEW_PROPERTY").map((step) => step.id), ["PROPERTY", "SERVICE", "SCHEDULE", "REVIEW"]);
   assert.equal(getRequestFlowStepIndex("RETURNING_SAVED_PROPERTY", "SERVICE"), 0);
   assert.equal(getRequestFlowStepIndex("RETURNING_NEW_PROPERTY", "PROPERTY"), 0);
 });

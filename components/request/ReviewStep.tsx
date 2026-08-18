@@ -6,7 +6,6 @@ import type { EstimateState } from "./EstimateCard";
 type ReviewStepProps = {
   draft: CleaningRequestDraft;
   services: CatalogItem[];
-  extras: CatalogItem[];
   estimate: EstimateState;
   mode: RequestFlowMode;
   selectedSavedProperty: VerifiedCustomerPropertyOption | null;
@@ -26,9 +25,8 @@ function SummaryRow({ label, value, section, onEdit }: { label: string; value: s
   );
 }
 
-export default function ReviewStep({ draft, services, extras, estimate, mode, selectedSavedProperty, onEdit, onNotesChange }: ReviewStepProps) {
+export default function ReviewStep({ draft, services, estimate, mode, selectedSavedProperty, onEdit, onNotesChange }: ReviewStepProps) {
   const service = services.find((item) => item.id === draft.serviceId)?.name ?? draft.serviceName;
-  const selectedExtras = extras.filter((item) => draft.extraIds.includes(item.id)).map((item) => item.name).join(", ");
   const property = selectedSavedProperty ? (selectedSavedProperty.label || selectedSavedProperty.address.line1) : draft.propertyType ? draft.propertyType.charAt(0) + draft.propertyType.slice(1).toLowerCase() : "Not provided";
   const details = selectedSavedProperty
     ? [selectedSavedProperty.propertyType.charAt(0) + selectedSavedProperty.propertyType.slice(1).toLowerCase(), selectedSavedProperty.bedrooms === null ? "" : `${selectedSavedProperty.bedrooms} bedrooms`, selectedSavedProperty.bathrooms === null ? "" : `${selectedSavedProperty.bathrooms} bathrooms`].filter(Boolean).join(" · ")
@@ -49,7 +47,6 @@ export default function ReviewStep({ draft, services, extras, estimate, mode, se
       <div className="divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white px-5">
         <SummaryRow label="Property" value={[property, address, details].filter(Boolean).join(" · ")} section="PROPERTY" onEdit={onEdit} />
         <SummaryRow label="Service" value={service} section="SERVICE" onEdit={onEdit} />
-        <SummaryRow label="Extras" value={selectedExtras || "No extras selected"} section="EXTRAS" onEdit={onEdit} />
         <SummaryRow label="Preferred schedule" value={[draft.preferredDate, draft.preferredTimeWindow].filter(Boolean).join(" · ")} section="SCHEDULE" onEdit={onEdit} />
         {mode === "NEW_CUSTOMER" ? <SummaryRow label="Your details" value={[contact, address].filter(Boolean).join(" · ")} section="CONTACT" onEdit={onEdit} /> : <div className="flex items-start justify-between gap-4 border-b border-slate-100 py-4"><div><p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Customer</p><p className="mt-1 text-sm font-medium text-slate-900">Returning customer — verified</p></div></div>}
       </div>

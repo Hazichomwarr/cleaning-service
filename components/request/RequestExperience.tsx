@@ -7,7 +7,7 @@ import CleaningRequestForm from "./CleaningRequestForm";
 import ReturningCustomerVerification, { type ReturningCustomerVerificationState } from "./ReturningCustomerVerification";
 import type { RequestFlowMode } from "@/src/lib/request-flow";
 
-export default function RequestExperience({ services, extras }: { services: CatalogItem[]; extras: CatalogItem[] }) {
+export default function RequestExperience({ services }: { services: CatalogItem[] }) {
   const [mode, setMode] = useState<RequestFlowMode>("NEW_CUSTOMER");
   const [verificationState, setVerificationState] = useState<ReturningCustomerVerificationState>("UNVERIFIED");
   const [selectedProperty, setSelectedProperty] = useState<VerifiedCustomerPropertyOption | null>(null);
@@ -49,7 +49,6 @@ export default function RequestExperience({ services, extras }: { services: Cata
       ) : (
         <CleaningRequestForm
           services={services}
-          extras={extras}
           mode={mode}
           selectedSavedProperty={selectedProperty}
           onChangeProperty={showPropertyChooser}

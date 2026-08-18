@@ -17,7 +17,6 @@ import {
   getRequestFieldLabel,
   isResidentialPropertyType,
   mapEstimateResult,
-  toggleRequestExtra,
   updateRequestDraft,
 } from "@/src/lib/request-form";
 import { getRequestFlowSectionForField, getRequestFlowStepIndex, getRequestFlowSteps, type RequestFlowMode, type RequestFlowSection } from "@/src/lib/request-flow";
@@ -30,7 +29,6 @@ import EstimateCard, { type EstimateState } from "./EstimateCard";
 import RequestProgress from "./RequestProgress";
 import ServiceStep from "./ServiceStep";
 import PropertyStep from "./PropertyStep";
-import ExtrasStep from "./ExtrasStep";
 import ScheduleStep from "./ScheduleStep";
 import ContactStep from "./ContactStep";
 import ReviewStep from "./ReviewStep";
@@ -100,7 +98,6 @@ function isComplete(section: RequestFlowSection, draft: CleaningRequestDraft): b
 
 export default function CleaningRequestForm({
   services,
-  extras,
   mode = "NEW_CUSTOMER",
   selectedSavedProperty = null,
   onChangeProperty,
@@ -108,7 +105,6 @@ export default function CleaningRequestForm({
   onReturningCustomerRecovery,
 }: {
   services: CatalogItem[];
-  extras: CatalogItem[];
   mode?: RequestFlowMode;
   selectedSavedProperty?: VerifiedCustomerPropertyOption | null;
   onChangeProperty?: () => void;
@@ -237,7 +233,7 @@ export default function CleaningRequestForm({
       propertyType: draft.propertyType,
       bedrooms: draft.bedrooms,
       bathrooms: draft.bathrooms,
-      extraIds: draft.extraIds,
+      extraIds: [],
       preferredDate: draft.preferredDate,
       preferredTimeWindow: draft.preferredTimeWindow,
       customerName: draft.customerName,
@@ -276,8 +272,6 @@ export default function CleaningRequestForm({
         setCurrentStep(Math.max(0, getRequestFlowStepIndex(mode, section)));
       } else if (result.reason === "SERVICE_UNAVAILABLE") {
         setCurrentStep(getRequestFlowStepIndex(mode, "SERVICE"));
-      } else if (result.reason === "EXTRA_UNAVAILABLE") {
-        setCurrentStep(getRequestFlowStepIndex(mode, "EXTRAS"));
       } else if (result.reason === "RETURNING_CUSTOMER_VERIFICATION_REQUIRED" || result.reason === "RETURNING_CUSTOMER_PROPERTY_INVALID") {
         onReturningCustomerRecovery?.();
       }
@@ -292,9 +286,7 @@ export default function CleaningRequestForm({
     submission.status === "error"
       ? submission.reason === "SERVICE_UNAVAILABLE"
         ? "That service is no longer available. Please choose another service."
-        : submission.reason === "EXTRA_UNAVAILABLE"
-          ? "One of the selected extras is no longer available. Please review your selections."
-          : submission.reason === "INTERNAL_ERROR"
+        : submission.reason === "INTERNAL_ERROR"
             ? "We couldn't send your request right now. Your information is still here. Please try again."
             : submission.reason === "RETURNING_CUSTOMER_VERIFICATION_REQUIRED"
               ? "Your returning-customer verification is no longer valid. Please verify again or continue as a new customer."
@@ -334,16 +326,6 @@ export default function CleaningRequestForm({
             onSelect={chooseService}
           />
         );
-      case "EXTRAS":
-        return (
-          <ExtrasStep
-            extras={extras}
-            selectedIds={draft.extraIds}
-            onToggle={(extraId) =>
-              update("extraIds", toggleRequestExtra(draft.extraIds, extraId))
-            }
-          />
-        );
       case "SCHEDULE":
         return (
           <ScheduleStep
@@ -362,7 +344,6 @@ export default function CleaningRequestForm({
           <ReviewStep
             draft={draft}
             services={services}
-            extras={extras}
             estimate={estimate}
             mode={mode}
             selectedSavedProperty={selectedSavedProperty}
