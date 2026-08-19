@@ -63,8 +63,8 @@ export default async function AdminPage() {
   const overview = await getAdminDashboardOverview();
   const cards = [
     { label: "New Requests", value: overview.counts.newRequests, detail: "Awaiting review", href: "/admin/requests" },
-    { label: "Today", value: overview.counts.todayScheduled, detail: "Scheduled cleanings", href: "/admin/schedule" },
-    { label: "Upcoming", value: overview.counts.upcomingScheduled, detail: "Confirmed work ahead", href: "/admin/schedule" },
+    { label: "Today", value: overview.counts.todayScheduled, detail: "Scheduled cleanings", href: "/admin/requests" },
+    { label: "Upcoming", value: overview.counts.upcomingScheduled, detail: "Confirmed work ahead", href: "/admin/requests" },
   ];
 
   return (
@@ -90,7 +90,7 @@ export default async function AdminPage() {
           </SectionCard>
         </div>
 
-        <SectionCard title="Today&apos;s cleanings" action={<Link href="/admin/schedule" className="text-sm font-semibold text-blue-700 hover:text-blue-900">View schedule</Link>}>
+        <SectionCard title="Today&apos;s cleanings" action={<Link href="/admin/requests" className="text-sm font-semibold text-blue-700 hover:text-blue-900">View requests</Link>}>
           {overview.todaysCleanings.length === 0 ? <EmptyState>No cleanings scheduled for today.</EmptyState> : <div className="divide-y divide-slate-100">{overview.todaysCleanings.map((item) => <div key={item.id} className="py-4 first:pt-0 last:pb-0"><p className="text-sm font-semibold text-slate-950">{item.scheduledStart ? formatScheduledTime(item.scheduledStart) : "Time to confirm"}</p><div className="mt-2 flex items-start justify-between gap-3"><div><p className="font-semibold text-slate-900">{item.customerName}</p><p className="mt-1 text-sm text-slate-600">{item.serviceName} · {propertyLabels[item.propertyType]}</p></div><StatusBadge status={item.status} /></div></div>)}</div>}
         </SectionCard>
       </div>
