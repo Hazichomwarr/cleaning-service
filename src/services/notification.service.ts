@@ -27,6 +27,7 @@ export type NotificationDatabase = {
   notification: {
     create: (args: { data: Record<string, unknown>; select?: Record<string, boolean> }) => Promise<NotificationRow>;
     findUnique: (args: { where: Record<string, unknown>; select?: Record<string, boolean> }) => Promise<NotificationRow | null>;
+    findMany?: (args: { where: Record<string, unknown>; select?: Record<string, boolean> }) => Promise<NotificationRow[]>;
     updateMany: (args: { where: Record<string, unknown>; data: Record<string, unknown> }) => Promise<{ count: number }>;
   };
 };

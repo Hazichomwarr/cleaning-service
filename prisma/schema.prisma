@@ -357,7 +357,7 @@ model CleaningRequestScheduleHistory {
   previousScheduledStart DateTime?
   previousScheduledEnd   DateTime?
   newScheduledStart      DateTime
-  newScheduledEnd        DateTime
+  newScheduledEnd        DateTime?
 
   changedByAdminUserId String
   changedByAdminUser   AdminUser @relation(fields: [changedByAdminUserId], references: [id], onDelete: Restrict)

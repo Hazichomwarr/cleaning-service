@@ -91,8 +91,8 @@ test("uses request occurrence identity and creates only one reminder across runs
   assert.equal(second.existing, 1);
   assert.equal(db.notifications.size, 1);
   assert.equal([...db.notifications.values()][0].status, NotificationStatus.SENT);
-  assert.equal(upcomingCleaningDeduplicationKey("request-1", request().scheduledStart!, request().scheduledEnd!), "upcoming-cleaning:request-1:2026-08-15T15:00:00.000Z:2026-08-15T17:00:00.000Z");
-  assert.notEqual(upcomingCleaningDeduplicationKey("request-1", request().scheduledStart!, request().scheduledEnd!), upcomingCleaningDeduplicationKey("request-1", new Date("2026-08-16T15:00:00Z"), new Date("2026-08-16T17:00:00Z")));
+  assert.equal(upcomingCleaningDeduplicationKey("request-1", request().scheduledStart!), "upcoming-cleaning:request-1:2026-08-15T15:00:00.000Z");
+  assert.notEqual(upcomingCleaningDeduplicationKey("request-1", request().scheduledStart!), upcomingCleaningDeduplicationKey("request-1", new Date("2026-08-16T15:00:00Z")));
 });
 
 test("only confirmed/assigned requests with complete schedule, price, and email are processed", async () => {

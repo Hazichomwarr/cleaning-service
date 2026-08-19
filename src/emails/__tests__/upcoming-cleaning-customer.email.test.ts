@@ -5,7 +5,7 @@ import { renderUpcomingCleaningCustomerEmail } from "../upcoming-cleaning-custom
 test("escapes reminder snapshots and excludes operational/payment language", () => {
   const html = renderUpcomingCleaningCustomerEmail({
     requestNumber: "JC-2026-0001", customerName: "Jane <script>", serviceName: "Deep & detailed", propertyType: "HOUSE",
-    confirmedPrice: "250.00", scheduledRange: "Aug 18, 2026 · 10:00 AM–12:00 PM", addressLine1: "123 <Main>", addressLine2: null,
+    confirmedPrice: "250.00", scheduledTime: "Aug 18, 2026 · 10:00 AM", addressLine1: "123 <Main>", addressLine2: null,
     city: "Newark", state: "NJ", postalCode: "07102", extraNames: ["Inside & cabinets"],
   });
   assert.match(html, /Jane &lt;script&gt;/);

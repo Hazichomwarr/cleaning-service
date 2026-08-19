@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import type { CleaningRequestStatus } from "@/src/generated/prisma/client";
 import type { ConfirmationReadiness } from "@/src/lib/cleaning-request-confirmation";
 import { confirmCleaningRequestAction } from "@/app/actions/confirm-cleaning-request";
+import { formatBusinessDateTime } from "@/src/lib/business-time";
 
 type Props = { requestId: string; status: CleaningRequestStatus; confirmedPrice: string | null; confirmedSchedule: { start: string | null; end: string | null } | null; readiness: ConfirmationReadiness };
 
 function formatSchedule(schedule: Props["confirmedSchedule"]): string {
-  if (!schedule?.start || !schedule.end) return "Complete confirmed schedule";
-  return `${new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "America/New_York" }).format(new Date(schedule.start))} – ${new Intl.DateTimeFormat("en-US", { timeStyle: "short", timeZone: "America/New_York" }).format(new Date(schedule.end))}`;
+  return schedule?.start ? formatBusinessDateTime(schedule.start) : "Set a confirmed appointment";
 }
 
 export default function RequestConfirmationActions({ requestId, status, confirmedPrice, confirmedSchedule, readiness }: Props) {
@@ -20,7 +20,7 @@ export default function RequestConfirmationActions({ requestId, status, confirme
   const [pending, startTransition] = useTransition();
   if (status !== "REVIEWING") return null;
   const invalidPrice = readiness.invalid.includes("CONFIRMED_PRICE");
-  const invalidSchedule = readiness.invalid.includes("SCHEDULE_RANGE");
+  const invalidSchedule = readiness.missing.includes("SCHEDULE_START");
   const submit = () => startTransition(async () => {
     setError(null);
     const result = await confirmCleaningRequestAction({ cleaningRequestId: requestId });

@@ -6,6 +6,6 @@ export function getCleaningRequestWorkflowReadiness(input: { status: CleaningReq
   const reasons: WorkflowBlockingReason[] = [];
   if (input.assignmentCount < 1) reasons.push("NO_ASSIGNED_WORKERS");
   if (!input.confirmedPrice || !input.confirmedPrice.gt(0)) reasons.push("CONFIRMED_PRICE_MISSING_OR_INVALID");
-  if (!input.scheduledStart || !input.scheduledEnd || input.scheduledEnd <= input.scheduledStart) reasons.push("CONFIRMED_SCHEDULE_MISSING_OR_INVALID");
+  if (!input.scheduledStart) reasons.push("CONFIRMED_SCHEDULE_MISSING_OR_INVALID");
   return { canStartCleaning: input.status === "ASSIGNED" && reasons.length === 0, startBlockingReasons: reasons, canCompleteCleaning: input.status === "IN_PROGRESS" && input.assignmentCount > 0, completeBlockingReasons: input.assignmentCount > 0 ? [] : ["NO_ASSIGNED_WORKERS"] };
 }

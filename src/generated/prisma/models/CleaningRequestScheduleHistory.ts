@@ -177,7 +177,7 @@ export type CleaningRequestScheduleHistoryGroupByOutputType = {
   previousScheduledStart: Date | null
   previousScheduledEnd: Date | null
   newScheduledStart: Date
-  newScheduledEnd: Date
+  newScheduledEnd: Date | null
   changedByAdminUserId: string
   reason: string | null
   createdAt: Date
@@ -210,7 +210,7 @@ export type CleaningRequestScheduleHistoryWhereInput = {
   previousScheduledStart?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   previousScheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   newScheduledStart?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
-  newScheduledEnd?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
+  newScheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   changedByAdminUserId?: Prisma.StringFilter<"CleaningRequestScheduleHistory"> | string
   reason?: Prisma.StringNullableFilter<"CleaningRequestScheduleHistory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
@@ -224,7 +224,7 @@ export type CleaningRequestScheduleHistoryOrderByWithRelationInput = {
   previousScheduledStart?: Prisma.SortOrderInput | Prisma.SortOrder
   previousScheduledEnd?: Prisma.SortOrderInput | Prisma.SortOrder
   newScheduledStart?: Prisma.SortOrder
-  newScheduledEnd?: Prisma.SortOrder
+  newScheduledEnd?: Prisma.SortOrderInput | Prisma.SortOrder
   changedByAdminUserId?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -241,7 +241,7 @@ export type CleaningRequestScheduleHistoryWhereUniqueInput = Prisma.AtLeast<{
   previousScheduledStart?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   previousScheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   newScheduledStart?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
-  newScheduledEnd?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
+  newScheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   changedByAdminUserId?: Prisma.StringFilter<"CleaningRequestScheduleHistory"> | string
   reason?: Prisma.StringNullableFilter<"CleaningRequestScheduleHistory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
@@ -255,7 +255,7 @@ export type CleaningRequestScheduleHistoryOrderByWithAggregationInput = {
   previousScheduledStart?: Prisma.SortOrderInput | Prisma.SortOrder
   previousScheduledEnd?: Prisma.SortOrderInput | Prisma.SortOrder
   newScheduledStart?: Prisma.SortOrder
-  newScheduledEnd?: Prisma.SortOrder
+  newScheduledEnd?: Prisma.SortOrderInput | Prisma.SortOrder
   changedByAdminUserId?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -273,7 +273,7 @@ export type CleaningRequestScheduleHistoryScalarWhereWithAggregatesInput = {
   previousScheduledStart?: Prisma.DateTimeNullableWithAggregatesFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   previousScheduledEnd?: Prisma.DateTimeNullableWithAggregatesFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   newScheduledStart?: Prisma.DateTimeWithAggregatesFilter<"CleaningRequestScheduleHistory"> | Date | string
-  newScheduledEnd?: Prisma.DateTimeWithAggregatesFilter<"CleaningRequestScheduleHistory"> | Date | string
+  newScheduledEnd?: Prisma.DateTimeNullableWithAggregatesFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   changedByAdminUserId?: Prisma.StringWithAggregatesFilter<"CleaningRequestScheduleHistory"> | string
   reason?: Prisma.StringNullableWithAggregatesFilter<"CleaningRequestScheduleHistory"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CleaningRequestScheduleHistory"> | Date | string
@@ -284,7 +284,7 @@ export type CleaningRequestScheduleHistoryCreateInput = {
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
   cleaningRequest: Prisma.CleaningRequestCreateNestedOneWithoutScheduleHistoryInput
@@ -297,7 +297,7 @@ export type CleaningRequestScheduleHistoryUncheckedCreateInput = {
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   changedByAdminUserId: string
   reason?: string | null
   createdAt?: Date | string
@@ -308,7 +308,7 @@ export type CleaningRequestScheduleHistoryUpdateInput = {
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cleaningRequest?: Prisma.CleaningRequestUpdateOneRequiredWithoutScheduleHistoryNestedInput
@@ -321,7 +321,7 @@ export type CleaningRequestScheduleHistoryUncheckedUpdateInput = {
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   changedByAdminUserId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -333,7 +333,7 @@ export type CleaningRequestScheduleHistoryCreateManyInput = {
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   changedByAdminUserId: string
   reason?: string | null
   createdAt?: Date | string
@@ -344,7 +344,7 @@ export type CleaningRequestScheduleHistoryUpdateManyMutationInput = {
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -355,7 +355,7 @@ export type CleaningRequestScheduleHistoryUncheckedUpdateManyInput = {
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   changedByAdminUserId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -496,7 +496,7 @@ export type CleaningRequestScheduleHistoryCreateWithoutChangedByAdminUserInput =
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
   cleaningRequest: Prisma.CleaningRequestCreateNestedOneWithoutScheduleHistoryInput
@@ -508,7 +508,7 @@ export type CleaningRequestScheduleHistoryUncheckedCreateWithoutChangedByAdminUs
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
 }
@@ -548,7 +548,7 @@ export type CleaningRequestScheduleHistoryScalarWhereInput = {
   previousScheduledStart?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   previousScheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   newScheduledStart?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
-  newScheduledEnd?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
+  newScheduledEnd?: Prisma.DateTimeNullableFilter<"CleaningRequestScheduleHistory"> | Date | string | null
   changedByAdminUserId?: Prisma.StringFilter<"CleaningRequestScheduleHistory"> | string
   reason?: Prisma.StringNullableFilter<"CleaningRequestScheduleHistory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CleaningRequestScheduleHistory"> | Date | string
@@ -559,7 +559,7 @@ export type CleaningRequestScheduleHistoryCreateWithoutCleaningRequestInput = {
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
   changedByAdminUser: Prisma.AdminUserCreateNestedOneWithoutRequestScheduleHistoryInput
@@ -570,7 +570,7 @@ export type CleaningRequestScheduleHistoryUncheckedCreateWithoutCleaningRequestI
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   changedByAdminUserId: string
   reason?: string | null
   createdAt?: Date | string
@@ -608,7 +608,7 @@ export type CleaningRequestScheduleHistoryCreateManyChangedByAdminUserInput = {
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
 }
@@ -618,7 +618,7 @@ export type CleaningRequestScheduleHistoryUpdateWithoutChangedByAdminUserInput =
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cleaningRequest?: Prisma.CleaningRequestUpdateOneRequiredWithoutScheduleHistoryNestedInput
@@ -630,7 +630,7 @@ export type CleaningRequestScheduleHistoryUncheckedUpdateWithoutChangedByAdminUs
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -641,7 +641,7 @@ export type CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutChangedByAdm
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -651,7 +651,7 @@ export type CleaningRequestScheduleHistoryCreateManyCleaningRequestInput = {
   previousScheduledStart?: Date | string | null
   previousScheduledEnd?: Date | string | null
   newScheduledStart: Date | string
-  newScheduledEnd: Date | string
+  newScheduledEnd?: Date | string | null
   changedByAdminUserId: string
   reason?: string | null
   createdAt?: Date | string
@@ -662,7 +662,7 @@ export type CleaningRequestScheduleHistoryUpdateWithoutCleaningRequestInput = {
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   changedByAdminUser?: Prisma.AdminUserUpdateOneRequiredWithoutRequestScheduleHistoryNestedInput
@@ -673,7 +673,7 @@ export type CleaningRequestScheduleHistoryUncheckedUpdateWithoutCleaningRequestI
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   changedByAdminUserId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -684,7 +684,7 @@ export type CleaningRequestScheduleHistoryUncheckedUpdateManyWithoutCleaningRequ
   previousScheduledStart?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   previousScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   newScheduledStart?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  newScheduledEnd?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  newScheduledEnd?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   changedByAdminUserId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -772,7 +772,7 @@ export type $CleaningRequestScheduleHistoryPayload<ExtArgs extends runtime.Types
     previousScheduledStart: Date | null
     previousScheduledEnd: Date | null
     newScheduledStart: Date
-    newScheduledEnd: Date
+    newScheduledEnd: Date | null
     changedByAdminUserId: string
     reason: string | null
     createdAt: Date

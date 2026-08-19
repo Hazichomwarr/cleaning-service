@@ -91,7 +91,7 @@ type DetailDatabaseRow = {
     previousScheduledStart: Date | null;
     previousScheduledEnd: Date | null;
     newScheduledStart: Date;
-    newScheduledEnd: Date;
+    newScheduledEnd: Date | null;
     reason: string | null;
     createdAt: Date;
     changedByAdminUser: { id: string; name: string; email: string };
@@ -246,7 +246,7 @@ function toDetail(row: DetailDatabaseRow): AdminCleaningRequestDetail {
         previousScheduledStart: history.previousScheduledStart?.toISOString() ?? null,
         previousScheduledEnd: history.previousScheduledEnd?.toISOString() ?? null,
         newScheduledStart: history.newScheduledStart.toISOString(),
-        newScheduledEnd: history.newScheduledEnd.toISOString(),
+        newScheduledEnd: history.newScheduledEnd?.toISOString() ?? null,
         reason: history.reason,
         changedAt: history.createdAt.toISOString(),
         changedBy: history.changedByAdminUser,

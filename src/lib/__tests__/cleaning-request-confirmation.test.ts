@@ -8,7 +8,7 @@ const facts = (overrides: Partial<Parameters<typeof getCleaningRequestConfirmati
 
 describe("cleaning request confirmation readiness", () => {
   it("is ready only with a positive confirmed price and complete forward schedule", () => assert.deepEqual(getCleaningRequestConfirmationReadiness(facts()), { ready: true, missing: [], invalid: [] }));
-  it("reports missing price and schedule fields", () => assert.deepEqual(getCleaningRequestConfirmationReadiness(facts({ confirmedPrice: null, scheduledStart: null, scheduledEnd: null })), { ready: false, missing: ["CONFIRMED_PRICE", "SCHEDULE_START", "SCHEDULE_END"], invalid: [] }));
-  it("reports invalid price and range", () => assert.deepEqual(getCleaningRequestConfirmationReadiness(facts({ confirmedPrice: new Prisma.Decimal("0"), scheduledEnd: date(9) })), { ready: false, missing: [], invalid: ["CONFIRMED_PRICE", "SCHEDULE_RANGE"] }));
+  it("reports missing price and appointment fields", () => assert.deepEqual(getCleaningRequestConfirmationReadiness(facts({ confirmedPrice: null, scheduledStart: null, scheduledEnd: null })), { ready: false, missing: ["CONFIRMED_PRICE", "SCHEDULE_START"], invalid: [] }));
+  it("reports invalid price without requiring an appointment end", () => assert.deepEqual(getCleaningRequestConfirmationReadiness(facts({ confirmedPrice: new Prisma.Decimal("0"), scheduledEnd: null })), { ready: false, missing: [], invalid: ["CONFIRMED_PRICE"] }));
   it("does not allow non-reviewing requests even when facts exist", () => assert.equal(getCleaningRequestConfirmationReadiness(facts({ status: CleaningRequestStatus.NEW })).ready, false));
 });

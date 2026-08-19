@@ -37,3 +37,8 @@ export function formatBusinessDateTimeRange(start: string | null, end: string | 
   const timeFormatter = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", timeZone: BUSINESS_TIME_ZONE });
   return `${formatter.format(new Date(start))} · ${timeFormatter.format(new Date(start))}–${timeFormatter.format(new Date(end))}`;
 }
+
+export function formatBusinessDateTime(value: string | null): string {
+  if (!value) return "Not scheduled yet";
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: BUSINESS_TIME_ZONE }).format(new Date(value));
+}

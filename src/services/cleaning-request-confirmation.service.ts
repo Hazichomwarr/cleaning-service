@@ -1,6 +1,6 @@
 import { CleaningRequestStatus, Prisma } from "../generated/prisma/client";
 import { renderRequestConfirmedCustomerEmail, requestConfirmedCustomerSubject } from "../emails/request-confirmed-customer.email";
-import { formatBusinessDateTimeRange } from "../lib/business-time";
+import { formatBusinessDateTime } from "../lib/business-time";
 import { getCleaningRequestConfirmationReadiness, type ConfirmationInvalidRequirement, type ConfirmationMissingRequirement } from "../lib/cleaning-request-confirmation";
 import { CleaningRequestConfirmationInputSchema } from "../lib/validations/cleaning-request-confirmation.schema";
 import { transitionCleaningRequestStatusInTransaction, type LifecycleTransaction } from "./cleaning-request-lifecycle.service";
@@ -37,7 +37,7 @@ export async function confirmCleaningRequestForAdmin(adminId: string, input: unk
           recipientEmail: current.customerEmail,
           recipientName: current.customerName,
           subject: requestConfirmedCustomerSubject(current.requestNumber),
-          html: renderRequestConfirmedCustomerEmail({ requestNumber: current.requestNumber, customerName: current.customerName ?? null, serviceName: current.service?.name ?? "Cleaning service", propertyType: current.propertyType!, bedrooms: current.bedrooms ?? null, bathrooms: current.bathrooms?.toString() ?? null, confirmedPrice: current.confirmedPrice!.toFixed(2), scheduledRange: formatBusinessDateTimeRange(current.scheduledStart?.toISOString() ?? null, current.scheduledEnd?.toISOString() ?? null), addressLine1: current.addressLine1 ?? "Not provided", addressLine2: current.addressLine2 ?? null, city: current.city ?? "Not provided", state: current.state ?? "", postalCode: current.postalCode ?? "", extraNames: current.requestExtras?.map((item) => item.cleaningExtra.name) ?? [] }),
+          html: renderRequestConfirmedCustomerEmail({ requestNumber: current.requestNumber, customerName: current.customerName ?? null, serviceName: current.service?.name ?? "Cleaning service", propertyType: current.propertyType!, bedrooms: current.bedrooms ?? null, bathrooms: current.bathrooms?.toString() ?? null, confirmedPrice: current.confirmedPrice!.toFixed(2), scheduledTime: formatBusinessDateTime(current.scheduledStart?.toISOString() ?? null), addressLine1: current.addressLine1 ?? "Not provided", addressLine2: current.addressLine2 ?? null, city: current.city ?? "Not provided", state: current.state ?? "", postalCode: current.postalCode ?? "", extraNames: current.requestExtras?.map((item) => item.cleaningExtra.name) ?? [] }),
           cleaningRequestId: current.id,
         }, { database: transaction as unknown as NotificationDatabase });
         if (!notification.success) throw new Error("Unable to persist confirmation notification intent.");

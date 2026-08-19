@@ -8,7 +8,7 @@ type State = { id: string; requestNumber: string; status: CleaningRequestStatus;
 
 function database(initial: Partial<State> = {}, historyFailure = false) {
   let state: State = { id: "request-1", requestNumber: "JC-2026-0042", status: CleaningRequestStatus.REVIEWING, scheduledStart: null, scheduledEnd: null, preferredDate: "2026-08-16", preferredTimeWindow: "MORNING", confirmedPrice: "250.00", ...initial };
-  const history: Array<{ id: string; previousScheduledStart: Date | null; previousScheduledEnd: Date | null; newScheduledStart: Date; newScheduledEnd: Date; reason: string | null; createdAt: Date; changedByAdminUserId: string }> = [];
+  const history: Array<{ id: string; previousScheduledStart: Date | null; previousScheduledEnd: Date | null; newScheduledStart: Date; newScheduledEnd: Date | null; reason: string | null; createdAt: Date; changedByAdminUserId: string }> = [];
   const db = {
     state: () => state,
     history,
@@ -19,7 +19,7 @@ function database(initial: Partial<State> = {}, historyFailure = false) {
         return await callback({
           cleaningRequest: {
             async findUnique() { return { id: state.id, requestNumber: state.requestNumber, status: state.status, scheduledStart: state.scheduledStart, scheduledEnd: state.scheduledEnd }; },
-            async updateMany(args: { where: { scheduledStart: Date | null; scheduledEnd: Date | null }; data: { scheduledStart: Date; scheduledEnd: Date } }) {
+            async updateMany(args: { where: { scheduledStart: Date | null; scheduledEnd: Date | null }; data: { scheduledStart: Date; scheduledEnd: Date | null } }) {
               const startMatches = args.where.scheduledStart === null ? state.scheduledStart === null : state.scheduledStart?.getTime() === args.where.scheduledStart.getTime();
               const endMatches = args.where.scheduledEnd === null ? state.scheduledEnd === null : state.scheduledEnd?.getTime() === args.where.scheduledEnd.getTime();
               if (!startMatches || !endMatches) return { count: 0 };
@@ -28,7 +28,7 @@ function database(initial: Partial<State> = {}, historyFailure = false) {
             },
           },
           cleaningRequestScheduleHistory: {
-            async create(args: { data: { previousScheduledStart: Date | null; previousScheduledEnd: Date | null; newScheduledStart: Date; newScheduledEnd: Date; reason: string | null; createdAt: Date; changedByAdminUserId: string } }) {
+            async create(args: { data: { previousScheduledStart: Date | null; previousScheduledEnd: Date | null; newScheduledStart: Date; newScheduledEnd: Date | null; reason: string | null; createdAt: Date; changedByAdminUserId: string } }) {
               if (historyFailure) throw new Error("history failed");
               const row = { id: `schedule-${history.length + 1}`, ...args.data };
               history.push(row);
@@ -61,10 +61,10 @@ test("rejects DST gap and ambiguous local times deliberately", () => {
 
 test("sets a first schedule and preserves current price, status, and preference", async () => {
   const db = database();
-  const result = await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-16", startTime: "10:00", endTime: "12:00" }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") });
+  const result = await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-16", appointmentTime: "10:00" }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") });
   assert.equal(result.success, true);
   assert.equal(db.state().scheduledStart?.toISOString(), "2026-08-16T14:00:00.000Z");
-  assert.equal(db.state().scheduledEnd?.toISOString(), "2026-08-16T16:00:00.000Z");
+  assert.equal(db.state().scheduledEnd, null);
   assert.equal(db.state().status, CleaningRequestStatus.REVIEWING);
   assert.equal(db.state().confirmedPrice, "250.00");
   assert.equal(db.state().preferredDate, "2026-08-16");
@@ -76,25 +76,24 @@ test("reschedules only with a reason and rejects no-op/range/past values", async
   const currentStart = new Date("2026-08-16T14:00:00.000Z");
   const currentEnd = new Date("2026-08-16T16:00:00.000Z");
   const db = database({ scheduledStart: currentStart, scheduledEnd: currentEnd });
-  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-16", startTime: "10:00", endTime: "12:00", reason: "   " }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "NO_SCHEDULE_CHANGE" });
-  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", startTime: "13:00", endTime: "15:00", reason: "   " }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "SCHEDULE_CHANGE_REASON_REQUIRED" });
-  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", startTime: "15:00", endTime: "13:00" }, { database: database() as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "INVALID_SCHEDULE_RANGE" });
-  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-12", startTime: "10:00", endTime: "12:00" }, { database: database() as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "SCHEDULE_IN_PAST" });
+  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-16", appointmentTime: "10:00", reason: "   " }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "NO_SCHEDULE_CHANGE" });
+  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", appointmentTime: "13:00", reason: "   " }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "SCHEDULE_CHANGE_REASON_REQUIRED" });
+  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-12", appointmentTime: "10:00" }, { database: database() as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "SCHEDULE_IN_PAST" });
 });
 
 test("rejects disallowed states and incomplete current schedules", async () => {
   for (const status of [CleaningRequestStatus.NEW, CleaningRequestStatus.CONFIRMED, CleaningRequestStatus.CANCELLED]) {
-    assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-16", startTime: "10:00", endTime: "12:00" }, { database: database({ status }) as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "INVALID_REQUEST_STATUS" });
+    assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-16", appointmentTime: "10:00" }, { database: database({ status }) as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "INVALID_REQUEST_STATUS" });
   }
-  assert.deepEqual(await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", startTime: "10:00", endTime: "12:00" }, { database: database({ scheduledStart: new Date("2026-08-16T14:00:00.000Z"), scheduledEnd: null }) as never, now: new Date("2026-08-13T15:00:00.000Z") }), { success: false, reason: "INVALID_CURRENT_SCHEDULE" });
+  assert.equal((await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", appointmentTime: "10:00", reason: "Complete legacy appointment" }, { database: database({ scheduledStart: new Date("2026-08-16T14:00:00.000Z"), scheduledEnd: null }) as never, now: new Date("2026-08-13T15:00:00.000Z") })).success, true);
 });
 
 test("rolls back on history failure and conflicts stale schedule edits", async () => {
   const db = database({ scheduledStart: new Date("2026-08-16T14:00:00.000Z"), scheduledEnd: new Date("2026-08-16T16:00:00.000Z") }, true);
-  const result = await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", startTime: "13:00", endTime: "15:00", reason: "Change" }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") });
+  const result = await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", appointmentTime: "13:00", reason: "Change" }, { database: db as never, now: new Date("2026-08-13T15:00:00.000Z") });
   assert.deepEqual(result, { success: false, reason: "INTERNAL_ERROR" });
   assert.equal(db.state().scheduledStart?.toISOString(), "2026-08-16T14:00:00.000Z");
-  const conflict = await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", startTime: "13:00", endTime: "15:00", reason: "Change" }, { database: { ...db, $transaction: async (callback: (transaction: never) => Promise<unknown>) => callback({ cleaningRequest: { async findUnique() { return { id: "request-1", requestNumber: "JC-2026-0042", status: CleaningRequestStatus.REVIEWING, scheduledStart: new Date("2026-08-16T14:00:00.000Z"), scheduledEnd: new Date("2026-08-16T16:00:00.000Z") }; }, async updateMany() { return { count: 0 }; } }, cleaningRequestScheduleHistory: { async create() { throw new Error("should not run"); } } } as never) } as never, now: new Date("2026-08-13T15:00:00.000Z") });
+  const conflict = await setCleaningRequestConfirmedScheduleForAdmin("admin-1", { cleaningRequestId: "request-1", date: "2026-08-17", appointmentTime: "13:00", reason: "Change" }, { database: { ...db, $transaction: async (callback: (transaction: never) => Promise<unknown>) => callback({ cleaningRequest: { async findUnique() { return { id: "request-1", requestNumber: "JC-2026-0042", status: CleaningRequestStatus.REVIEWING, scheduledStart: new Date("2026-08-16T14:00:00.000Z"), scheduledEnd: new Date("2026-08-16T16:00:00.000Z") }; }, async updateMany() { return { count: 0 }; } }, cleaningRequestScheduleHistory: { async create() { throw new Error("should not run"); } } } as never) } as never, now: new Date("2026-08-13T15:00:00.000Z") });
   assert.deepEqual(conflict, { success: false, reason: "SCHEDULE_CONFLICT" });
 });
 

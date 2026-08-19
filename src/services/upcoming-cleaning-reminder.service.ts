@@ -1,5 +1,5 @@
 import { Prisma, CleaningRequestStatus, NotificationStatus, NotificationType } from "../generated/prisma/client";
-import { BUSINESS_TIME_ZONE, formatBusinessDateTimeRange, parseBusinessDateTime } from "../lib/business-time";
+import { BUSINESS_TIME_ZONE, formatBusinessDateTime, parseBusinessDateTime } from "../lib/business-time";
 import { renderUpcomingCleaningCustomerEmail, upcomingCleaningCustomerSubject } from "../emails/upcoming-cleaning-customer.email";
 import { createEmailNotification, deliverNotification, type NotificationDatabase } from "./notification.service";
 import type { EmailProvider } from "../lib/email/resend-email.provider";
@@ -52,8 +52,8 @@ export function isWithinUpcomingCleaningReminderWindow(value: Date, window: Remi
   return value >= window.start && value < window.end;
 }
 
-export function upcomingCleaningDeduplicationKey(requestId: string, scheduledStart: Date, scheduledEnd: Date): string {
-  return `upcoming-cleaning:${requestId}:${scheduledStart.toISOString()}:${scheduledEnd.toISOString()}`;
+export function upcomingCleaningDeduplicationKey(requestId: string, scheduledStart: Date): string {
+  return `upcoming-cleaning:${requestId}:${scheduledStart.toISOString()}`;
 }
 
 function usableEmail(value: string | null): boolean {
@@ -62,8 +62,7 @@ function usableEmail(value: string | null): boolean {
 
 function isEligible(request: ReminderRequest, window: ReminderWindow): boolean {
   return (request.status === CleaningRequestStatus.CONFIRMED || request.status === CleaningRequestStatus.ASSIGNED)
-    && request.scheduledStart !== null && request.scheduledEnd !== null
-    && request.scheduledEnd > request.scheduledStart
+    && request.scheduledStart !== null
     && isWithinUpcomingCleaningReminderWindow(request.scheduledStart, window)
     && request.confirmedPrice !== null
     && usableEmail(request.customerEmail);
@@ -77,7 +76,7 @@ function reminderInput(request: ReminderRequest, deduplicationKey: string) {
     html: renderUpcomingCleaningCustomerEmail({
       requestNumber: request.requestNumber, customerName: request.customerName, serviceName: request.service?.name ?? "Cleaning service",
       propertyType: request.propertyType, confirmedPrice: request.confirmedPrice!.toFixed(2),
-      scheduledRange: formatBusinessDateTimeRange(request.scheduledStart!.toISOString(), request.scheduledEnd!.toISOString()),
+      scheduledTime: formatBusinessDateTime(request.scheduledStart!.toISOString()),
       addressLine1: request.addressLine1, addressLine2: request.addressLine2, city: request.city, state: request.state, postalCode: request.postalCode,
       extraNames: request.requestExtras.map((item) => item.cleaningExtra.name),
     }), cleaningRequestId: request.id, deduplicationKey,
@@ -103,9 +102,16 @@ export async function processUpcomingCleaningReminders(options: { database?: Rem
       outcome = await database.$transaction(async (transaction) => {
         const current = await transaction.cleaningRequest.findUnique({ where: { id: candidate.id }, select: { id: true, requestNumber: true, status: true, customerEmail: true, customerName: true, propertyType: true, confirmedPrice: true, scheduledStart: true, scheduledEnd: true, addressLine1: true, addressLine2: true, city: true, state: true, postalCode: true, service: { select: { name: true } }, requestExtras: { select: { cleaningExtra: { select: { name: true } } } } } });
         if (!current || !isEligible(current, window)) return { kind: "skipped" };
-        const key = upcomingCleaningDeduplicationKey(current.id, current.scheduledStart!, current.scheduledEnd!);
+        const key = upcomingCleaningDeduplicationKey(current.id, current.scheduledStart!);
         const existing = await transaction.notification.findUnique({ where: { deduplicationKey: key }, select: { id: true, status: true } });
         if (existing) return { kind: "existing", notification: existing };
+        const legacyKeyPrefix = `upcoming-cleaning:${current.id}:${current.scheduledStart!.toISOString()}:`;
+        const legacy = transaction.notification.findMany
+          ? await transaction.notification.findMany({ where: { cleaningRequestId: current.id, type: NotificationType.UPCOMING_CLEANING_CUSTOMER }, select: { id: true, status: true, deduplicationKey: true } })
+          : [];
+        if (legacy.some((notification) => notification.deduplicationKey?.startsWith(legacyKeyPrefix))) {
+          return { kind: "existing" };
+        }
         const created = await createEmailNotification(reminderInput(current, key), { database: transaction });
         if (created.success) return { kind: "created", notification: { id: created.notification.id, status: created.notification.status } };
         const raced = await transaction.notification.findUnique({ where: { deduplicationKey: key }, select: { id: true, status: true } });
@@ -114,9 +120,7 @@ export async function processUpcomingCleaningReminders(options: { database?: Rem
     } catch {
       // A concurrent unique-key collision can abort the small transaction before
       // its winner is observable inside it. Re-read outside the failed transaction.
-      const key = candidate.scheduledStart && candidate.scheduledEnd && candidate.scheduledEnd > candidate.scheduledStart
-        ? upcomingCleaningDeduplicationKey(candidate.id, candidate.scheduledStart, candidate.scheduledEnd)
-        : null;
+      const key = candidate.scheduledStart ? upcomingCleaningDeduplicationKey(candidate.id, candidate.scheduledStart) : null;
       const raced = key ? await database.notification.findUnique({ where: { deduplicationKey: key }, select: { id: true, status: true } }) : null;
       outcome = raced ? { kind: "existing", notification: raced } : { kind: "failed" };
     }

@@ -7,8 +7,8 @@ export type CleaningRequestConfirmationFacts = {
   scheduledEnd: Date | null;
 };
 
-export type ConfirmationMissingRequirement = "CONFIRMED_PRICE" | "SCHEDULE_START" | "SCHEDULE_END";
-export type ConfirmationInvalidRequirement = "CONFIRMED_PRICE" | "SCHEDULE_RANGE";
+export type ConfirmationMissingRequirement = "CONFIRMED_PRICE" | "SCHEDULE_START";
+export type ConfirmationInvalidRequirement = "CONFIRMED_PRICE";
 export type ConfirmationReadiness = { ready: boolean; missing: ConfirmationMissingRequirement[]; invalid: ConfirmationInvalidRequirement[] };
 
 export function getCleaningRequestConfirmationReadiness(facts: CleaningRequestConfirmationFacts): ConfirmationReadiness {
@@ -18,7 +18,5 @@ export function getCleaningRequestConfirmationReadiness(facts: CleaningRequestCo
   if (!facts.confirmedPrice) missing.push("CONFIRMED_PRICE");
   else if (!facts.confirmedPrice.gt(0)) invalid.push("CONFIRMED_PRICE");
   if (!facts.scheduledStart) missing.push("SCHEDULE_START");
-  if (!facts.scheduledEnd) missing.push("SCHEDULE_END");
-  if (facts.scheduledStart && facts.scheduledEnd && facts.scheduledEnd <= facts.scheduledStart) invalid.push("SCHEDULE_RANGE");
   return { ready: missing.length === 0 && invalid.length === 0, missing, invalid };
 }
